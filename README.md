@@ -1,31 +1,20 @@
-# Blank
+# ratpenat
 
-Blank — starter [Hugo](https://gohugo.io/) theme for developers. Use it to make your own theme.
+I created this theme from the [blank](https://themes.gohugo.io/themes/blank/) theme
+with inspiration from several other themes, for example:
+* [PaperMod](https://themes.gohugo.io/themes/hugo-papermod/)
+* [MinIndie](https://git.sr.ht/~bacardi55/MinIndie)
+* [Archie](https://github.com/athul/archie)
+* [smol](https://themes.gohugo.io/themes/smol/)
 
-**[Demo](https://blank-demo.netlify.app/)**
+This is a theme tailored for my personal use in [my blog](https://quiroptero.blog).
+As a result it might be heavily hardcoded, opinionated and filled with dirty solutions.
+Mistakes, if any, are mine and not those I have borrowed ideas from.
 
-![Blank theme screenshot](https://github.com/Vimux/blank/blob/master/images/splash.png)
+The creation of this theme aims to achieve the following objectives:
 
-## Installation
-
-In your Hugo site `themes` directory, run:
-
-```
-git clone https://github.com/vimux/blank
-```
-
-Next, open `config.toml` in the base of the Hugo site and ensure the theme option is set to `blank`.
-
-```
-theme = "blank"
-```
-
-For more information read the official [quick start guide](https://gohugo.io/getting-started/quick-start/) of Hugo.
-
-## Contributing
-
-Have you found a bug or got an idea for a new feature? Feel free to use the [issue tracker](https://github.com/Vimux/blank/issues) to let me know. Or make directly a [pull request](https://github.com/Vimux/blank/pulls).
-
-## License
-
-This theme is released under the [MIT license](https://github.com/Vimux/blank/blob/master/LICENSE).
+* It's easy to understand (for me).
+* Prefer, when possible, specific layouts rather than general ones.
+* It's overall structure is simple.
+* It's sparse: nothing that I do not specifically need won't be included.
+* Reduce the number of variables that I need to run my site
