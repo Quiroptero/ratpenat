@@ -1,0 +1,25 @@
+{{- define "main" }}
+<main>
+<article>
+    <h1>{{ .Title }}</h1>
+
+    <div>
+        {{ .Content | partial "anchors.html" }}
+    </div>
+
+    <div>
+        {{- /* Stats table */ -}}
+        <h2>Estadísticas totales</h2>
+        {{- partial "stats/stats_table" -}}
+
+        {{- /* Posts per year */ -}}
+        <h2>Estadísticas por año</h2>
+        {{- partial "stats/posts_per_year" -}}
+
+        {{- /* tags cloud */ -}}
+        <h2>Nube de etiquetas</h2>
+        {{ partial "stats/cloud" (dict "ctx" $)}}
+    </div>
+</article>
+</main>
+{{- end }}

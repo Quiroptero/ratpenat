@@ -1,0 +1,26 @@
+{{ define "main" }}
+    <main>
+        <article>
+        <h1>{{ .Title }}</h1>
+        <div>
+            <span>Esta es una página de ahora desactualizada. La versión actual está acá:
+            <a href="{{ "/ahora/" | relLangURL }}">/ahora</a>.
+            </span>
+        </div>
+        
+        <hr>
+        <div class="content">
+        {{ .Content | partial "anchors.html" }}
+        </div>
+
+        {{- $pages := where site.RegularPages "Section" "eq" "ahora" }}
+        {{- if and (gt (len $pages) 1) (in $pages . ) }}
+        <nav class="nextprev">
+            <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">« {{ .Name }}</a>{{- end }}</div>
+            <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">{{ .Name }} »</a>{{- end }}</div>
+        </nav>
+        {{- end }}
+        
+        </article>
+    </main>
+{{ end }}

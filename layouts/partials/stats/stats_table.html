@@ -1,0 +1,55 @@
+{{ $posts := where site.RegularPages "Type" "blog" }}
+
+{{ $scratch := newScratch }}
+{{ $scratch.Set "longCount" 0 }}
+
+{{ range $posts }}
+    {{ $scratch.Add "wordcount" .WordCount }}
+    {{ if ge .WordCount ($scratch.Get "longCount") }}
+        {{ $scratch.Set "longestPost" . }}
+        {{ $scratch.Set "longCount" .WordCount }}
+    {{ end }}
+{{ end }}
+
+{{ $postCount :=  len ($posts) }}
+{{ $wordCount := $scratch.Get "wordcount" }}
+{{ $avgPostLength := div $wordCount $postCount }}
+
+<table class="table">
+    <tr>
+        <td width="40%">Total de entradas publicadas</td>
+        <td width="60%">{{ $postCount | lang.NumFmt 0 }}</td>
+    </tr>
+    <tr>
+        <td>Total de palabras escritas</td>
+        <td>{{ $wordCount | lang.NumFmt 0 }}</td>
+    </tr>
+    <tr>
+        <td>Promedio de palabras por entrada</td>
+        <td>{{ $avgPostLength | lang.NumFmt 0 }}</td>
+    </tr>
+    <tr>
+        <td>Primera entrada</td>
+        <td>
+            {{ range last 1 $posts }}
+                <a href="{{ .Permalink }}">{{ .Title }}</a>, publicada el {{ .Date | time.Format ":date_full" }}
+            {{ end }}
+        </td>
+    </tr>
+    <tr>
+        <td>Entrada más reciente</td>
+        <td>
+            {{ range first 1 $posts }}
+                <a href="{{ .Permalink }}">{{ .Title }}</a>, publicada el {{ .Date | time.Format ":date_full" }}
+            {{ end }}
+        </td>
+    </tr>
+    <tr>
+        <td>Entrada más larga</td>
+        <td>
+            {{ with $scratch.Get "longestPost" }}
+                <a href="{{ .Permalink }}">{{ .Title }}</a>, con {{ .WordCount | lang.NumFmt 0 }} palabras
+            {{ end }}
+        </td>
+    </tr>
+</table>

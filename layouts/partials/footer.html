@@ -1,3 +1,13 @@
 <footer>
-	<p>&copy; {{ now.Year }} <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></p>
+    <div>
+	<span>&copy; 2017-{{ now.Year }} <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></span>
+    <span>·</span>
+    <span><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></span>
+    </div>
+    <div>
+    <span>Yo no te rastreo, pero otros podrían</span>
+    </div>
+
+    {{- partial "random_quote.html" -}}
+    {{- partial "random_bat.html" -}}
 </footer>

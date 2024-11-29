@@ -1,0 +1,32 @@
+{{ define "main" }}
+<main>
+    <div>
+        <h1>{{ .Title }}</h1>
+        <p>
+            Esta es una lista de todas las <b>{{ .Name | strings.ToLower}}</b> que hay en el blog.
+            Entre paréntesis se indica el número de entradas asociadas a cada una.
+        </p>
+	</div>
+    
+    <hr class="small">
+
+	{{ with .Content }}
+    <div>
+        {{ . }}
+        <hr class="small">
+    </div>
+    {{ end }}
+
+    {{ $data := .Data }}
+    <div>
+        <ul>
+		    {{ range $key, $value := .Data.Terms.Alphabetical }}
+		    <li>
+                <a href="{{ absURL "" }}{{ $data.Plural }}/{{ $value.Name | urlize }}/">{{ $value.Name }}</a>
+                ({{ $value.Count }})
+            </li>
+		    {{ end }}
+	    </ul>
+    </div>
+</main>
+{{ end }}

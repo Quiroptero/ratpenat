@@ -1,0 +1,43 @@
+{{ define "main" }}
+<main>
+    <article>
+    <h1>{{ .Title }}</h1>
+    <div>
+        <span>
+            Actualizado por última vez el
+            <b><time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05" }}">
+               {{ .Lastmod | time.Format ":date_full" }}
+            </time></b>
+            en {{ .Params.location }}
+        </span>
+    </div>
+    <div class="toc">
+        <span>
+            Esta «página del ahora» es un vistazo de aquello en lo que estoy enfocado en este momento de mi vida.
+            La actualizo constantemente y sin regularidad.
+            El <a href="#historial">historial</a>
+            se encuentra al final de la página.
+            La idea de las
+            <a href="https://nownownow.com/about/">páginas de ahora</a>
+            es de <a href="https://sive.rs/">Derek Sivers.</a>
+        </span>
+    </div>
+    
+    <div class="content">
+    {{ .Content | partial "anchors.html" }}
+    </div>
+
+    <hr>
+
+    <h1 id="historial">Historial</h1>
+    {{ $pages := where .Site.RegularPages "Section" "eq" "ahora" }}
+    {{ $pages := $pages.ByDate.Reverse }}
+    <ul>
+        {{ range $pages }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+
+    </article>
+</main>
+{{ end }}

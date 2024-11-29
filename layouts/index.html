@@ -1,10 +1,37 @@
 {{ define "main" }}
-	<main>
-		{{ $paginator := .Paginate (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
-		{{ range $paginator.Pages }}
-			{{ .Render "summary" }}
-		{{ end }}
-		{{ partial "pagination.html" . }}
-	</main>
-{{ partial "sidebar.html" . }}
+<main class="home">
+    {{ with .Content }}<div class="welcome">{{ . | safeHTML }}</div>{{ end }}
+    <hr />
+    <h1>Entrada más reciente</h1>
+    {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
+        <p>Publicada el {{ .Date | time.Format ":date_full"}}:<a href="{{ .RelPermalink }}"> {{ .Title }}</a></p>
+	{{ end }}
+    <p>→ Ver <a href="{{ "/blog" | relLangURL }}">todas las entradas</a></p>
+
+    <h1>Entradas destacadas</h1>
+    {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+    {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
+    <ul>
+    {{ range $featured}}
+        <li>{{ .Date | time.Format "2006-01-02" }}: <a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+    <p>→ Ver las <a href="{{ "/destacadas/" | relLangURL }}">entradas destacadas</a></p>
+
+    <h1>Páginas destacadas</h1>
+    {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
+    {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
+    <ul>
+        {{ range $featured }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
+        {{ end }}
+    </ul>
+    <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
+
+    <hr class="small">
+
+    <div id="random-quote-container">
+        <span id="random-quote"></span>
+    </div>
+</main>
 {{ end }}

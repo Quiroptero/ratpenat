@@ -1,0 +1,25 @@
+{{ define "main" }}
+<main>
+
+    {{ .Content | partial "anchors.html" }}
+
+    {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
+
+    <h1>Páginas destacadas</h1>
+    {{ $featured := $pages | intersect (where .Site.AllPages.ByTitle "Params.featured" true )}}
+    <ul>
+        {{ range $featured }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> {{ .Type }} {{ .Kind }}</li>
+        {{ end }}
+    </ul>
+
+    <h1>Todas las páginas</h1>
+    {{ $static := $pages | intersect (where .Site.AllPages.ByTitle ".Type" "eq" "static") }}
+    <ul>
+        {{ range $static }}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
+        {{ end }}
+    </ul>
+
+</main>
+{{ end }}

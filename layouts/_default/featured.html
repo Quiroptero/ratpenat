@@ -1,0 +1,15 @@
+{{ define "main" }}
+<main>
+    {{ if .Content }}
+    {{ .Content }}
+    {{ end }}
+
+    {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+    {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
+    <ul>
+    {{ range $featured}}
+        <li>{{ .Date | time.Format "2006-01-02" }} <a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+</main>
+{{ end }}

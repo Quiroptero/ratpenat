@@ -1,0 +1,31 @@
+{{ define "main" }}
+    <main>
+        <article>
+        <h1>{{ .Title }}</h1>
+        
+        <div class="content">
+        {{ .Content | partial "anchors.html" }}
+        </div>
+
+        <hr>
+
+        {{ range (where .Site.RegularPages "Type" "in" .Site.Params.mainSections).GroupByDate "2006" }}
+            {{ $year := .Key }}
+            <div>
+            {{ range .Pages.GroupByDate "January" }}
+                {{ $month := .Key }}
+                <h1 class="blog-list">{{ $month }} {{ $year }}</h1>
+                <ul class="blog-list">
+                    {{ range .Pages }}
+                    <li>
+                    <span>{{ .Date.Format "02" }}</span>
+                    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    </li>
+                    {{ end }}
+                </ul>
+            {{ end }}
+            </div>
+        {{ end }}
+        </article>
+    </main>
+{{ end }}

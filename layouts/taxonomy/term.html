@@ -1,0 +1,29 @@
+{{ define "main" }}
+<main>
+    <div>
+        {{ $txt := "con" }}
+        {{ $type := .Data.Singular }}
+        {{ if eq $type "serie" }}
+            {{ $txt = "que forman parte de" }}
+        {{ end }}
+        <h1>Entradas {{ $txt }} la {{ .Data.Singular }} «{{ .Data.Term }}»</h1>
+    </div>
+    
+    {{ with .Content }}
+    <div>
+        {{ . | partial "anchors.html" }}
+    </div>
+
+    <hr class="small">
+    {{ end }}
+
+    <ul>
+        {{ range .Pages }}
+    	<li>
+            <span>{{ dateFormat "2006-01-02" .Date }}</span>
+    		<a href="{{ .RelPermalink }}">{{.Title}}</a>
+    	</li>
+    	{{ end }}
+    </ul>
+</main>
+{{ end }}

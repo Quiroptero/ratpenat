@@ -1,0 +1,45 @@
+{{ define "main" }}
+<main>
+    <article>
+        {{/* metadata */}}
+        <h1>{{ .Title }}</h1>
+        <div class="toc">
+            <p>
+                La intención de estas páginas es difundir datos curiosos de estos magníficos animales.
+                La información proviene del libro <em><strong>Bats. An illustrated guide to all species</strong></em>,
+                de Marianne Taylor y Merlin D. Tuttle, a menos que se especifique lo contrario.
+                El resumen lo hice yo, después de leer el libro, no una herramienta de
+                <a href="/ia" >/ia</a>.
+            </p>
+        </div>
+        {{/* content */}}
+        <div class="content">
+        {{ .Content | partial "anchors.html" }}
+        </div>
+
+    {{ $pages := where .Site.RegularPages "Section" "eq" "murcielagos" }}
+    {{ $pages := $pages.ByTitle }}
+
+    <h1>Cosas interesantes de los murciélagos</h1>
+    <ul>
+        {{ range $pages }}
+            {{ if .Params.isbatfact }}
+            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+            {{ end }}
+        {{ end }}
+    </ul>
+    
+    <h1>Lista de murciélagos</h1>
+    <ul>
+        {{ range $pages }}
+            {{ if not .Params.isbatfact }}
+            <li>
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+                <i>({{ replace .Slug `_` ` ` | strings.FirstUpper }})</i>
+            </li>
+            {{ end }}
+        {{ end }}
+    </ul>
+    </article>
+</main>
+{{ end }}
