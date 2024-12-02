@@ -9,7 +9,7 @@
     {{ $featured := $pages | intersect (where .Site.AllPages.ByTitle "Params.featured" true )}}
     <ul>
         {{ range $featured }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> {{ .Type }} {{ .Kind }}</li>
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
         {{ end }}
     </ul>
 
