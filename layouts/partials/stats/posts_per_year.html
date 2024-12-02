@@ -56,9 +56,9 @@
     let yearCount = [{{ range $scratch.Get "yearCount" }}{{ . }}, {{end}}];
     let yearAvg = [{{ range $scratch.Get "yearAvg" }}{{ . }}, {{end}}];
 
-    const lightBar = 'rgba(37,19,81)'
+    const lightBar = '#fcffa4'
     const lightLine = 'rgba(243,182,31)'
-    const lightLegend = 'rgba(31,39,27)'
+    const lightLegend = '#ecdbba'
 
     var options = {
         plugins: {legend: {position: 'top'}},
