@@ -1,0 +1,15 @@
+{{- define "main" }}
+<main class="home">
+  <h1>
+    ¡Aquí no hay nada!
+  </h1>
+  <p>Parece que la página que estabas buscando no existe o migró a otro lado.</p>
+  <p>
+    Puedes
+    <a href="{{ absURL "" }}">volver al inicio</a>,
+    <a href="{{ "buscar" | absURL }}">probar a buscar</a>
+    o
+    <a href="mailto:{{ site.Params.author.email }}">hacérmelo saber</a>.
+  </p>
+</main>
+{{- end }}{{/* end main */ -}}
