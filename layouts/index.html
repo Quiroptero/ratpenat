@@ -2,11 +2,15 @@
 <main class="home">
     {{ with .Content }}<div class="welcome">{{ . | safeHTML }}</div>{{ end }}
     <hr />
+
+    <div>
+    <p>Las entradas son el principal tipo de contenido del blog.</p>
+    <p>→ Ver <a href="{{ "/blog" | relLangURL }}">todas las entradas</a></p>
+
     <h1>Entrada más reciente</h1>
     {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
         <p>Publicada el {{ .Date | time.Format ":date_full"}}:<a href="{{ .RelPermalink }}"> {{ .Title }}</a></p>
 	{{ end }}
-    <p>→ Ver <a href="{{ "/blog" | relLangURL }}">todas las entradas</a></p>
 
     <h1>Entradas destacadas</h1>
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
@@ -17,7 +21,13 @@
     {{ end }}
     </ul>
     <p>→ Ver las <a href="{{ "/destacadas/" | relLangURL }}">entradas destacadas</a></p>
+    </div>
 
+    <hr>
+
+    <div>
+    <p>Las páginas estáticas son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
+    <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
     <h1>Páginas destacadas</h1>
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
     {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
@@ -26,7 +36,7 @@
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
         {{ end }}
     </ul>
-    <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
+    </div>
 
     <hr class="small">
 
