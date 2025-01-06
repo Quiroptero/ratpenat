@@ -32,12 +32,12 @@
         {{ $yearWordAvg := div ($scratch.Get "wordcount") $yearPostCount }}
         <tr>
             <td>{{ .Key }}</td>
-            <td>{{ $yearPostCount | lang.NumFmt 0 }}</td>
-            <td>{{ $scratch.Get "wordcount" | lang.NumFmt 0 }}</td>
-            <td>{{ $yearWordAvg | lang.NumFmt 0 }}</td>
+            <td>{{ $yearPostCount | lang.FormatNumberCustom 0 }}</td>
+            <td>{{ $scratch.Get "wordcount" | lang.FormatNumberCustom 0 }}</td>
+            <td>{{ $yearWordAvg | lang.FormatNumberCustom 0 }}</td>
             <td>
                 {{ with $scratch.Get "longestpost" }}
-                    <a href="{{ .Permalink }}">{{ .Title }}</a>, con {{ .WordCount | lang.NumFmt 0 }} palabras
+                    <a href="{{ .Permalink }}">{{ .Title }}</a>, con {{ .WordCount | lang.FormatNumberCustom 0 }} palabras
                 {{ end }}
             </td>
         </tr>

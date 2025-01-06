@@ -18,15 +18,15 @@
 <table class="table">
     <tr>
         <td width="40%">Total de entradas publicadas</td>
-        <td width="60%">{{ $postCount | lang.NumFmt 0 }}</td>
+        <td width="60%">{{ $postCount | lang.FormatNumberCustom 0 }}</td>
     </tr>
     <tr>
         <td>Total de palabras escritas</td>
-        <td>{{ $wordCount | lang.NumFmt 0 }}</td>
+        <td>{{ $wordCount | lang.FormatNumberCustom 0 }}</td>
     </tr>
     <tr>
         <td>Promedio de palabras por entrada</td>
-        <td>{{ $avgPostLength | lang.NumFmt 0 }}</td>
+        <td>{{ $avgPostLength | lang.FormatNumberCustom 0 }}</td>
     </tr>
     <tr>
         <td>Primera entrada</td>
@@ -48,7 +48,7 @@
         <td>Entrada más larga</td>
         <td>
             {{ with $scratch.Get "longestPost" }}
-                <a href="{{ .Permalink }}">{{ .Title }}</a>, con {{ .WordCount | lang.NumFmt 0 }} palabras
+                <a href="{{ .Permalink }}">{{ .Title }}</a>, con {{ .WordCount | lang.FormatNumberCustom 0 }} palabras
             {{ end }}
         </td>
     </tr>

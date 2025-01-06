@@ -1,0 +1,20 @@
+{{ define "main" }}
+<main>
+
+    <h1>Reseñas literarias</h1>
+
+    {{ .Content | partial "anchors.html" }}
+
+    {{ $pages := where .Site.AllPages "Type" "=" "blog" }}
+    {{ $rl := $pages | intersect (where .Site.RegularPages.ByDate.Reverse "Params.rl" true )}}
+    <ul>
+        {{ range $rl }}
+        <li>
+            <span>{{ dateFormat "2006-01-02" .Date }}</span>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </li>
+        {{ end }}
+    </ul>
+
+</main>
+{{ end }}

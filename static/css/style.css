@@ -50,6 +50,7 @@ body {
 #flex-container > footer { padding: 1rem; position: relative; }
 
 a {text-decoration: none;} /* in general, remove underlines (but keep them later on posts content) */
+strong {color: var(--linkcontentcolor);}
 
 /* header */
 header * {color: var(--metacolor);}
@@ -103,7 +104,10 @@ code {
 }
 
 /* styling nested unordered lists */
-div.content > ul { 
+div > ul { 
+    padding-left: 0rem;
+}
+main > ul {
     padding-left: 0rem;
 }
 ul > li > ul {

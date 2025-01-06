@@ -24,6 +24,15 @@
         </div>
         {{ end }}
 
+        {{ if .Params.rl }}
+        <div class="warning">
+            <p>
+                Esta entrada es una <a href="/rl">reseña literaria</a>,
+                por lo que puede contener <a href="/2018/09/destripar">destripes</a>.
+            </p>
+        </div>
+        {{ end }}
+
         <div class="content">
         {{ .Content | partial "anchors.html" }}
         </div>
