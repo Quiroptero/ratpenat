@@ -1,6 +1,6 @@
 {{ define "main" }}
 <main>
-
+    <h1>{{ .Title }}</h1>
     {{ .Content | partial "anchors.html" }}
 
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
