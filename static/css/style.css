@@ -61,7 +61,7 @@ header nav {
     align-items: center;
 }
 
-div.header { display: flex; font-size: 0.9rem;}
+div.header { display: flex; font-size: 1.2rem;}
 
 #menu {
     display: flex;
