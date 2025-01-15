@@ -29,13 +29,15 @@
     <hr>
 
     <h1 id="historial">Historial</h1>
-    {{ $pages := where .Site.RegularPages "Section" "eq" "ahora" }}
+    {{ $pages := where .Site.RegularPages "Layout" "eq" "now" }}
     {{ $pages := $pages.ByDate.Reverse }}
     <ul>
-        {{ range $pages }}
+        {{ range first 3 $pages }}
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
         {{ end }}
     </ul>
+
+    <p>→ Ver <a href="{{ "/ahora/historial" | relLangURL }}">todo el historial</a></p>
 
 </main>
 {{ end }}

@@ -12,7 +12,7 @@
         {{ .Content | partial "anchors.html" }}
         </div>
 
-        {{- $pages := where site.RegularPages "Section" "eq" "ahora" }}
+        {{- $pages := where site.RegularPages "Layout" "eq" "now" }}
         {{- if and (gt (len $pages) 1) (in $pages . ) }}
         <nav class="nextprev">
             <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">« {{ .Name }}</a>{{- end }}</div>
