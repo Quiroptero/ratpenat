@@ -1,0 +1,48 @@
+{{ $posts := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{ $scratch := newScratch }}
+{{ $grouped := $posts.GroupByDate "200601" }}
+
+<div style="width: 100%;height: 300px;margin: 30px auto">
+    <canvas id="yearchart">
+        <p>Gráfica de línea que muestra el número de publicaciones por año</p>
+    </canvas>
+</div>
+
+{{ range $grouped.Reverse }}
+{{ $yearPostCount := len (where .Pages "Type" "blog") }}
+{{ $scratch.Set "wordcount" 0 }}
+{{ $scratch.Set "longcount" 0 }}
+{{ range .Pages }}
+    {{ $scratch.Add "wordcount" .WordCount }}
+    {{ if ge .WordCount ($scratch.Get "longcount") }}
+        {{ $scratch.Set "longestpost" . }}
+        {{ $scratch.Set "longcount" .WordCount }}
+    {{ end }}
+{{ end }}
+{{ $yearWordAvg := div ($scratch.Get "wordcount") $yearPostCount }}
+{{ $scratch.Add "yearKeys" (slice .Key) }}
+{{ $scratch.Add "yearCount" (slice $yearPostCount) }}
+{{ $scratch.Add "yearAvg" (slice $yearWordAvg) }}
+{{ end }}
+
+{{ $script := "js/chart.min.js" | resources.Get | resources.Fingerprint }}
+<script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+<script type="text/javascript">
+    var ctx = document.getElementById('yearchart')
+
+    let yearKeys = [{{ range $scratch.Get "yearKeys" }}{{ . }}, {{end}}];
+    let yearCount = [{{ range $scratch.Get "yearCount" }}{{ . }}, {{end}}];
+
+    var options = {
+        plugins: {legend: {position: 'top'}},
+        type: 'bar',
+        data: {
+            labels: yearKeys,
+            datasets: [{
+                data: yearCount,
+            }]
+        },
+    }
+    const mychart = new Chart(ctx, options)
+    mychart.update();
+</script>

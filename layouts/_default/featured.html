@@ -1,13 +1,11 @@
 {{ define "main" }}
 <main>
 
-    <h1>Entradas destacadas</h1>
+    <h1>{{ .Title }}</h1>
 
     {{ if .Content }}
     {{ .Content }}
     {{ end }}
-
-    <hr />
 
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}

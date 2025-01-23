@@ -1,0 +1,16 @@
+{{ $posts := where site.RegularPages "Type" "in" site.Params.mainSections }}
+{{ $scratch := newScratch }}
+{{ $scratch.Set "totalwords" 0 }}
+
+{{ $span := sub time.Now.Year 2017 }}
+
+{{ range $posts }}
+    {{ $scratch.Add "totalwords" .WordCount}}
+{{ end }}
+
+<p>
+    Desde 2017 (hace {{ $span }} años) he publicado en este blog <strong>{{ len $posts }}</strong> entradas
+    (en promedio {{ div (len $posts) $span }} entradas por año),
+    con un total de <strong>{{ $scratch.Get "totalwords" | lang.FormatNumberCustom 0 }}</strong> palabras
+    (en promedio {{ div ($scratch.Get "totalwords") $span | lang.FormatNumberCustom 0 }} palabras por año).
+</p>

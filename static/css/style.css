@@ -31,7 +31,7 @@ ul {
 body {
     color: var(--textcolor);
     background: var(--bgcolor);
-    font-family: monospace; 
+    font-family: monospace, monospace; 
     font-size: 14px; 
     line-height: 1.3rem;
     max-width: 800px;
@@ -143,12 +143,12 @@ h6:hover .anchor {
     border-bottom: 0px;
 }
 
-h1::before { content: '# '; }
-h2::before { content: '## '; }
-h3::before { content: '### '; }
-h4::before { content: '#### '; }
-h5::before { content: '##### '; }
-h6::before { content: '###### '; }
+h1.content::before { content: '# '; }
+h2.content::before { content: '## '; }
+h3.content::before { content: '### '; }
+h4.content::before { content: '#### '; }
+h5.content::before { content: '##### '; }
+h6.content::before { content: '###### '; }
 
 nav.nextprev{
     display: flex;
@@ -286,4 +286,11 @@ tr.r1 {
 }
 td.field {
     padding: 0.5rem 0.5rem;
+}
+
+/* ascii-like tables */
+div.ascii {
+    text-align: center;
+    justify-content: center;
+    line-height: 0.8rem;
 }

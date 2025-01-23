@@ -1,6 +1,5 @@
 {{ define "main" }}
 <main>
-    <article>
     <h1>{{ .Title }}</h1>
     <div>
         <span>
@@ -10,12 +9,9 @@
             </time></b>
         </span>
     </div>
-    
 
     <div class="content">
     {{ .Content | partial "anchors.html" }}
     </div>
-
-    </article>
 </main>
 {{ end }}

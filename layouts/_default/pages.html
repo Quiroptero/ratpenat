@@ -5,7 +5,7 @@
 
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
 
-    <h1>Páginas destacadas</h1>
+    <h1 class="content">Páginas destacadas</h1>
     {{ $featured := $pages | intersect (where .Site.AllPages.ByTitle "Params.featured" true )}}
     <ul>
         {{ range $featured }}
@@ -13,7 +13,7 @@
         {{ end }}
     </ul>
 
-    <h1>Todas las páginas</h1>
+    <h1 class="content">Todas las páginas</h1>
     {{ $static := $pages | intersect (where .Site.AllPages.ByTitle ".Type" "eq" "static") }}
     <ul>
         {{ range $static }}
