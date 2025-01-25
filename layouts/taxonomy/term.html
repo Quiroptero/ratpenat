@@ -12,6 +12,9 @@
     {{ with .Content }}
     <div>
         {{ . | partial "anchors.html" }}
+        {{ if eq $type "categoría" }}
+        <p>→ Ver todas las <a href="/categorías">/categorías</a></p>
+        {{ end }}
     </div>
 
     <hr class="small">
