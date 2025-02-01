@@ -13,15 +13,25 @@ ul {
 /* variables */
 :root {
     /* colors */
-    --bgcolor: #191919;
-    --bgcolorhazy: #333333;
-    --textcolor: #ecdbba;
-    --textcolorhazy: #7a7a7a;
-    --hcolor: #fcac11;
-    --metacolor: #fcac11;
-    --linkcontentcolor: #fcffa4;
-    --linkcolor: #e9612b;
+    /* --bgcolor: #191919; */
+    /* --bgcolorhazy: #333333; */
+    /* --textcolor: #ecdbba; */
+    /* --textcolorhazy: #7a7a7a; */
+    /* --hcolor: #fcac11; */
+    /* --metacolor: #fcac11; */
+    /* --linkcontentcolor: #fcffa4; */
+    /* --linkcolor: #e9612b; */
+    /* --warningcolor: #ff0000; */
+    --bgcolor: #090909;
+    --bgcolorhazy: #1c1c1c;
+    --textcolor: #d8d8d8;
+    --textcolorhazy: #abaaaa;
+    --hcolor: #f7ca88;
+    --metacolor: #ab2321;
+    --linkcontentcolor: #d36060;
+    --linkcolor: #d36060;
     --warningcolor: #ff0000;
+
     /* end */
     --gap-menu-items: 20px;
     --radius: 8px;
@@ -191,12 +201,12 @@ footer a {color: var(--metacolor);}
 
 /* style of random quote */
 #random-quote-container {
-    border: 1px solid var(--linkcontentcolor);
+    border: 1px solid var(--hcolor);
     margin: 0.5rem;
     padding: 0.5rem 0.5rem;
     text-align: center;
     font-size: 0.8rem;
-    color: var(--linkcontentcolor);
+    color: var(--hcolor);
     display: flex;
     flex-direction: column;
 }
@@ -270,9 +280,9 @@ table, th, td { border: none; }
 }
 th {
     padding: 0.5rem 0.5rem;
-    background: var(--linkcolor);
+    background: var(--metacolor);
     font-size: 0.9rem;
-    color: var(--bgcolor);
+    color: var(--textcolor);
     text-align: left;
 }
 tr.r0 {
