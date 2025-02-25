@@ -1,8 +1,10 @@
 {{ define "main" }}
 <main>
     <h1>{{ .Title }}</h1>
-    <div><b><time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">{{ .Date | time.Format ":date_full" }}</time></b></div>
-    <div>
+    <div class="meta">
+        <b><time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">{{ .Date | time.Format ":date_full" }}</time></b>
+    </div>
+    <div class="meta">
         <span>
         {{ with .Params.categorías }}
             {{ range . }}<a href="{{ "/categorías/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>{{ end }}
@@ -17,7 +19,7 @@
         </span>
     </div>
     {{ with .Params.series }}
-    <div>
+    <div class="meta">
         <span>Parte de la serie </span>
         <a href="{{ "/series/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
     </div>
