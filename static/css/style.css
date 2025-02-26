@@ -170,15 +170,18 @@ nav.nextprev{
     justify-content: space-between;
     margin-top: 40px;
     margin-bottom: 40px;
+    font-size: 0.85rem;
 }
 
 div.related-content {
     margin-top: 40px;
+    font-size: 0.85rem;
 }
 
 /* footer */
 footer {
     text-align: center;
+    font-size: 0.8rem;
 }
 
 footer a {color: var(--metacolor);}
@@ -243,6 +246,7 @@ footer a {color: var(--metacolor);}
     padding: 0.5rem;
     text-align: center;
     color: var(--textcolor);
+    font-size: 0.85rem;
 }
 
 #random-bat {
