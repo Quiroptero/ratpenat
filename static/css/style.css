@@ -277,6 +277,7 @@ figure {
 figcaption {
     font-size: 0.85rem;
     text-align: center;
+    color: var(--textcolorhazy);
 }
 
 /* scroll bar */
