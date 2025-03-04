@@ -175,6 +175,7 @@ nav.nextprev{
     margin-top: 40px;
     margin-bottom: 40px;
     font-size: 0.85rem;
+    gap: 0.3rem;
 }
 
 div.related-content {
