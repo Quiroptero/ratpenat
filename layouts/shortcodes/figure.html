@@ -12,6 +12,12 @@
     {{ .Page.Store.Set "src" $image.RelPermalink }}
 {{- end -}}
 
+{{- if .Get "fit" -}}
+    {{- $pic := .Page.Resources.Get $u -}}
+    {{- $image := $pic.Fit (printf "%s q100 lanczos" (.Get "fit")) -}}
+    {{ .Page.Store.Set "src" $image.RelPermalink }}
+{{- end -}}
+
 <figure{{ with .Get "class" }} class="{{ . }}"{{ end }}>
   <img src="{{ .Page.Store.Get "src" }}"
     {{- if or (.Get "alt") (.Get "caption") }}
