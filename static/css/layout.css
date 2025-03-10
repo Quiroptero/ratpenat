@@ -1,0 +1,198 @@
+:root {
+    --gap-menu-items: 1.25rem;
+    --radius: 0.5rem;
+}
+
+/* layout and behavior of site's header */
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* body container */
+#flex-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+/* make the footer be always at the bottom regardless of how much space the page's content actually takes */
+main { 
+    flex-grow: 1; 
+}
+
+#flex-container > footer {
+    padding: 1rem; position: relative; 
+}
+
+/* menu layout */
+#menu {
+    display: flex;
+    list-style: none;
+}
+
+#menu li + li {
+    margin-inline-start: var(--gap-menu-items);
+}
+
+/* get some extra top space on the landing page */
+main.home { 
+    margin-top: 3rem;
+}
+
+/* headings */
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+    margin-bottom: 0.5rem;
+    margin-top:1.8rem;
+}
+
+/* archive */
+h1.blog-list {
+    margin-bottom: 0rem;
+}
+
+ul.blog-list {
+    margin-top: 0.2rem;
+    margin-bottom: 1.2rem;
+}
+
+/* styling nested unordered lists */
+div > ul { 
+    padding-left: 0rem;
+}
+main > ul {
+    padding-left: 0rem;
+}
+ul > li > ul {
+    padding-left: 2rem;
+}
+
+/* some extra space for main content */
+div.content {
+    margin: 2rem 0;
+}
+
+/* nextprev blog links */
+nav.nextprev{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    gap: 0.3rem;
+}
+
+/* related content */
+div.related-content {
+    margin-top: 3rem;
+}
+
+/* search page */
+#searchbox input {
+    padding: 4px 10px;
+    width: 100%;
+    border: 2px solid var(--b);
+    border-radius: var(--radius);
+}
+
+#searchResults {
+    list-style-position: inside;
+}
+
+/* random quote */
+#random-quote-container {
+    border: 1px solid var(--b);
+    margin: 0.5rem;
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* notice box */
+.notice {
+    margin: 1rem auto;
+    padding: 0.5rem;
+}
+
+/* series box */
+.series-box {
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.series-box p {
+    margin: 0rem;
+}
+
+.series-box ul {
+    margin-bottom: 0rem;
+}
+
+/* warning notice */
+.warning {
+    margin: 1rem auto;
+    padding: 0.5rem;
+}
+
+/* random bat */
+#random-bat {
+    display: inline-flex;
+    background-color: var(--bgcolor);
+    border: none;
+    cursor: pointer;
+}
+
+/* images */
+figure {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem auto;
+    max-inline-size: min-content;
+}
+
+figcaption {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--mute);
+}
+
+/* scroll bar */
+/* width */
+::-webkit-scrollbar { width: 7px; }
+/* Track */
+::-webkit-scrollbar-track { background: var(--bg); }
+/* Handle */
+::-webkit-scrollbar-thumb { background: var(--fg); }
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover { background: var(--h); }
+
+/* library styles */
+table { 
+    border-collapse: collapse; 
+    border-color: transparent; 
+}
+
+table, 
+th, 
+td { 
+    border: none; 
+}
+
+.sortable {
+    margin-top: 3rem;
+}
+
+th {
+    padding: 0.5rem 0.5rem;
+}
+
+td.field {
+    padding: 0.5rem 0.5rem;
+}

@@ -39,7 +39,7 @@
     </div>
 
     {{ with .Params.series }}
-    <div class="toc-series">
+    <div class="series-box">
         <p>De la serie <strong>{{ . }}</strong>:</p>
         <ul>
             {{ $series := where site.RegularPages "Params.series" "=" . }}

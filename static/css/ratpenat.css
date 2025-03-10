@@ -1,0 +1,18 @@
+/* file structure based on https://github.com/joeroe/risotto/ */
+
+@import 'colours.css';
+@import 'typography.css';
+@import 'layout.css';
+
+html {
+    overflow-y: scroll;
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--fg);
+    max-width: 50rem;
+    margin: 20px auto 0px;
+    padding: 0 10px;
+}

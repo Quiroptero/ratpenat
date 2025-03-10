@@ -4,7 +4,7 @@
     <h1>{{ .Title }}</h1>
 
     {{/* welcome text */}}
-    <div class="toc">
+    <div class="notice">
         <p>
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
             fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linecap="round"
@@ -28,7 +28,7 @@
     </div>
 
     {{/* content */}}
-    <div class="content">
+    <div>
     {{ .Content | partial "anchors.html" }}
     </div>
 

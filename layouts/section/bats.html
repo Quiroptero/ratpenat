@@ -2,7 +2,7 @@
 <main>
      {{/* metadata */}}
      <h1>{{ .Title }}</h1>
-     <div class="toc">
+     <div class="notice">
          <p>
              La intención de estas páginas es difundir datos curiosos de estos magníficos animales.
              La información proviene del libro <em><strong>Bats. An illustrated guide to all species</strong></em>,
@@ -12,14 +12,14 @@
          </p>
      </div>
      {{/* content */}}
-     <div class="content">
+     <div>
      {{ .Content | partial "anchors.html" }}
      </div>
 
     {{ $pages := where .Site.RegularPages "Section" "eq" "murcielagos" }}
     {{ $pages := $pages.ByTitle }}
 
-    <h1 class="content">Cosas interesantes de los murciélagos</h1>
+    <h1>Cosas interesantes de los murciélagos</h1>
     <ul>
         {{ range $pages }}
             {{ if .Params.isbatfact }}
@@ -28,7 +28,7 @@
         {{ end }}
     </ul>
     
-    <h1 class="content">Lista de murciélagos</h1>
+    <h1>Lista de murciélagos</h1>
     <ul>
         {{ range $pages }}
             {{ if not .Params.isbatfact }}

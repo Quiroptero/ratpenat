@@ -1,7 +1,7 @@
 {{ define "main" }}
     <main>
         <h1>{{ .Title }}</h1>
-        <div class="content">
+        <div>
         {{ .Content | partial "anchors.html" }}
         </div>
 
@@ -12,8 +12,8 @@
             <div>
             {{ range .Pages.GroupByDate "January" }}
                 {{ $month := .Key }}
-                <h1 class="blog-list">{{ $month }} {{ $year }}</h1>
-                <ul class="blog-list">
+                <h1>{{ $month }} {{ $year }}</h1>
+                <ul>
                     {{ range .Pages }}
                     <li>
                     <span>{{ .Date.Format "02" }}</span>

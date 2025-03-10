@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
 <head>
+    <!-- GNU Terry Pratchett -->
     <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ .Title }}</title>
+
+    <title>{{ with .Title }}{{ . }} &ndash; {{end}}{{ .Site.Title }}</title>
     {{ with .Page.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ . }}">{{ end }}
     {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
-    <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
+
+    {{ partial "theme" . }}
+
     {{ with .OutputFormats.Get "RSS" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}

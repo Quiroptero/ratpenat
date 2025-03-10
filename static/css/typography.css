@@ -1,0 +1,226 @@
+/* fonts */
+
+:root {
+    --font-monospace: "Fira Mono", monospace, monospace;
+}
+
+body {
+    font-family: var(--font-monospace);
+    font-size: 1rem;
+    line-height: 1.3rem;
+}
+
+/* in general, remove link underlines (but keep them later on posts content) */
+a {
+    text-decoration: none;
+}
+
+/* make links in content noticeable */
+div.content a {
+    text-decoration: none;
+    color: var(--l);
+    border-bottom: 0.125rem solid var(--l);
+}
+
+/* display general links in color */
+main a {
+    color: var(--l);
+}
+
+/* highlight bold text */
+strong {
+    color: var(--s);
+}
+
+/* lists */
+ul {
+    -webkit-padding-start: 0;
+    list-style-position: inside;
+}
+
+/* site header */
+header * {
+    color: var(--site-meta);
+}
+
+/* site menu */
+#menu {
+    font-size: 0.9rem;
+}
+
+/* landing page */
+div.welcome {
+    text-align: center;
+}
+
+/* content metadata */
+div.meta { 
+    font-size: 0.85rem; 
+    color: var(--off-fg);
+}
+
+div.meta a {
+    color: var(--m);
+}
+
+/* prevent super from affecting line height */
+sup { 
+    line-height: 0; 
+}
+
+/* headings */
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+    color: var(--h);
+    font-size: 1.2rem;
+}
+
+h1.content::before { content: '# '; }
+h2.content::before { content: '## '; }
+h3.content::before { content: '### '; }
+h4.content::before { content: '#### '; }
+h5.content::before { content: '##### '; }
+h6.content::before { content: '###### '; }
+
+/* archive */
+h1.blog-list::before { 
+    content: ''; 
+}
+
+h1.blog-list { 
+    font-size: 1rem; 
+}
+
+/* code block */
+code {
+    color: var(--m);
+    background: var(--nb);
+}
+
+/* separators */
+hr {
+  margin: 25px 30% 25px;
+  border-color: var(--fg);
+  border-width: 1px;
+}
+
+hr.small {
+  margin: 25px 45% 25px;
+  border: 1px dashed var(--fg);
+}
+
+/* display anchor # on hover */
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+    display: inline-flex;
+    border-bottom: 0rem;
+}
+
+/* nextprev blog links */
+nav.nextprev{
+    font-size: 0.85rem;
+}
+
+nav.nextprev a {
+    color: var(--nxtprv);
+}
+
+/* related content */
+div.related-content{
+    font-size: 0.85rem;
+}
+
+/* footer */
+footer {
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: var(--site-meta);
+}
+
+/* search page */
+#searchbox input {
+    background-color: var(--bgcolor);
+    font-weight: bold;
+    color: var(--fg);
+}
+
+#searchbox input:focus {
+    border-color: var(--l);
+    outline: none;
+    box-shadow: none;
+}
+
+/* random quote */
+#random-quote-container {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--off-fg);
+}
+
+/* notice box */
+.notice {
+    text-align: center;
+    color: var(--off-fg);
+    font-size: 0.85rem;
+    background: var(--nb);
+}
+
+/* series box */
+.series-box {
+    text-align: left;
+    color: var(--fg);
+    font-size: 0.9rem;
+    background: var(--nb);
+}
+
+.series-box ul {
+    font-size: 0.85rem;
+}
+
+.series-box strong {
+    color: var(--m);
+}
+
+/* warning notice */
+.warning {
+    text-align: center;
+    color: var(--w);
+    font-size: 0.85rem;
+    background: var(--nb);
+}
+
+/* library styles */
+th {
+    background: var(--w);
+    font-size: 0.9rem;
+    color: var(--bg);
+    text-align: left;
+}
+
+tr.r0 {
+    font-size: 0.7rem;
+    background-color: var(--mute);
+    color: var(--bg);
+}
+
+tr.r1 {
+    font-size: 0.7rem;
+    background-color: var(--off-bg);
+}
+
+/* footnotes */
+div.footnotes {
+    font-size: 0.8rem;
+    color: var(--mute);
+}
