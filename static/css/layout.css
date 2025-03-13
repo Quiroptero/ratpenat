@@ -196,3 +196,14 @@ th {
 td.field {
     padding: 0.5rem 0.5rem;
 }
+
+/* table of contents */
+div.toc > details > nav > ul { 
+    padding-left: 0rem;
+}
+
+.toc {
+    padding: 0.5rem 1rem;
+    margin: 1rem 0rem;
+    border-top: 0.125rem solid var(--b);
+}

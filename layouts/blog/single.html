@@ -34,6 +34,15 @@
     </div>
     {{ end }}
 
+    {{ if .Params.toc }}
+    <div class="toc">
+        <details>
+            <summary>Tabla de contenidos</summary>
+            {{ .TableOfContents }}
+        </details>
+    </div>
+    {{ end }}
+
     <div class="content">
     {{ .Content | partial "anchors.html" }}
     </div>

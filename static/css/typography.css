@@ -224,3 +224,13 @@ div.footnotes {
     font-size: 0.8rem;
     color: var(--mute);
 }
+
+/* table of contents */
+.toc {
+    font-size: 0.85rem;
+    background: var(--nb);
+}
+
+.toc a {
+    color: var(--h);
+}

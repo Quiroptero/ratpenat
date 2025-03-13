@@ -22,5 +22,5 @@
     --nxtprv: var(--base0D);
     /* notice boxes */
     --w: var(--base08);  /* warning text */
-    --nb: var(--base01);  /* background, code also uses this */
+    --nb: var(--base01);  /* background for notice boxes, code and toc */
 }
