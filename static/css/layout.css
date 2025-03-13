@@ -207,3 +207,23 @@ div.toc > details > nav > ul {
     margin: 1rem 0rem;
     border-top: 0.125rem solid var(--b);
 }
+
+/* movie list */
+div.grid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+}
+div.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+div.container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+div.container p {
+    margin: 0;
+}

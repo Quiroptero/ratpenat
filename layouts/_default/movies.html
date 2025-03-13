@@ -1,0 +1,21 @@
+{{ define "main" }}
+<main>
+    <h1>{{ .Title }}</h1>
+
+    {{ partial "static_meta" . }}
+
+    <div>
+    {{ .Content | partial "anchors.html" }}
+    </div>
+    <p>Este año he visto <strong>{{ .Resources.ByType "image" | len }}</strong> películas</p>
+    <div class="grid">
+    {{ range sort (.Resources.ByType "image") "Params.weight" "desc" }}
+        <div class="container">
+            <img alt="{{ .Params.alt }}" src="{{ .RelPermalink }}">
+            <p>{{ .Params.meta }}</p>
+        </div>
+    {{ end }}
+    </div>
+
+</main>
+{{ end }}
