@@ -3,8 +3,8 @@
 
     <h1>{{ .Title }}</h1>
 
-    {{ if .Content }}
-    {{ .Content }}
+    {{ with .Content }}
+    <div class="content">{{ . }}</div>
     {{ end }}
 
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}

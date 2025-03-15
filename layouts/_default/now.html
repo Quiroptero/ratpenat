@@ -1,14 +1,13 @@
 {{ define "main" }}
     <main>
         <h1>{{ .Title }}</h1>
-        <div>
+        <div class="warning">
             <span>Esta es una página de ahora desactualizada. La versión actual está acá:
             <a href="{{ "/ahora/" | relLangURL }}">/ahora</a>.
             </span>
         </div>
         
-        <hr>
-        <div>
+        <div class="content">
         {{ .Content | partial "anchors.html" }}
         </div>
 

@@ -27,12 +27,14 @@
         </span>
     </div>
     
-    <div>
+    <div class="content">
     {{ .Content | partial "anchors.html" }}
     </div>
 
     <hr>
 
+    <!-- now pages archive -->
+    <div>
     <h1 id="historial">Historial</h1>
     {{ $pages := where .Site.RegularPages "Layout" "eq" "now" }}
     {{ $pages := $pages.ByDate.Reverse }}
@@ -41,8 +43,7 @@
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
         {{ end }}
     </ul>
-
     <p>→ Ver <a href="{{ "/ahora/historial" | relLangURL }}">todo el historial</a></p>
-
+    </div>
 </main>
 {{ end }}

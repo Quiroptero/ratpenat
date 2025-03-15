@@ -3,7 +3,9 @@
 
     <h1>{{ .Title }}</h1>
 
+    <div class="content">
     {{ .Content | partial "anchors.html" }}
+    </div>
 
     {{ $pages := where .Site.AllPages "Type" "=" "blog" }}
     {{ $rl := $pages | intersect (where .Site.RegularPages.ByDate.Reverse "Params.rl" true )}}
@@ -15,6 +17,5 @@
         </li>
         {{ end }}
     </ul>
-
 </main>
 {{ end }}
