@@ -1,0 +1,3 @@
+{{ $filename := .Get 0 }}
+{{ $class := .Get 1 }}
+<pre{{ with $class }} class="{{.}}"{{ end }}>{{ readFile (path.Join .Page.File.Dir $filename ) | safeHTML }}</pre>
