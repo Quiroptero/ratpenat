@@ -234,3 +234,8 @@ div.footnotes {
 .toc a {
     color: var(--h);
 }
+
+pre.stats {
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+}
