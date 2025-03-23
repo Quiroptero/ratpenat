@@ -235,7 +235,17 @@ div.footnotes {
     color: var(--h);
 }
 
+/* stats */
 pre.stats {
     font-size: 0.8rem;
     line-height: 0.8rem;
+    text-align: center;
+}
+
+/* latest post */
+p.latest-meta {
+    font-size: 1rem;
+}
+p.latest-post {
+    font-size: 1.3rem;
 }
