@@ -1,3 +1,11 @@
 {{ $filename := .Get 0 }}
 {{ $class := .Get 1 }}
+{{ $summary := .Get 2 }}
+<div class="stats">
+<details>
+{{ with $summary }}
+<summary>{{ . }}</summary>
+{{ end }}
 <pre{{ with $class }} class="{{.}}"{{ end }}>{{ readFile (path.Join .Page.File.Dir $filename ) | safeHTML }}</pre>
+</details>
+</div>
