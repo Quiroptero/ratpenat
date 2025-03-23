@@ -3,17 +3,28 @@
     {{ with .Content }}<div class="welcome">{{ . | safeHTML }}</div>{{ end }}
     <hr />
 
-    <div>
-    <h1>Entradas</h1>
-    <p>Las entradas son el principal tipo de contenido del blog.</p>
+    <div class="content">
+    {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
+    <div class="notice">
+        <p class="latest-meta">
+        Última entrada el <strong>{{ .Date | time.Format ":date_full"}}</strong>
+        </p>
+        <p class="latest-post">
+        <a href="{{ .RelPermalink }}"> {{ .Title }}</a>
+        </p>
+    </div>
+    {{ end }}
+    <p>Las <strong>entradas</strong> son el principal tipo de contenido del blog.</p>
+    <h1>Más recientes</h1>
+    <ul>
+        {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) | after 1 }}
+        <li>{{ .Date | time.Format "2006-01-02" }}: <a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+
     <p>→ Ver <a href="{{ "/blog" | relLangURL }}">todas las entradas</a></p>
 
-    <h2>Entrada más reciente</h2>
-    {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
-        <p>Publicada el {{ .Date | time.Format ":date_full"}}:<a href="{{ .RelPermalink }}"> {{ .Title }}</a></p>
-	{{ end }}
-
-    <h2>Entradas destacadas</h2>
+    <h2>Destacadas</h2>
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
     <ul>
@@ -26,11 +37,8 @@
 
     <hr>
 
-    <div>
-    <h1>Páginas</h1>
-    <p>Las páginas estáticas son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
-    <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
-    <h2>Páginas destacadas</h2>
+    <div class="content">
+    <p>Las <strong>páginas</strong> son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
     {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
     <ul>
@@ -38,6 +46,7 @@
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
         {{ end }}
     </ul>
+    <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
     </div>
 
     <hr class="small">
