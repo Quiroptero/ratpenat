@@ -161,6 +161,10 @@ figure.book {
     max-inline-size: unset;
 }
 
+figure.with-border img {
+    border: 2px solid var(--b);
+}
+
 figcaption {
     font-size: 0.85rem;
     text-align: center;
