@@ -1,0 +1,123 @@
+{{ define "main" }}
+<main>
+    <h1>{{ .Title }}</h1>
+
+    <div class="meta">
+        <span>
+            Actualizado por última vez el
+            <b><time datetime="{{ (os.Stat "content/lecturas/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
+               {{ (os.Stat "content/lecturas/data.yaml").ModTime | time.Format ":date_full" }}
+            </time></b>
+        </span>
+    </div>
+
+    <div class="content">
+    {{ .Content | partial "anchors.html" }}
+    </div>
+
+    <!-- parse books metadata to build a grid with covers -->
+    {{ $data := dict }}
+    {{ with .Resources.Get "data.yaml" }}
+        {{ with . | transform.Unmarshal }}
+            {{ $data = . }}
+        {{ end }}
+    {{ end }}
+
+    <!-- compute details of books -->
+    {{ $a := newScratch }}
+    {{ $a.Set "1" 0 }}
+    {{ $a.Set "2" 0 }}
+    {{ $a.Set "3" 0 }}
+    {{ $a.Set "4" 0 }}
+    {{ $a.Set "5" 0 }}
+    {{ range $data }}
+        {{ if eq .kind 1 }}{{ $a.Add "1" 1 }}{{ end }}
+        {{ if eq .kind 2 }}{{ $a.Add "2" 1 }}{{ end }}
+        {{ if eq .kind 3 }}{{ $a.Add "3" 1 }}{{ end }}
+        {{ if eq .kind 4 }}{{ $a.Add "4" 1 }}{{ end }}
+        {{ if eq .kind 5 }}{{ $a.Add "5" 1 }}{{ end }}
+    {{ end }}
+
+    <!-- paragraph with details of how many books were read -->
+    <div class="content">
+    <p>
+        Este año he leído <strong>{{ len $data }}</strong> libros
+        y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
+    </p>
+    <ul>
+        {{ if gt ($a.Get "1") 0 }}
+        <li>📕 <strong>{{ $a.Get "1" }}</strong> novelas</li>
+        {{ end }}
+        {{ if gt ($a.Get "2") 0 }}
+        <li>📘 <strong>{{ $a.Get "2" }}</strong> colecciones de cuentos o de poesía</li>
+        {{ end }}
+        {{ if gt ($a.Get "3") 0 }}
+        <li>🖼️ <strong>{{ $a.Get "3" }}</strong> novelas gráficas, cómics o libros de arte</li>
+        {{ end }}
+        {{ if gt ($a.Get "4") 0 }}
+        <li>📸 <strong>{{ $a.Get "4" }}</strong> libros de fotografía</li>
+        {{ end }}
+        {{ if gt ($a.Get "5") 0 }}
+        <li>📰 <strong>{{ $a.Get "5" }}</strong> ensayos, libros de historia u otras de no ficción</li>
+        {{ end }}
+    </ul>
+    </div>
+
+    <div class="bookgrid">
+    {{ range sort $data "weight" "desc" }}
+        <div class="container">
+            <!-- determine the kind of book -->
+            <!-- remember: we use := to initialize a variable and = to assign it a value afterwards -->
+            {{ $k := "" }}
+            {{ if eq .kind 1 }}
+                {{ $k = "📕" }}
+            {{ else if eq .kind 2 }}
+                {{ $k = "📘" }}
+            {{ else if eq .kind 3 }}
+                {{ $k = "🖼️" }}
+            {{ else if eq .kind 4 }}
+                {{ $k = "📸" }}
+            {{ else if eq .kind 5 }}
+                {{ $k = "📰" }}
+            {{ end }}
+
+            <!-- determine the list of authors and their roles (writing, illustration) -->
+            {{ $authors := slice }}
+            {{ $authorsAlt := slice }}
+            {{ range .author }}
+                {{ $s := .role }}
+                {{ $s := replace $s "E" "✍️" }}
+                {{ $s := replace $s "I" "🎨" }}
+                {{ $s := replace $s "F" "📸" }}
+                {{ $authors = append (delimit (slice $s .name) " " ) $authors }}
+                {{ $authorsAlt = append (slice .name ) $authorsAlt }}
+            {{ end }}
+
+            <!-- book cover with metadata -->
+            <figure class="book">
+                <p>{{ $k }}</p>
+                <!-- if available, the picture is a link to the review -->
+                {{ if .review }}<a href="{{ .review }}">{{ end }}
+                <!-- resize to fill an arbitrary size to fit movies page  -->
+                <img 
+                    alt="Portada del libro {{ .title }}. {{ if gt (len .author) 1 }}Autores: {{ else }}Autor: {{ end }} {{ delimit $authorsAlt ", " " y " }}."
+                    {{ with $.Resources.GetMatch (printf "img/%s*" .isbn) }}
+                    {{ with .Fill "342x513 Top" }}
+                    src="{{ .RelPermalink }}"
+                    {{ end }}
+                    {{ end }}
+                    loading="lazy"
+                >
+                {{ if .review }}</a>{{ end }}
+                <!--https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg-->
+                <figcaption>
+                    <!-- if available, the title is a link to the review -->
+                    <p><strong>{{ if .review }}<a href="{{ .review }}">{{ end }}{{ .title }}{{ if .review }}</a>{{ end }}</strong></p>
+                    <p>{{ delimit $authors "; " " y "}}</p>
+                </figcaption>
+            </figure>
+        </div>
+    {{ end }}
+    </div>
+</main>
+{{ end }}

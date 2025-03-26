@@ -157,6 +157,10 @@ figure {
     max-inline-size: min-content;
 }
 
+figure.book {
+    max-inline-size: unset;
+}
+
 figcaption {
     font-size: 0.85rem;
     text-align: center;
@@ -208,11 +212,16 @@ div.toc > details > nav > ul {
     border-top: 0.125rem solid var(--b);
 }
 
-/* movie list */
+/* movies and books list */
 div.grid {
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(4, 1fr);
+}
+div.bookgrid {
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
 }
 div.container {
     display: flex;
