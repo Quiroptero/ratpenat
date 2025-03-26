@@ -119,5 +119,19 @@
         </div>
     {{ end }}
     </div>
+
+    <hr/>
+
+    <!-- archive -->
+    <div>
+    <h1 id="archivo">Archivo</h1>
+    {{ $pages := where .Site.RegularPages "Layout" "eq" "books" }}
+    {{ $pages := $pages.ByDate.Reverse }}
+    <ul>
+        {{ range $pages }}
+        <li><a href="{{ .RelPermalink }}">Lecturas en {{ .Title }}</a></li>
+        {{ end }}
+    </ul>
+    </div>
 </main>
 {{ end }}
