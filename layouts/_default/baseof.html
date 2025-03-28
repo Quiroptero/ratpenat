@@ -27,7 +27,8 @@
     <script defer crossorigin="anonymous" src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
     {{ end }}
 
-    {{ if (eq .Layout `library`) }}
+    <!-- enable sorting library table -->
+    {{ if (eq .Section `biblioteca`) }}
     {{ $script := "js/tellico2html.js" | resources.Get | resources.Fingerprint }}
     <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
     <script type="text/javascript">

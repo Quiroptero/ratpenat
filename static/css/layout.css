@@ -199,6 +199,7 @@ td {
 
 th {
     padding: 0.5rem 0.5rem;
+    cursor: pointer;
 }
 
 td.field {
