@@ -15,139 +15,125 @@
 
     <div class="content">{{ .Content | partial "anchors.html" }}</div>
 
-    <!-- read the library data -->
+    <!-- read the library data file -->
     {{ $data := .Resources.Get "biblioteca.csv" | transform.Unmarshal }}
 
     <!-- set some variables to help compute metrics -->
-    {{ $s := newScratch }}
-    {{ $s.Set "ebook" 0 }}
-    {{ $s.Set "hard" 0 }}
-    {{ $s.Set "softplus" 0 }}
-    {{ $s.Set "soft" 0 }}
-    {{ $s.Set "read" 0 }}
+    <!-- books -->
     {{ $total_books := (sub (len $data) 1) }}
-    {{ $authors := slice }}
-    {{ $authors_mentions := newScratch }}
     {{ $books := slice }}
-    {{ $languages := slice }}
-    {{ $languages_mentions := newScratch }}
+    <!-- book covers -->
+    {{ $covers := dict }}
+    <!-- books read -->
+    {{ $read := 0 }}
+    <!-- authors -->
+    {{ $authors := dict }}
+    {{ $authors_slice := slice }}
+    <!-- languages -->
+    {{ $languages := dict }}
     {{ $languages_slice := slice }}
 
     <!-- compute metrics -->
     <!-- reading data after 1 to ignore headers -->
     {{ range $i, $x :=  after 1 $data }}
         {{ range $j, $y := $x }}
-            <!-- checking authors -->
+            <!-- authors -->
             {{ if eq $j 2 }}
                 {{ range split $y "; " }}
-                    {{ if not ($authors_mentions.Get . ) }}
-                        {{ $authors_mentions.Set $y 1 }}
-                    {{ else }}
-                        {{ $authors_mentions.Add $y 1}}
-                    {{ end }}
-                    {{ $authors = append (slice . ) $authors }}
+                    {{ $authors = merge $authors (dict . (add (index $authors .  | default 0) 1) )}}
                 {{ end }}
             {{ end }}
-            <!-- checking books -->
+            <!-- books -->
             {{ if eq $j 0 }}
                 {{ $books = append (slice . ) $books }}
             {{ end }}
-            <!-- checking book covers -->
+            <!-- book covers -->
             {{ if eq $j 3 }}
-                {{ if eq $y "Hardback" }}
-                    {{ $s.Add "hard" 1 }}
-                {{ else if eq $y "Paperback" }}
-                    {{ $s.Add "soft" 1 }}
-                {{ else if eq $y "Trade Paperback" }}
-                    {{ $s.Add "softplus" 1 }}
-                {{ else }}
-                    {{ $s.Add "ebook" 1 }}
-                {{ end }}
+                {{ $covers = merge $covers (dict . (add (index $covers .  | default 0) 1) )}}
             {{ end }}
-            <!-- checking languages -->
+            <!-- languages -->
             {{ if eq $j 4 }}
                 {{ range split $y "; " }}
-                    {{ if not ($languages_mentions.Get . )}}
-                        {{ $languages_mentions.Set . 1 }}
-                    {{ else }}
-                        {{ $languages_mentions.Add . 1 }}
-                    {{ end }}
-                    {{ $languages = append (slice . ) $languages }}
+                    <!-- here we're merging two dicts: the languages dict -->
+                    <!-- and a temporary dict that contains the language as key and the count as value -->
+                    <!-- the trick is that the value is retrieved from the languages dict -->
+                    <!-- if a language is not present yet in the languages dict, it takes the value 0 by default -->
+                    <!-- if the language is already present, then it takes the corresponding value -->
+                    <!-- in any case, it will add 1 to the value, thus getting the number of "mentions" -->
+                    <!-- remember: the dot "." represents the current language -->
+                    {{ $languages = merge $languages (dict . (add (index $languages .  | default 0) 1) )}}
                 {{ end }}
             {{ end }}
             <!-- how many books (of my library) have I read? -->
             {{ if eq $j 5}}
                 {{ if eq $y "true" }}
-                    {{ $s.Add "read" 1 }}
+                    {{ $read = add $read 1 }}
                 {{ end }}
             {{ end }}
         {{ end }}
     {{ end }}
 
-    <!-- covers -->
-    {{ $s.Set "book" (add ($s.Get "hard") ($s.Get "soft") ($s.Get "softplus"))}}
-    <!-- most mentioned author -->
-    {{ $most_mentioned := "" }}
-    {{ range first 1 $authors }}
-        {{ $most_mentioned = . }}
-    {{ end }}
-    {{ range $authors }}
-        {{ if gt ($authors_mentions.Get . ) ($authors_mentions.Get $most_mentioned ) }}
-            {{ $most_mentioned = . }}
-        {{ end }}
-    {{ end }}
-    <!-- distinct authors, languages and books -->
-    {{ $distinct_authors := uniq $authors | len }}
-    {{ $distinct_books := uniq $books | len }}
-    {{ $languages := uniq $languages }}
-
-    <!-- sort languages by mentions -->
-    {{ range $languages }}
-        {{ $languages_slice = append (slice (dict "language" . "value" ($languages_mentions.Get . | int ))) $languages_slice }}
-    {{ end }}
-
-    <!-- compute percentages -->
-    {{ $s.Set "bookP" (div (float ($s.Get "book")) ($total_books) | math.Product 100 | math.Round) }}
-    {{ $s.Set "ebookP" (div (float ($s.Get "ebook")) ($total_books) | math.Product 100 | math.Round) }}
-    {{ $s.Set "hardP" (div (float ($s.Get "hard")) ($s.Get "book") | math.Product 100 | math.Round) }}
-    {{ $s.Set "softP" (div (float ($s.Get "soft")) ($s.Get "book") | math.Product 100 | math.Round) }}
-    {{ $s.Set "softplusP" (div (float ($s.Get "softplus")) ($s.Get "book") | math.Product 100 | math.Round) }}
-
     <!-- paragraph to showcase the different metrics -->
     <div class="content">
         <h1>Estadísticas de mi biblioteca</h1>
+        <!-- totals -->
         <p>
-            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca ({{ $distinct_books }} no repetidos):
+            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca ({{ uniq $books | len }} no repetidos),
+            de los cuales he leído <strong>{{ $read }}</strong> ({{ div (float $read) $total_books | math.Product 100 | math.Round }}%).
         </p>
+        <!-- covers -->
         <ul>
-            <li><strong>{{ $s.Get "book" }}</strong> ({{ $s.Get "bookP" }}%) son libros físicos
+            {{ $printed := 0 }}
+            {{ range $cover, $count := $covers }}
+            {{ if not (eq $cover "E-Book") }}{{ $printed = add $printed $count }}{{ end }}
+            {{ end }}
+            <li><strong>{{ $printed }}</strong> ({{ div (float $printed) $total_books | math.Product 100 | math.Round }}%) son libros físicos
             <ul>
-                <li><strong>{{ $s.Get "hard" }}</strong> ({{ $s.Get "hardP" }}%) en cartoné</li>
-                <li><strong>{{ $s.Get "softplus" }}</strong> ({{ $s.Get "softplusP" }}%) en rústica+</li>
-                <li><strong>{{ $s.Get "soft" }}</strong> ({{ $s.Get "softP" }}%) en rústica</li>
+                <li>
+                    <strong>{{ index $covers "Hardback" }}</strong>
+                    ({{ div (index $covers "Hardback") (float $printed) | math.Product 100 | math.Round }}%) encuadernados en cartoné
+                </li>
+                <li>
+                    <strong>{{ index $covers "Trade Paperback" }}</strong>
+                    ({{ div (index $covers "Trade Paperback") (float $printed) | math.Product 100 | math.Round }}%) en rústica+
+                </li>
+                <li>
+                    <strong>{{ index $covers "Paperback" }}</strong>
+                    ({{ div (index $covers "Paperback") (float $printed) | math.Product 100 | math.Round }}%) en rústica
+                </li>
             </ul>
-            <li><strong>{{ $s.Get "ebook" }}</strong> ({{ $s.Get "ebookP" }}%) son libros electrónicos</li>
+            <li><strong>{{ index $covers "E-Book" }}</strong> ({{ div (index $covers "E-Book" ) (float $total_books) | math.Product 100 | math.Round }}%) son libros electrónicos</li>
         </ul>
+        <!-- languages -->
         <p>
-            Hay representados <strong>{{ $distinct_authors }}</strong> autores distintos.
-            El autor del que tengo más libros es <strong>{{ $most_mentioned }}</strong>, con {{ $authors_mentions.Get $most_mentioned }} libros.
+            Y están en <strong>{{ len $languages }}</strong> idiomas diferentes:
         </p>
-        <p>
-            De los libros de mi biblioteca he leído <strong>{{ $s.Get "read" }}</strong> ({{ div (float ($s.Get "read")) (float $total_books) | math.Product 100 | math.Round }}%).
-        </p>
-        <p>
-            Tengo libros en <strong>{{ len $languages }}</strong> idiomas diferentes:
-        </p>
+        <!-- sort languages by number of mentions -->
+        {{ range $key, $value := $languages }}
+            {{ $languages_slice = append (dict "language" $key "count" $value) $languages_slice }}
+        {{ end }}
         <ul>
-        {{ range sort $languages_slice "value" "desc" }}
-            <li>{{ .language }}: <strong>{{ .value }}</strong> ({{ div (float .value) $total_books | math.Product 100 | math.Round }}%)</li>
+        {{ range sort $languages_slice "count" "desc" }}
+            <li>{{ .language }}: <strong>{{ .count }}</strong> ({{ div (float .count) $total_books | math.Product 100 | math.Round }}%)</li>
         {{ end }}
         </ul>
+        <!-- sort authors by number of mentions and get the most mentioned -->
+        {{ range $key, $value := $authors }}
+            {{ $authors_slice = append (dict "name" $key "count" $value) $authors_slice }}
+        {{ end }}
+        <p>
+            Hay representados <strong>{{ len $authors }}</strong> autores distintos.
+            {{ range first 1 (sort $authors_slice "count" "desc") }}
+            El autor del que tengo más libros es <strong>{{ .name }}</strong>, con {{ .count }} libros.
+            {{ end }}
+        </p>
     </div>
 
     <hr/>
 
     <!-- parse csv to build a table -->
+    <!-- scratch to work with title and subtitle fields -->
+    {{ $s := newScratch }}
     <table class="sortable">
         {{ with $data }}
             <!-- headers of the table -->
