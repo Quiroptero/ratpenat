@@ -15,27 +15,15 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    <!-- parse books metadata to build a grid with covers -->
-    {{ $data := dict }}
-    {{ with .Resources.Get "data.yaml" }}
-        {{ with . | transform.Unmarshal }}
-            {{ $data = . }}
-        {{ end }}
-    {{ end }}
+    <!-- read the data file -->
+    {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
+
+    <!-- set some variables to help compute metrics -->
+    {{ $kinds := dict }}
 
     <!-- compute details of books -->
-    {{ $a := newScratch }}
-    {{ $a.Set "1" 0 }}
-    {{ $a.Set "2" 0 }}
-    {{ $a.Set "3" 0 }}
-    {{ $a.Set "4" 0 }}
-    {{ $a.Set "5" 0 }}
-    {{ range $data }}
-        {{ if eq .kind 1 }}{{ $a.Add "1" 1 }}{{ end }}
-        {{ if eq .kind 2 }}{{ $a.Add "2" 1 }}{{ end }}
-        {{ if eq .kind 3 }}{{ $a.Add "3" 1 }}{{ end }}
-        {{ if eq .kind 4 }}{{ $a.Add "4" 1 }}{{ end }}
-        {{ if eq .kind 5 }}{{ $a.Add "5" 1 }}{{ end }}
+    {{ range $i, $x := $data }}
+        {{ $kinds = merge $kinds (dict (string .kind) (add (index $kinds (string .kind) | default 0) 1) )}}
     {{ end }}
 
     <!-- paragraph with details of how many books were read -->
@@ -45,20 +33,20 @@
         y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
     </p>
     <ul>
-        {{ if gt ($a.Get "1") 0 }}
-        <li>📕 <strong>{{ $a.Get "1" }}</strong> novelas</li>
+        {{ if gt (index $kinds "1") 0 }}
+        <li>📕 <strong>{{ index $kinds "1" }}</strong> novelas</li>
         {{ end }}
-        {{ if gt ($a.Get "2") 0 }}
-        <li>📘 <strong>{{ $a.Get "2" }}</strong> colecciones de cuentos o de poesía</li>
+        {{ if gt (index $kinds "2") 0 }}
+        <li>📘 <strong>{{ index $kinds "2" }}</strong> colecciones de cuentos o de poesía</li>
         {{ end }}
-        {{ if gt ($a.Get "3") 0 }}
-        <li>🖼️ <strong>{{ $a.Get "3" }}</strong> novelas gráficas, cómics o libros de arte</li>
+        {{ if gt (index $kinds "3") 0 }}
+        <li>🖼️ <strong>{{ index $kinds "3" }}</strong> novelas gráficas, cómics o libros de arte</li>
         {{ end }}
-        {{ if gt ($a.Get "4") 0 }}
-        <li>📸 <strong>{{ $a.Get "4" }}</strong> libros de fotografía</li>
+        {{ if gt (index $kinds "4") 0 }}
+        <li>📸 <strong>{{ index $kinds "4" }}</strong> libros de fotografía</li>
         {{ end }}
-        {{ if gt ($a.Get "5") 0 }}
-        <li>📰 <strong>{{ $a.Get "5" }}</strong> ensayos, libros de historia u otras de no ficción</li>
+        {{ if gt (index $kinds "5") 0 }}
+        <li>📰 <strong>{{ index $kinds "5" }}</strong> ensayos, libros de historia u otras de no ficción</li>
         {{ end }}
     </ul>
     </div>
