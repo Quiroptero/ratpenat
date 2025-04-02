@@ -1,0 +1,35 @@
+/* implement a cross-browser progress bar */
+
+/* since different browsers use different ways to style <progress> */
+/* (which is very stupid) */
+/* I need to hide the progress element itself */
+/* and get a solution that (hopefully) works everywhere */
+progress {
+    opacity: 0;
+}
+
+/* wrapper of the progress bar */
+.progress-container {
+    position: relative;
+    display: inline-block;
+    background: var(--base03);
+    height: 0.5rem;
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* the "actual" progress bar */
+.progress-bar {
+    background: var(--base0A);
+    height: 0.5rem;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* text accompanying the bar */
+.progress-label {
+    position: relative;
+    margin-bottom: 0rem;
+    margin-top: 2rem;
+}
