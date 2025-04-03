@@ -114,7 +114,19 @@
         {{ end }}
         <ul>
         {{ range sort $languages_slice "count" "desc" }}
-            <li>{{ .language }}: <strong>{{ .count }}</strong> ({{ div (float .count) $total_books | math.Product 100 | math.Round }}%)</li>
+            <!-- for now, hardcode the languages -->
+            <!-- see: https://github.com/gohugoio/hugo/issues/12212 -->
+            {{ $lang := ""}}
+            {{ if eq .language "es" }}
+                {{ $lang = "español" }}
+            {{ else if eq .language "en" }}
+                {{ $lang = "inglés" }}
+            {{ else if eq .language "fr" }}
+                {{ $lang = "francés" }}
+            {{ else if eq .language "ca" }}
+                {{ $lang = "catalán" }}
+            {{ end }}
+            <li>{{ $lang }}: <strong>{{ .count }}</strong> ({{ div (float .count) $total_books | math.Product 100 | math.Round }}%)</li>
         {{ end }}
         </ul>
         <!-- sort authors by number of mentions and get the most mentioned -->
