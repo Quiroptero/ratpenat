@@ -157,10 +157,6 @@ figure {
     max-inline-size: min-content;
 }
 
-figure.book {
-    max-inline-size: unset;
-}
-
 figure.with-border img {
     border: 2px solid var(--b);
 }
@@ -240,4 +236,18 @@ div.container img {
 }
 div.container p {
     margin: 0;
+}
+figure.book {
+    max-inline-size: unset;
+    margin: 0;
+}
+figure.book figcaption {
+    font-size: 0.8rem;
+}
+figure.movie {
+    max-inline-size: unset;
+    margin: 0;
+}
+figure.movie figcaption {
+    font-size: 0.7rem;
 }
