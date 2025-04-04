@@ -36,7 +36,7 @@
 
     {{ if .Params.toc }}
     <div class="toc">
-        <details>
+        <details{{ if eq .Params.toc "open" }} open=""{{ end }}>
             <summary>Tabla de contenidos</summary>
             {{ .TableOfContents }}
         </details>
