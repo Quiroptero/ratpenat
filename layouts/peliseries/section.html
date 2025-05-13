@@ -5,8 +5,8 @@
     <div class="meta">
         <span>
             Actualizado por última vez el
-            <b><time datetime="{{ (os.Stat "content/pelis/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
-               {{ (os.Stat "content/pelis/data.yaml").ModTime | time.Format ":date_full" }}
+            <b><time datetime="{{ (os.Stat "content/peliseries/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
+               {{ (os.Stat "content/peliseries/data.yaml").ModTime | time.Format ":date_full" }}
             </time></b>
         </span>
     </div>
@@ -43,7 +43,7 @@
     <!-- paragraph with details of how many movies were watched -->
     <div class="content">
     <p>
-        Este año he visto <strong>{{ $total_movies }}</strong> películas distintas
+        Este año he visto <strong>{{ $total_movies }}</strong> películas y series distintas
         (<strong>{{ len $movies_slice }}</strong> de ellas <a href="/doble.gif">en más de una ocasión</a>):
     </p>
     <ul>
