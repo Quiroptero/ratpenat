@@ -1,0 +1,41 @@
+{{ define "main" }}
+<main>
+    <h1>{{ .Title }}</h1>
+
+    <div class="meta">
+        <span>
+            Actualizado por última vez el
+            <b><time datetime="{{ (os.Stat "content/videojuegos/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
+               {{ (os.Stat "content/videojuegos/data.yaml").ModTime | time.Format ":date_full" }}
+            </time></b>
+        </span>
+    </div>
+
+    <div class="content">
+    {{ .Content | partial "anchors.html" }}
+    </div>
+
+    <!-- read the games data file -->
+    {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
+    {{ $data = shuffle $data }}
+
+    <!-- grid with game posters -->
+    <div class="grid">
+    {{ range $data }}
+        <div class="container">
+            <figure class="movie" >
+            <img
+                alt="Póster del videojuego {{ .title }}" 
+                {{ with $.Resources.GetMatch (printf "img/%s*" .id) }}
+                src="{{ .RelPermalink }}"
+                {{ end }}
+            >
+            <figcaption>
+                <p><strong>{{ .title }}</strong></p>
+            </figcaption>
+            </figure>
+        </div>
+    {{ end }}
+    </div>
+</main>
+{{ end }}
