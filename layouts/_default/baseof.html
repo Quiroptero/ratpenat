@@ -9,8 +9,8 @@
 
     <title>{{ with .Title }}{{ . }} &ndash; {{end}}{{ .Site.Title }}</title>
     {{ with .Page.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
-    {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ . }}">{{ end }}
-    {{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}
+    {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
+    {{ with .Site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
 
     {{ partial "theme" . }}
 
