@@ -251,3 +251,12 @@ figure.movie {
 figure.movie figcaption {
     font-size: 0.7rem;
 }
+
+blockquote {
+    margin: 2rem 3rem;
+}
+
+blockquote p {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
