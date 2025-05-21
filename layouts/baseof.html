@@ -42,6 +42,14 @@
 
 </head>
 <body id="flex-container">
+    {{ if site.Params.debug }}
+        <div class="debug">
+            {{ partial "template-call-stack.html" . }}
+            <p>Current Page Path:</p>
+            {{ .Path }}
+        </div>
+    {{ end }}
+
     {{ partial "header" . }}
     {{ block "main" . }}{{ end }}
     {{ partial "footer" . }}

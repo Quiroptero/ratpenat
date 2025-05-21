@@ -16,7 +16,7 @@
     </ul>
 
     <h1>Todas las páginas</h1>
-    {{ $static := $pages | intersect (where .Site.AllPages.ByTitle ".Type" "eq" "static") }}
+    {{ $static := $pages | intersect (where .Site.AllPages.ByTitle "Params.static" true ) }}
     <ul>
         {{ range $static }}
         <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>

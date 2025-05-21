@@ -6,7 +6,7 @@
         {{ if eq $type "serie" }}
             {{ $txt = "que forman parte de" }}
         {{ end }}
-        <h1>Entradas {{ $txt }} la {{ .Data.Singular }} «{{ .Data.Term }}»</h1>
+        <h1>Entradas {{ $txt }} la {{ .Data.Singular }} «{{ if eq $type "serie" }}{{ .Title }}{{ else }}{{ .Data.Term }}{{ end }}»</h1>
     </div>
     
     {{ with .Content }}

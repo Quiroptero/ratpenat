@@ -2,14 +2,7 @@
 <main>
     <h1>{{ .Title }}</h1>
 
-    <div class="meta">
-        <span>
-            Actualizado por última vez el
-            <b><time datetime="{{ (os.Stat "content/lecturas/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
-               {{ (os.Stat "content/lecturas/data.yaml").ModTime | time.Format ":date_full" }}
-            </time></b>
-        </span>
-    </div>
+    {{ partial "last_mode_by_file.html" . }}
 
     <div class="content">
     {{ .Content | partial "anchors.html" }}
@@ -130,7 +123,7 @@
     <!-- archive -->
     <div>
     <h1 id="archivo">Archivo</h1>
-    {{ $pages := where .Site.RegularPages "Layout" "eq" "books" }}
+    {{ $pages := where .Site.RegularPages "Section" "eq" "readings" }}
     {{ $pages := $pages.ByDate.Reverse }}
     <ul>
         {{ range $pages }}
