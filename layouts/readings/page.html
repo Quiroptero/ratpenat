@@ -2,14 +2,7 @@
 <main>
     <h1>Lecturas en {{ .Title }}</h1>
 
-    <div class="meta">
-        <span>
-            Actualizado por última vez el
-            <b><time datetime="{{ (os.Stat (printf "content/lecturas/%s/data.yaml" .Title )).ModTime.Format "2006-01-02T15:04:05" }}">
-               {{ (os.Stat (printf "content/lecturas/%s/data.yaml" .Title )).ModTime | time.Format ":date_full" }}
-            </time></b>
-        </span>
-    </div>
+    {{ partial "last_mode_by_file.html" . }}
 
     <div class="notice">
         Este es el registro de mis lecturas durante {{ .Title }}. El registro actual se encuentra acá: <a href="/lecturas">/lecturas</a>.
@@ -129,11 +122,11 @@
     </div>
     
     <!-- links to next/prev pages -->
-    {{- $pages := where site.RegularPages "Layout" "eq" "books" }}
+    {{- $pages := where site.RegularPages "Section" "eq" "readings" }}
     {{- if and (gt (len $pages) 1) (in $pages . ) }}
     <nav class="nextprev">
-        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
-        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
     </nav>
     {{- end }}
 </main>

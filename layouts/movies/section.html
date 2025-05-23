@@ -2,14 +2,7 @@
 <main>
     <h1>{{ .Title }}</h1>
 
-    <div class="meta">
-        <span>
-            Actualizado por última vez el
-            <b><time datetime="{{ (os.Stat "content/peliseries/data.yaml").ModTime.Format "2006-01-02T15:04:05" }}">
-               {{ (os.Stat "content/peliseries/data.yaml").ModTime | time.Format ":date_full" }}
-            </time></b>
-        </span>
-    </div>
+    {{ partial "last_mode_by_file.html" . }}
 
     <div class="content">
     {{ .Content | partial "anchors.html" }}
@@ -47,8 +40,8 @@
         (<strong>{{ len $movies_slice }}</strong> de ellas <a href="/doble.gif">en más de una ocasión</a>):
     </p>
     <ul>
-        <li>📽️ <strong>{{ index $kinds "1" }}</strong> en el cine</li>
-        <li>🍿 <strong>{{ index $kinds "2" }}</strong> en el <a href="/2025/02/cinecasa">cinecasa</a></li>
+        <li>🍿 <strong>{{ index $kinds "1" }}</strong> en el cine</li>
+        <li>🏠 <strong>{{ index $kinds "2" }}</strong> en el <a href="/2025/02/cinecasa">cinecasa</a></li>
         <li>📺 <strong>{{ index $kinds "3" }}</strong> en otro tipo de pantallas</li>
     </ul>
     </div>
@@ -59,8 +52,8 @@
         <div class="container">
             <figure class="movie" >
             {{ $s := .kind }}
-            {{ $s := replace $s "1" "📽️" }}
-            {{ $s := replace $s "2" "🍿" }}
+            {{ $s := replace $s "1" "🍿" }}
+            {{ $s := replace $s "2" "🏠" }}
             {{ $s := replace $s "3" "📺" }}
             <p>{{ $s }}</p>
             <img

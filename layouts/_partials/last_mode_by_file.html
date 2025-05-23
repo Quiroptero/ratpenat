@@ -1,0 +1,8 @@
+<div class="meta">
+    <span>
+        Actualizado por última vez el
+        <b><time datetime="{{ (os.Stat (printf "content/%s/%s" .File.Dir .Params.data_file )).ModTime.Format "2006-01-02T15:04:05" }}">
+           {{ (os.Stat (printf "content/%s/%s" .File.Dir .Params.data_file )).ModTime | time.Format ":date_full" }}
+        </time></b>
+    </span>
+</div>

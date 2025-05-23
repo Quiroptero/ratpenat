@@ -1,17 +1,8 @@
 {{ define "main" }}
 <main>
     <h1>{{ .Title }}</h1>
-    <!-- Keeping this metadata section here because the lastmod is being read from the biblioteca.csv file -->
-    <!-- There might be a way to use {{ partial "static_meta" . }} instead, -->
-    <!-- but I don't feel like figuring out how to pass the lastmod parameter -->
-    <div class="meta">
-        <span>
-            Actualizado por última vez el
-            <b><time datetime="{{ (os.Stat "content/biblioteca/biblioteca.csv").ModTime.Format "2006-01-02T15:04:05" }}">
-               {{ (os.Stat "content/biblioteca/biblioteca.csv").ModTime | time.Format ":date_full" }}
-            </time></b>
-        </span>
-    </div>
+
+    {{ partial "last_mode_by_file.html" . }}
 
     <div class="content">{{ .Content | partial "anchors.html" }}</div>
 

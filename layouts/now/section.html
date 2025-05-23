@@ -36,7 +36,7 @@
     <!-- now pages archive -->
     <div>
     <h1 id="historial">Historial</h1>
-    {{ $pages := where .Site.RegularPages "Layout" "eq" "now" }}
+    {{ $pages := where .Site.RegularPages "Section" "eq" "now" }}
     {{ $pages := $pages.ByDate.Reverse }}
     <ul>
         {{ range first 3 $pages }}
