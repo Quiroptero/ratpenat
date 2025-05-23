@@ -1,0 +1,5 @@
+{{ if .Draft }}
+{{ printf "[draft] %s" .Title }}
+{{ else }}
+{{ .Title }}
+{{ end }}
