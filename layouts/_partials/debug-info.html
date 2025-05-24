@@ -1,0 +1,14 @@
+{{ $calls := slice }}
+{{ with templates.Current }}
+  {{ range .Ancestors }}
+    {{ $calls = append (slice .Name) $calls }}
+    {{ with .Base }}
+      {{ $calls = append (slice .Name) $calls }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+<p><strong>Calls</strong>: {{ delimit $calls " -> "}}</p>
+<p><strong>Page path</strong>: {{ page.Path }}</p>
+<p><strong>Words</strong>: {{ page.WordCount }}</p>
+<p><strong>Reading time</strong>: {{ page.ReadingTime }}</p>
+<p><strong>CSS</strong>: {{ .Store.Get "random_palette" }}</p>

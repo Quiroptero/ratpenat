@@ -249,3 +249,13 @@ p.latest-meta {
 p.latest-post {
     font-size: 1.3rem;
 }
+
+/* debug info */
+div.debug {
+    color: var(--m);
+    background: var(--nb);
+}
+
+div.debug strong {
+    color: var(--s);
+}

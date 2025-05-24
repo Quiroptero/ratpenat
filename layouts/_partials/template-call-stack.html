@@ -1,9 +1,0 @@
-{{ with templates.Current }}
-  <p>Template call stack:</p>
-  {{ range .Ancestors }}
-    {{ .Name }}<br>
-    {{ with .Base }}
-      {{ .Name }}<br>
-    {{ end }}
-  {{ end }}
-{{ end }}
