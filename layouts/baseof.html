@@ -12,7 +12,19 @@
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
     {{ with .Site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
 
-    {{ partial "theme" . }}
+    <!-- theme -->
+    {{ if (eq .Site.Params.theme.palette "random") }}
+        {{ range (readDir "themes/ratpenat/static/css/palettes" | shuffle | first 1) }}
+            <link rel="stylesheet" href="{{ printf "css/palettes/%s" .Name | absURL }}">
+            <!-- set the random palette name for later use in debug mode -->
+            {{ $.Store.Set "random_palette" .Name }}
+            <!-- -->
+        {{ end }}
+    {{ else }}
+        <link rel="stylesheet" href="{{ printf "css/palettes/%s.css" (.Site.Params.theme.palette | default "darktooth") | absURL }}">
+    {{ end }}
+    <link rel="stylesheet" href="{{ "css/ratpenat.css" | absURL }}">
+    <!-- /theme -->
 
     {{ with .OutputFormats.Get "RSS" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
@@ -42,13 +54,13 @@
 
 </head>
 <body id="flex-container">
+    <!-- display debug information -->
     {{ if site.Params.debug }}
         <div class="debug">
-            {{ partial "template-call-stack.html" . }}
-            <p>Current Page Path:</p>
-            {{ .Path }}
+            {{ partial "debug-info.html" . }}
         </div>
     {{ end }}
+    <!-- /debug -->
 
     {{ partial "header" . }}
     {{ block "main" . }}{{ end }}
