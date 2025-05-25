@@ -8,6 +8,8 @@ header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
 /* body container */
