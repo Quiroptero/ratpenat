@@ -11,7 +11,7 @@
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
     {{ range $featured}}
     <div class="row-label-link">
-        <div class="label-fixed-day">{{ .Date.Format "02" }}&nbsp;</div>
+        <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}:</div>
         <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
     </div>
     {{ end }}
