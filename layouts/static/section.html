@@ -6,22 +6,14 @@
     </div>
 
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
-
-    <h1>Páginas destacadas</h1>
-    {{ $featured := $pages | intersect (where .Site.AllPages.ByTitle "Params.featured" true )}}
-    <ul>
-        {{ range $featured }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
-        {{ end }}
-    </ul>
-
-    <h1>Todas las páginas</h1>
     {{ $static := $pages | intersect (where .Site.AllPages.ByTitle "Params.static" true ) }}
-    <ul>
-        {{ range $static }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
-        {{ end }}
-    </ul>
-
+    {{ range $static }}
+        <a href="{{ .Permalink }}">
+        <div class="static-page-card">
+            <div class="static-page-title">{{ .Title }}</div>
+            <div class="static-page-descr">{{ .Description }}</div>
+        </div>
+        </a>
+    {{ end }}
 </main>
 {{ end }}

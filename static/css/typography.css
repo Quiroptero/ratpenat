@@ -259,3 +259,19 @@ div.debug {
 div.debug strong {
     color: var(--s);
 }
+
+div.static-page-card {
+    background: var(--nb);
+}
+
+div.static-page-title {
+    font-size: 1.2rem;
+    color: var(--h);
+    text-align: center;
+}
+
+div.static-page-descr {
+    font-size: 0.9rem;
+    color: var(--mute);
+    text-align: center;
+}

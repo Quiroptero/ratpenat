@@ -29,8 +29,8 @@
     {{ with .OutputFormats.Get "RSS" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}
-
-    {{ if (eq .Layout `search`) }}
+    
+    {{ if (eq .Path "/search") }}
     <link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
     {{- $fastsearch := resources.Get "js/fastsearch.js" | js.Build (dict "params" (dict "fuseOpts" site.Params.fuseOpts)) | resources.Minify }}
     {{- $fusejs := resources.Get "js/fuse.basic.min.js" }}
@@ -40,7 +40,7 @@
     {{ end }}
 
     <!-- enable sorting library table -->
-    {{ if (eq .Section `biblioteca`) }}
+    {{ if (eq .Path "/library") }}
     {{ $script := "js/tellico2html.js" | resources.Get | resources.Fingerprint }}
     <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
     <script type="text/javascript">

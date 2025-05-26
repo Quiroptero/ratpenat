@@ -269,6 +269,60 @@ div.debug {
 }
 
 div.debug p {
-    margin-top: 0.2rem;
+    margin: 0.2rem 0rem;
+}
+
+div.debug pre {
+    margin: 0rem;
+}
+
+/* display list of links nicely */
+/* flex based */
+div.row-label-link {
+    display: flex;
+    align-items: flex-start;
+}
+
+div.label-fixed-date {
+    width: 12ch; /* YYYY-MM-DD: */
+    flex-shrink: 0;
+}
+
+div.label-fixed-day {
+    width: 3ch; /* DD */
+    flex-shrink: 0;
+}
+
+div.link-wrap {
+    flex: 1;
+}
+
+/* static pages links in home */
+
+div.grid-link-label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1ch;
+  row-gap: 0.5rem;
+  align-items: start;
+}
+
+div.label-cell {
+    display: flex;
+    align-items: center;
+}
+
+div.link-cell {
+    display: flex;
+    align-items: center;
+}
+
+/* static pages links in section */
+div.static-page-card {
+    margin: 0.5rem 0rem;
+    padding: 0.5rem 0rem;
+}
+
+div.static-page-title {
     margin-bottom: 0.2rem;
 }

@@ -12,15 +12,13 @@
             <div>
             {{ range .Pages.GroupByDate "January" }}
                 {{ $month := .Key }}
-                <h1>{{ $month }} {{ $year }}</h1>
-                <ul>
-                    {{ range .Pages }}
-                    <li>
-                    <span>{{ .Date.Format "02" }}</span>
-                    <a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a>
-                    </li>
-                    {{ end }}
-                </ul>
+                <h1>{{ $year }} {{ $month }}</h1>
+                {{ range .Pages }}
+                    <div class="row-label-link">
+                        <div class="label-fixed-day">{{ .Date.Format "02" }}&nbsp;</div>
+                        <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
+                    </div>
+                {{ end }}
             {{ end }}
             </div>
         {{ end }}

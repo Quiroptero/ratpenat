@@ -9,13 +9,11 @@
 
     {{ $pages := where .Site.AllPages "Type" "=" "blog" }}
     {{ $rl := $pages | intersect (where .Site.RegularPages.ByDate.Reverse "Params.rl" true )}}
-    <ul>
-        {{ range $rl }}
-        <li>
-            <span>{{ dateFormat "2006-01-02" .Date }}</span>
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </li>
-        {{ end }}
-    </ul>
+    {{ range $rl }}
+    <div class="row-label-link">
+        <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}:</div>
+        <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+    </div>
+    {{ end }}
 </main>
 {{ end }}

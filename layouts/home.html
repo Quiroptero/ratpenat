@@ -16,11 +16,14 @@
     {{ end }}
     <p>Las <strong>entradas</strong> son el principal tipo de contenido del blog.</p>
     <h1>Más recientes</h1>
-    <ul>
-        {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) | after 1 }}
-        <li>{{ .Date | time.Format "2006-01-02" }}: <a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></li>
+    <div>
+    {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) | after 1 }}
+        <div class="row-label-link">
+            <div class="label-fixed-date">{{ .Date | time.Format "2006-01-02" }}:&nbsp;</div>
+            <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
+        </div>
     {{ end }}
-    </ul>
+    </div>
 
     <p>→ Ver <a href="{{ "/blog" | relLangURL }}">todas las entradas</a></p>
 
@@ -29,7 +32,10 @@
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
     <ul>
     {{ range first 5 $featured}}
-        <li>{{ .Date | time.Format "2006-01-02" }}: <a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></li>
+        <div class="row-label-link">
+            <div class="label-fixed-date">{{ .Date | time.Format "2006-01-02" }}:&nbsp;</div>
+            <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
+        </div>
     {{ end }}
     </ul>
     <p>→ Ver todas las <a href="{{ "/destacadas/" | relLangURL }}">entradas destacadas</a></p>
@@ -41,11 +47,12 @@
     <p>Las <strong>páginas</strong> son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
     {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
-    <ul>
+    <div class="grid-link-label">
         {{ range $featured }}
-        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>: {{ .Description }}</li>
+        <div class="link-cell"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+        <div class="label-cell">{{ .Description }}</div>
         {{ end }}
-    </ul>
+    </div>
     <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
     </div>
 

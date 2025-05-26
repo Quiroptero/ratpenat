@@ -7,8 +7,21 @@
     {{ end }}
   {{ end }}
 {{ end }}
-<p><strong>Calls</strong>: {{ delimit $calls " -> "}}</p>
+
+<p><strong>CSS</strong>: {{ .Store.Get "random_palette" }}</p>
+<p><strong>Kind</strong>: {{ page.Kind }}</p>
 <p><strong>Page path</strong>: {{ page.Path }}</p>
+<p><strong>Calls</strong>: {{ delimit $calls " -> "}}</p>
 <p><strong>Words</strong>: {{ page.WordCount }}</p>
 <p><strong>Reading time</strong>: {{ page.ReadingTime }}</p>
-<p><strong>CSS</strong>: {{ .Store.Get "random_palette" }}</p>
+{{ with page.AlternativeOutputFormats }}
+    <p><strong>Alternative Output Formats</strong></p>
+    {{ range . }}
+        <p>
+            - Name: {{ .Name }}
+            <pre>  MediaType: {{ .MediaType }}</pre>
+            <pre>  Rel: {{ .Rel }}</pre>
+            <pre>  Permalink: {{ .Permalink }}</pre>
+        </p>
+    {{ end }}
+{{ end }}

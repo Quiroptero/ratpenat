@@ -22,7 +22,7 @@
         <ul>
 		    {{ range $key, $value := .Data.Terms.Alphabetical }}
 		    <li>
-                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a>
+                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title | strings.ToLower }}</a>
                 ({{ $value.Count }})
             </li>
 		    {{ end }}
