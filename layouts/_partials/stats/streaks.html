@@ -1,0 +1,58 @@
+<!-- streaks are only computed for blog posts -->
+{{ $blog_pages := where .Site.RegularPages "Section" "in" .Site.MainSections }}
+
+<!-- get the months that have at least one post published -->
+{{ $months_with_posts := slice }}
+{{ range $blog_pages }}
+    {{ $month := .Date.Format "2006-01" }}
+    {{ if not (in $months_with_posts $month)}}
+        {{ $months_with_posts = $months_with_posts | append $month }}
+    {{ end }}
+{{ end }}
+{{ $months_with_posts = sort $months_with_posts }}
+
+<!-- initialize variables -->
+{{ $previous_month := "" }}
+{{ $current_streak := "1" }}
+{{ $streaks := dict $current_streak (dict "length" 0 "start" "" "end" "") }}
+<!-- start a loop to walk through months and compute streaks -->
+<!-- a streak is defined as a chain of consecutive months -->
+<!-- then, check if month[i-1] + 1 month is equal to month[i] -->
+{{ range $i, $month := $months_with_posts }}
+    <!-- first iteration -->
+    {{ if eq $previous_month "" }}
+        {{ $start_dict := dict $current_streak (dict "start" $month) }}
+        {{ $length_dict := dict $current_streak (dict "length" 1) }}
+        {{ $streaks = merge $streaks $start_dict $length_dict }}
+    <!-- subsequent iterations -->
+    {{ else }}
+        <!-- convert the previous month from string to time to be able to use AddDate -->
+        {{ $previous_month_time := printf "%s-01T00:00:00-06:00" $previous_month | time.AsTime }}
+        <!-- months are consecutive -->
+        {{ if eq ($previous_month_time.AddDate 0 1 0 | time.Format "2006-01") $month }}
+            <!-- streak continues -->
+            {{ $length_dict := dict $current_streak (dict "length" (add (index $streaks $current_streak "length") 1)) }}
+            {{ $streaks = merge $streaks $length_dict }}
+        <!-- months are not consecutive -->
+        {{ else }}
+            <!-- streak finished -->
+            <!-- the streak was actually finished in the previous month, -->
+            <!-- as it differs from the current one by more than 1 month -->
+            <!-- notice that the only missing part of the last streak is the end month -->
+            {{ $end_dict := dict $current_streak (dict "end" $previous_month) }}
+            {{ $streaks = merge $streaks $end_dict }}
+            <!-- start a new streak -->
+            {{ $current_streak = add (int $current_streak) 1 | string }}
+            {{ $new_streak := dict $current_streak (dict "length" 0 "start" $month "end" "") }}
+            {{ $streaks = merge $streaks $new_streak}}
+        {{ end }}
+    {{ end }}
+    {{ $previous_month = $month }}
+{{ end }}
+<!-- always set the end date of the last streak -->
+{{ $end_dict := dict $current_streak (dict "end" $previous_month) }}
+{{ $streaks = merge $streaks $end_dict }}
+
+<!-- return the streaks dict to the caller template -->
+{{ $streaks = sort $streaks "end" "desc" }}
+{{ return $streaks }}
