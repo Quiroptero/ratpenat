@@ -1,5 +1,12 @@
 {{ define "main" }}
 <main>
+    {{ $series_slug := "a" }}
+    {{ $series_title := "b" }}
+    {{ if .Params.series }}
+        {{ $series_slug = .Params.series }}
+        {{ $series_title = (site.GetPage (printf "/series/%s" $series_slug)).Title }}
+    {{ end }}
+
     <h1>{{ partial "draft_notice" . }}</h1>
     <div class="meta">
         <b><time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">{{ .Date | time.Format ":date_full" }}</time></b>
@@ -18,10 +25,12 @@
 		{{ end }}
         </span>
     </div>
-    {{ with .Params.series }}
+    {{ if .Params.series }}
     <div class="meta">
         <span>Parte de la serie </span>
-        <a href="{{ "/series/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>
+        <a href="{{ "/series/" | relLangURL }}{{ $series_slug | urlize }}">
+            {{ $series_title }}
+        </a>
     </div>
     {{ end }}
 
@@ -47,11 +56,12 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    {{ with .Params.series }}
+
+    {{ if .Params.series }}
     <div class="series-box">
-        <p>De la serie <strong>{{ . }}</strong>:</p>
+        <p>De la serie <strong>{{ $series_title }}</strong>:</p>
         <ul>
-            {{ $series := where site.RegularPages "Params.series" "=" . }}
+            {{ $series := where site.RegularPages "Params.series" "=" $series_slug }}
             {{ range $series }}
 	        <li>
                 <span>{{ dateFormat "2006-01-02" .Date }}</span>
