@@ -60,15 +60,13 @@
     {{ if .Params.series }}
     <div class="series-box">
         <p>De la serie <strong>{{ $series_title }}</strong>:</p>
-        <ul>
-            {{ $series := where site.RegularPages "Params.series" "=" $series_slug }}
-            {{ range $series }}
-	        <li>
-                <span>{{ dateFormat "2006-01-02" .Date }}</span>
-		        <a href="{{ .RelPermalink }}">{{.Title}}</a>
-	        </li>
-	        {{ end }}
-        </ul>
+        {{ $series := where site.RegularPages "Params.series" "=" $series_slug }}
+        {{ range $series }}
+            <div class="row-label-link">
+                <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}</div>
+		        <div class="link-wrap"><a href="{{ .RelPermalink }}">{{.Title}}</a></div>
+            </div>
+	    {{ end }}
     </div>
     {{ end }}
 
