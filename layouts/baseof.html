@@ -52,7 +52,11 @@
     </script>
     {{ end }}
 
+    <!-- creation of LQIPs and GIPs -->
+    <!-- see: https://www.brycewray.com/posts/2022/06/responsive-optimized-images-hugo/ -->
+    {{ partial "head-imgs-css.html" . }}
 </head>
+
 <body id="flex-container">
     <!-- display debug information -->
     {{ if site.Params.debug }}

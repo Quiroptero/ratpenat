@@ -37,7 +37,9 @@
     <div class="content">
     <p>
         Este año he visto <strong>{{ $total_movies }}</strong> películas y series distintas
-        (<strong>{{ len $movies_slice }}</strong> de ellas <a href="/doble.gif">en más de una ocasión</a>):
+        <!-- kind of hardcoding the reference here in order to make the meme an element of the page bundle -->
+        {{ $meme_url := ((.Resources.Get "meme.webp").Process "q50").RelPermalink }}
+        (<strong>{{ len $movies_slice }}</strong> de ellas <a href="{{ $meme_url }}">en más de una ocasión</a>):
     </p>
     <ul>
         <li>🍿 <strong>{{ index $kinds "1" }}</strong> en el cine</li>
@@ -59,7 +61,7 @@
             <img
                 alt="Póster de la película {{ .title }}{{ with .original_title }} ({{ . }}){{ end }}" 
                 {{ with $.Resources.GetMatch (printf "img/%s*" .id) }}
-                src="{{ .RelPermalink }}"
+                src="{{ (.Process "webp").RelPermalink }}"
                 {{ end }}
             >
             <figcaption>

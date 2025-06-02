@@ -20,7 +20,7 @@
             <img
                 alt="Póster del videojuego {{ .title }}" 
                 {{ with $.Resources.GetMatch (printf "img/%s*" .id) }}
-                src="{{ .RelPermalink }}"
+                src="{{ (.Resize "500x q80 webp Lanczos").RelPermalink }}"
                 {{ end }}
             >
             <figcaption>

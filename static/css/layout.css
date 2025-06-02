@@ -159,6 +159,12 @@ figure {
     max-inline-size: min-content;
 }
 
+figure > picture {
+    display: flex;
+    flex-direction: column;
+    max-inline-size: min-content;
+}
+
 figure.with-border img {
     border: 2px solid var(--b);
 }

@@ -1,0 +1,78 @@
+{{/* image processing, code adapted from Brice Wray */}}
+{{/* see: https://www.brycewray.com/posts/2022/06/responsive-optimized-images-hugo/ */}}
+
+{{/* init vars */}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" -}}
+{{- $caption := default "" (.Get "caption") -}}
+{{- $resize := default false (.Get "resize") -}}
+{{- $width := "" -}}
+{{- $class := default "" (.Get "class") -}}
+
+{{- $respSizes := slice "320" "900" "1200" -}}
+{{- $dataSzes := "(min-width: 1024px) 100vw, 50vw" -}}
+{{- $imgBd5 := md5 $src -}}
+{{- $divClass := printf "relative bigImgDiv imgB-" $imgBd5 "-GIP" -}}
+{{/*
+	The `imgB-`[hash]-GIP` class is
+	generated in a `head` partial;
+	here, we need only get the class's name,
+	using the same method as in that partial
+	(md5-ing the image file name).
+*/}}
+
+{{- if .Page.Resources.GetMatch $src -}}
+	{{ with .Page.Resources.GetMatch $src }}
+		{{- $imgRsc := . -}}
+        {{/* using box filter here, but we can change to anything */}}
+		{{- $actualImg := $imgRsc.Process (print "resize 640x webp box") -}}
+        {{- if $resize -}}
+		    {{- $actualImg = $imgRsc.Process (print "resize " $resize "x webp box") -}}
+        {{- end -}}
+        <figure{{- if $class }} class="{{ $class }}"{{- end -}}>
+	    	<picture>
+                {{/* webp */}}
+                {{- if $resize -}}
+                <source type="image/webp" srcset="{{- ($imgRsc.Process (print "resize " $resize "x webp photo box")).RelPermalink }} {{ $resize }}w">
+                {{- else -}}
+	    		<source type="image/webp" srcset="
+	    		{{- with $respSizes -}}
+	    			{{- range $i, $e := . -}}
+	    				{{- if ge $imgRsc.Width . -}}
+	    					{{- if $i }}, {{ end -}}{{- ($imgRsc.Process (print "resize " . "x webp photo box")).RelPermalink }} {{ . }}w
+	    				{{- end -}}
+	    			{{- end -}}
+	    		{{- end -}}" sizes="{{ $dataSzes }}" />
+                {{- end -}}
+                {{/* jpg: disabled by default, might enable it sometime */}}
+                {{/*
+                {{- if not $resize -}}
+	    		<source type="image/jpeg" srcset="
+	    		{{- with $respSizes -}}
+	    			{{- range $i, $e := . -}}
+	    				{{- if ge $imgRsc.Width . -}}
+	    					{{- if $i }}, {{ end -}}{{- ($imgRsc.Process (print "resize " . "x jpg box")).RelPermalink }} {{ . }}w
+	    				{{- end -}}
+	    			{{- end -}}
+	    		{{- end -}}" sizes="{{ $dataSzes }}" />
+                {{- end -}}
+                */}}
+                {{- if $resize -}}
+                    {{- $width = $actualImg.Width -}}
+                {{- end -}}
+	    		<img
+                    src="{{ $actualImg.RelPermalink }}" 
+                    {{- if $resize -}} width="{{ $width }}" {{- end -}}
+                    alt="{{ $alt }}" 
+                    title="{{ $alt }}" 
+                    loading="lazy"
+                />
+	    	</picture>
+            {{- if $caption -}}
+            <figcaption>{{ $caption | markdownify }}</figcaption>
+            {{- end -}}
+        </figure>
+	{{- end -}}
+{{- else -}}
+	<p><em>{{ T "Image unavailable" }}</em></p>
+{{- end }}

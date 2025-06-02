@@ -103,7 +103,7 @@
                 <img 
                     alt="Portada del libro {{ .title }}. {{ if gt (len .author) 1 }}Autores: {{ else }}Autor: {{ end }} {{ delimit $authorsAlt ", " " y " }}."
                     {{ with $.Resources.GetMatch (printf "img/%s*" .isbn) }}
-                    {{ with .Fill "342x513 Top" }}
+                    {{ with .Fill "342x513 webp Top" }}
                     src="{{ .RelPermalink }}"
                     {{ end }}
                     {{ end }}
