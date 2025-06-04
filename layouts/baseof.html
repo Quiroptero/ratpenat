@@ -26,11 +26,12 @@
     <!-- see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 -->
     <!--      https://gohugo.io/functions/resources/postprocess/ -->
     {{ $palette := "" }}
+    {{ $available_palettes := .Site.Params.theme.available_palettes }}
     {{ if (eq .Site.Params.theme.palette "random") }}
-        {{ range (readDir "themes/ratpenat/assets/css/palettes" | shuffle | first 1) }}
-            {{ $palette = .Name }}
+        {{ range ($available_palettes | shuffle | first 1) }}
+            {{ $palette = printf "%s.css" . }}
             <!-- set the random palette name for later use in debug mode -->
-            {{ $.Store.Set "random_palette" .Name }}
+            {{ $.Store.Set "random_palette" . }}
         {{ end }}
     {{ else }}
         {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
