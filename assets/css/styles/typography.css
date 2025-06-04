@@ -63,6 +63,12 @@ div.meta a {
     color: var(--m);
 }
 
+/* build stats */
+
+div.build-meta p {
+    color: var(--m);
+}
+
 /* prevent super from affecting line height */
 sup { 
     line-height: 0; 
@@ -253,6 +259,7 @@ p.latest-meta {
 }
 p.latest-post {
     font-size: 1.3rem;
+    line-height: 2rem;
 }
 
 /* debug info */
