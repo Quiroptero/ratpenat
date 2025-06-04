@@ -65,8 +65,11 @@ div.meta a {
 
 /* build stats */
 
-div.build-meta p {
+div.build-meta {
     color: var(--m);
+    text-align: center;
+    font-size: 0.8rem;
+    background: var(--nb);
 }
 
 /* prevent super from affecting line height */

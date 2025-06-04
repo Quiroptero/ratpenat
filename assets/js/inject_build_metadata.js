@@ -22,11 +22,11 @@ async function readLog() {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
-    const buildStatsSizeContainer = document.getElementById('build-stats-size');
     const buildStatsTimeContainer = document.getElementById('build-stats-time');
+    const buildStatsSizeContainer = document.getElementById('build-stats-size');
     const buildStatsDateContainer = document.getElementById('build-stats-date');
     const parsedLog = await readLog();
-    buildStatsSizeContainer.innerHTML = parsedLog[0].trim();
-    buildStatsTimeContainer.innerHTML = parsedLog[1].trim();
+    buildStatsTimeContainer.innerHTML = parsedLog[0].trim();
+    buildStatsSizeContainer.innerHTML = parsedLog[1].trim();
     buildStatsDateContainer.innerHTML = parsedLog[2].trim();
 });
