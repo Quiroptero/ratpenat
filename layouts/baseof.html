@@ -12,37 +12,80 @@
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
     {{ with .Site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
 
-    <!-- theme -->
-    {{ if (eq .Site.Params.theme.palette "random") }}
-        {{ range (readDir "themes/ratpenat/static/css/palettes" | shuffle | first 1) }}
-            <link rel="stylesheet" href="{{ printf "css/palettes/%s" .Name | absURL }}">
-            <!-- set the random palette name for later use in debug mode -->
-            {{ $.Store.Set "random_palette" .Name }}
-            <!-- -->
-        {{ end }}
-    {{ else }}
-        <link rel="stylesheet" href="{{ printf "css/palettes/%s.css" (.Site.Params.theme.palette | default "darktooth") | absURL }}">
-    {{ end }}
-    <link rel="stylesheet" href="{{ "css/ratpenat.css" | absURL }}">
-    <!-- /theme -->
-
+    <!-- RSS -->
     {{ with .OutputFormats.Get "RSS" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}
-    
+
+    <!-- theme (CSS) -->
+    <!-- I could postprocess CSS here, but as of now I don't see much gain out of it -->
+    <!-- the thing is, since I'm defining CSS by hand, unused classes should be few or none -->
+    <!-- (the palettes could be an example) -->
+    <!-- in short: postprocess seems overkill right now, since it also requires setting up Node in the CI/CD -->
+    <!-- however, this might be a nice thing in the future -->
+    <!-- see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 -->
+    <!--      https://gohugo.io/functions/resources/postprocess/ -->
+    {{ $palette := "" }}
+    {{ if (eq .Site.Params.theme.palette "random") }}
+        {{ range (readDir "themes/ratpenat/assets/css/palettes" | shuffle | first 1) }}
+            {{ $palette = .Name }}
+            <!-- set the random palette name for later use in debug mode -->
+            {{ $.Store.Set "random_palette" .Name }}
+        {{ end }}
+    {{ else }}
+        {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
+    {{ end }}
+    {{ $palette = printf "css/palettes/%s" $palette }}
+    {{ $styles := slice }}
+    {{ range (readDir "themes/ratpenat/assets/css/styles") }}
+        {{ $styles = $styles | append (printf "css/styles/%s" .Name | resources.Get ) }}
+    {{ end }}
+    {{ $styles = $styles | append (resources.Get $palette) }}
+    {{ $css := $styles | resources.Concat "css/style.css" }}
+    {{ if hugo.IsProduction }}
+        {{ $css = $css | minify | fingerprint }}
+    {{ end }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }}>
+    <!-- /theme -->
+
+    <!-- scripts -->
+
+    <!-- random bat script -->
+    {{ $script := "js/random_bat.js" | resources.Get }}
+    {{ if hugo.IsProduction }}
+        {{ $script = $script | minify | fingerprint }}
+    {{ end }}
+    <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+
+    <!-- random quote script -->
+    {{ if (eq .Path "/") }}
+        {{ $script := "js/random_quote.js" | resources.Get }}
+        {{ if hugo.IsProduction }}
+            {{ $script = $script | minify | fingerprint }}
+        {{ end }}
+        <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+    {{ end }}
+
+    <!-- enable searching in the site -->
     {{ if (eq .Path "/search") }}
-    <link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
-    {{- $fastsearch := resources.Get "js/fastsearch.js" | js.Build (dict "params" (dict "fuseOpts" site.Params.fuseOpts)) | resources.Minify }}
-    {{- $fusejs := resources.Get "js/fuse.basic.min.js" }}
-    {{- $license_js := resources.Get "js/license.js" }}
-    {{- $search := (slice $fusejs $license_js $fastsearch ) | resources.Concat "assets/js/search.js" | fingerprint }}
-    <script defer crossorigin="anonymous" src="{{ $search.RelPermalink }}" integrity="{{ $search.Data.Integrity }}"></script>
+        <link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
+        {{- $fastsearch := resources.Get "js/fastsearch.js" | js.Build (dict "params" (dict "fuseOpts" site.Params.fuseOpts)) | resources.Minify }}
+        {{- $fusejs := resources.Get "js/fuse.basic.min.js" }}
+        {{- $license_js := resources.Get "js/license.js" }}
+        {{- $search := (slice $fusejs $license_js $fastsearch ) | resources.Concat "assets/js/search.js" }}
+        {{ if hugo.IsProduction }}
+            {{ $search = $search | minify | fingerprint }}
+        {{ end }}
+        <script defer crossorigin="anonymous" src="{{ $search.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $search.Data.Integrity }}"{{ end }}></script>
     {{ end }}
 
     <!-- enable sorting library table -->
     {{ if (eq .Path "/library") }}
-    {{ $script := "js/tellico2html.js" | resources.Get | resources.Fingerprint }}
-    <script src="{{ $script.RelPermalink }}" integrity="{{ $script.Data.Integrity }}"></script>
+    {{ $script := "js/tellico2html.js" | resources.Get }}
+    {{ if hugo.IsProduction }}
+        {{ $script = $script | minify | fingerprint }}
+    {{ end }}
+    <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
     <script type="text/javascript">
         var COL_SORT_ARRAY = new Array()
         COL_SORT_ARRAY[0] = 0
@@ -52,6 +95,17 @@
     </script>
     {{ end }}
 
+    <!-- inject build metadata in stats page after build -->
+    {{ if (eq .Path "/about/stats") }}
+        {{ $script := "js/inject_build_metadata.js" | resources.Get }}
+        {{ if hugo.IsProduction }}
+            {{ $script = $script | minify | fingerprint }}
+        {{ end }}
+        <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+    {{ end }}
+
+    <!-- /scripts -->
+
     <!-- creation of LQIPs and GIPs -->
     <!-- see: https://www.brycewray.com/posts/2022/06/responsive-optimized-images-hugo/ -->
     {{ partial "head-imgs-css.html" . }}
@@ -59,7 +113,7 @@
 
 <body id="flex-container">
     <!-- display debug information -->
-    {{ if site.Params.debug }}
+    {{ if hugo.IsDevelopment }}
         <div class="debug">
             {{ partial "debug-info.html" . }}
         </div>

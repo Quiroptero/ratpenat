@@ -10,6 +10,12 @@
 
     <!-- compute metrics of interest -->
 
+    <div class="build-meta" id="build-stats-container">
+        <span id="build-stats-size"></span>
+        <span id="build-stats-time"></span>
+        <span id="build-stats-date"></span>
+    </div>
+
     {{ $years_active := sub (time.Now | time.Format "2006" | int) 2017 }}
 
     <!-- statistics are based on blog posts only -->
