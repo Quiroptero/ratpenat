@@ -37,10 +37,14 @@
         {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
     {{ end }}
     {{ $palette = printf "css/palettes/%s" $palette }}
-    {{ $styles := slice }}
-    {{ range (readDir "themes/ratpenat/assets/css/styles") }}
-        {{ $styles = $styles | append (printf "css/styles/%s" .Name | resources.Get ) }}
-    {{ end }}
+    <!-- hardcoding the list since I have no clue how to automatically read from global resources -->
+    {{ $styles := slice 
+        (resources.Get "css/styles/colours.css")
+        (resources.Get "css/styles/layout.css")
+        (resources.Get "css/styles/progress.css")
+        (resources.Get "css/styles/ratpenat.css")
+        (resources.Get "css/styles/typography.css")
+    }}
     {{ $styles = $styles | append (resources.Get $palette) }}
     {{ $css := $styles | resources.Concat "css/style.css" }}
     {{ if hugo.IsProduction }}
