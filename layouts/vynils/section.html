@@ -1,0 +1,36 @@
+{{ define "main" }}
+<main>
+
+    <h1>{{ .Title }}</h1>
+
+    {{ partial "last_mod_by_file.html" . }}
+
+    <div class="content">{{ .Content | partial "anchors.html" }}</div>
+
+    <!-- read the vynils data file -->
+    {{ $opts := dict "targetType" "map" }}
+    {{ $data := transform.Unmarshal $opts (.Resources.Get .Params.data_file) }}
+    {{ $data = shuffle $data }}
+
+    <!-- grid with vynils -->
+    <div class="bookgrid">
+    {{ range $data }}
+        <div class="container">
+            <figure class="movie" >
+            <img
+                alt="Portada de un álbum en formato vinilo. Nombre del álbum: {{ .Album }}. Artista o artistas: {{ .Artist }}" 
+                {{ with $.Resources.GetMatch (printf "img/%s*" .Cover) }}
+                src="{{ (.Fill "500x500 q80 webp Lanczos").RelPermalink }}"
+                {{ end }}
+            >
+            <figcaption>
+                <p><strong>{{ .Album }}</strong></p>
+                <p>{{ .Artist }}</p>
+            </figcaption>
+            </figure>
+        </div>
+    {{ end }}
+    </div>
+
+</main>
+{{ end }}
