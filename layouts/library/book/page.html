@@ -1,0 +1,33 @@
+{{ define "main" }}
+<main>
+
+    {{/* read the library data file and filter this one book */}}
+    {{ $opts := dict "targetType" "map" }}
+    {{ $data := transform.Unmarshal $opts (.Parent.Resources.Get .Parent.Params.data_file) }}
+    {{ $data := where $data "ID" "==" (.Params.id | string) }}
+    {{/* extract the map from the slice */}}
+    {{ $book := index $data 0 }}
+
+    <h1>{{ $book.Title }}</h1>
+    <h1>{{ $book.Front_Cover }}</h1>
+    <h1>{{ $book.ID }}</h1>
+    
+    {{ $img := "" }}
+    {{ with .Parent.Resources.Get (printf "img/%s*" $book.Front_Cover) }}
+        {{ $img = . }}
+    {{ else }}
+        {{ $img = resources.Get "images/no-book-cover.jpg" }}
+    {{ end }}
+    <div>
+        <figure>
+        <img
+            alt="" 
+            src="{{ ($img.Process "webp").RelPermalink }}"
+        >
+        <figcaption>
+            <p><strong>{{ $book.title }}</strong></p>
+        </figcaption>
+        </figure>
+    </div>
+</main>
+{{ end }}
