@@ -228,9 +228,21 @@ tr.r0 {
     color: var(--bg);
 }
 
+tr.r0 a {
+    color: var(--bg);
+}
+
 tr.r1 {
     font-size: 0.7rem;
     background-color: var(--off-bg);
+}
+
+tr.r1 a {
+    color: var(--fg);
+}
+
+tr a {
+    text-decoration: underline;
 }
 
 /* footnotes */

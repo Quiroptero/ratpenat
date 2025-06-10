@@ -6,123 +6,99 @@
 
     <div class="content">{{ .Content | partial "anchors.html" }}</div>
 
-    <!-- read the library data file -->
-    {{ $data := .Resources.Get "biblioteca.csv" | transform.Unmarshal }}
+    {{/* read the library data file */}}
+    {{ $opts := dict "targetType" "map" }}
+    {{ $data := transform.Unmarshal $opts (.Resources.Get .Params.data_file) }}
 
-    <!-- set some variables to help compute metrics -->
-    <!-- books -->
-    {{ $total_books := (sub (len $data) 1) }}
-    {{ $books := slice }}
-    <!-- book covers -->
-    {{ $covers := dict }}
-    <!-- books read -->
-    {{ $read := 0 }}
-    <!-- authors -->
+    {{ $books := where $data "Binding" "!=" "E-Book" }}
+    {{ $ebooks := where $data "Binding" "==" "E-Book" }}
+
+    {{/* set some variables to help compute metrics */}}
+    {{/* total */}}
+    {{ $total_books := (sub (len $books) 1) }}
+    {{ $total_ebooks := (sub (len $ebooks) 1) }}
+    {{/* how many have I read? */}}
+    {{ $books_read := where $books "Read" "true" | len }}
+    {{ $ebooks_read := where $ebooks "Read" "true" | len }}
+    {{/* titles */}}
+    {{ $titles := slice }}
+    {{/* binding */}}
+    {{ $binding := dict }}
+    {{/* authors */}}
     {{ $authors := dict }}
     {{ $authors_slice := slice }}
-    <!-- languages -->
+    {{/* languages */}}
     {{ $languages := dict }}
     {{ $languages_slice := slice }}
 
-    <!-- compute metrics -->
-    <!-- reading data after 1 to ignore headers -->
-    {{ range $i, $x :=  after 1 $data }}
-        {{ range $j, $y := $x }}
-            <!-- authors -->
-            {{ if eq $j 2 }}
-                {{ range split $y "; " }}
-                    {{ $authors = merge $authors (dict . (add (index $authors .  | default 0) 1) )}}
-                {{ end }}
-            {{ end }}
-            <!-- books -->
-            {{ if eq $j 0 }}
-                {{ $books = append (slice . ) $books }}
-            {{ end }}
-            <!-- book covers -->
-            {{ if eq $j 3 }}
-                {{ $covers = merge $covers (dict . (add (index $covers .  | default 0) 1) )}}
-            {{ end }}
-            <!-- languages -->
-            {{ if eq $j 4 }}
-                {{ range split $y "; " }}
-                    <!-- here we're merging two dicts: the languages dict -->
-                    <!-- and a temporary dict that contains the language as key and the count as value -->
-                    <!-- the trick is that the value is retrieved from the languages dict -->
-                    <!-- if a language is not present yet in the languages dict, it takes the value 0 by default -->
-                    <!-- if the language is already present, then it takes the corresponding value -->
-                    <!-- in any case, it will add 1 to the value, thus getting the number of "mentions" -->
-                    <!-- remember: the dot "." represents the current language -->
-                    {{ $languages = merge $languages (dict . (add (index $languages .  | default 0) 1) )}}
-                {{ end }}
-            {{ end }}
-            <!-- how many books (of my library) have I read? -->
-            {{ if eq $j 5}}
-                {{ if eq $y "true" }}
-                    {{ $read = add $read 1 }}
-                {{ end }}
-            {{ end }}
+    {{/* compute metrics */}}
+    {{ range $books }}
+        {{/* authors */}}
+        {{/* NOTE: the following strategy apply to other cases as well
+            strategy: merge the main dict with a temporary one
+            the main dict is merged with a temporary dict
+            that contains the variable being measured (in this case, the authors) as key
+            and the current count of such variable as the value
+            on the merge operation the value is then updated
+            the "trick" is that the current value is retrieved from the main dict
+            if a key is not yet present, it adds the key and uses 0 as the current value
+            if a key is already present, then it takes the corresponding current value
+            in both cases it adds 1 to the current value, thus getting the number of mentions
+        */}}
+        {{ range split .Author "; "}}
+            {{ $authors = merge $authors (dict . (add (index $authors . | default 0) 1) )}}
+        {{ end }}
+        {{/* titles */}}
+        {{ $titles = append (slice .Title ) $titles }}
+        {{/* binding */}}
+        {{ $binding = merge $binding (dict .Binding (add (index $binding .Binding | default 0) 1) )}}
+        {{/* languages */}}
+        {{ range split .Language "; " }}
+            {{ $languages = merge $languages (dict . (add (index $languages . | default 0) 1) )}}
         {{ end }}
     {{ end }}
 
-    <!-- paragraph to showcase the different metrics -->
+    {{/* paragraph to showcase the different metrics */}} 
+    {{/* TODO: how to translate templated paragraphs? */}}
     <div class="content">
-        <h1>Estadísticas de mi biblioteca</h1>
-        <!-- totals -->
+        <h1>{{ T "My library stats" }}</h1>
+        {{/* totals */}}
         <p>
-            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca ({{ uniq $books | len }} no repetidos),
-            de los cuales he leído <strong>{{ $read }}</strong> ({{ div (float $read) $total_books | math.Product 100 | math.Round }}%).
+            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca
+            {{- if ne $total_books (uniq $titles | len) }}({{ uniq $titles | len }} no repetidos){{ end }},
+            de los cuales he leído <strong>{{ $books_read }}</strong> ({{ div (float $books_read) $total_books | math.Product 100 | math.Round }}%).
         </p>
-        <!-- covers -->
+        {{/* bindings */}}
         <ul>
-            {{ $printed := 0 }}
-            {{ range $cover, $count := $covers }}
-            {{ if not (eq $cover "E-Book") }}{{ $printed = add $printed $count }}{{ end }}
-            {{ end }}
-            <li><strong>{{ $printed }}</strong> ({{ div (float $printed) $total_books | math.Product 100 | math.Round }}%) son libros físicos
-            <ul>
-                <li>
-                    <strong>{{ index $covers "Hardback" }}</strong>
-                    ({{ div (index $covers "Hardback") (float $printed) | math.Product 100 | math.Round }}%) encuadernados en cartoné
-                </li>
-                <li>
-                    <strong>{{ index $covers "Trade Paperback" }}</strong>
-                    ({{ div (index $covers "Trade Paperback") (float $printed) | math.Product 100 | math.Round }}%) en rústica+
-                </li>
-                <li>
-                    <strong>{{ index $covers "Paperback" }}</strong>
-                    ({{ div (index $covers "Paperback") (float $printed) | math.Product 100 | math.Round }}%) en rústica
-                </li>
-            </ul>
-            <li><strong>{{ index $covers "E-Book" }}</strong> ({{ div (index $covers "E-Book" ) (float $total_books) | math.Product 100 | math.Round }}%) son libros electrónicos</li>
+            <li>
+                <strong>{{ index $binding "Hardback" }}</strong>
+                ({{ div (index $binding "Hardback") (float $total_books) | math.Product 100 | math.Round }}%) encuadernados en cartoné
+            </li>
+            <li>
+                <strong>{{ index $binding "Trade Paperback" }}</strong>
+                ({{ div (index $binding "Trade Paperback") (float $total_books) | math.Product 100 | math.Round }}%) en rústica+
+            </li>
+            <li>
+                <strong>{{ index $binding "Paperback" }}</strong>
+                ({{ div (index $binding "Paperback") (float $total_books) | math.Product 100 | math.Round }}%) en rústica
+            </li>
         </ul>
-        <!-- languages -->
-        <p>
-            Y están en <strong>{{ len $languages }}</strong> idiomas diferentes:
-        </p>
-        <!-- sort languages by number of mentions -->
+        {{/* languages */}}
+        <p>Y están en <strong>{{ len $languages }}</strong> idiomas diferentes:</p>
+        {{/* sort languages by number of mentions */}}
         {{ range $key, $value := $languages }}
             {{ $languages_slice = append (dict "language" $key "count" $value) $languages_slice }}
         {{ end }}
         <ul>
         {{ range sort $languages_slice "count" "desc" }}
-            <!-- for now, hardcode the languages -->
-            <!-- see: https://github.com/gohugoio/hugo/issues/12212 -->
-            {{ $lang := ""}}
-            {{ if eq .language "es" }}
-                {{ $lang = "español" }}
-            {{ else if eq .language "en" }}
-                {{ $lang = "inglés" }}
-            {{ else if eq .language "fr" }}
-                {{ $lang = "francés" }}
-            {{ else if eq .language "ca" }}
-                {{ $lang = "catalán" }}
-            {{ end }}
-            <li>{{ $lang }}: <strong>{{ .count }}</strong> ({{ div (float .count) $total_books | math.Product 100 | math.Round }}%)</li>
+            {{/* for now, hardcode the languages in the i18n file */}}
+            {{/* see: https://github.com/gohugoio/hugo/issues/12212 */}}
+            <li>{{ or (T .language) .language }}: <strong>{{ .count }}</strong> ({{ div (float .count) $total_books | math.Product 100 | math.Round }}%)</li>
         {{ end }}
         </ul>
-        <!-- sort authors by number of mentions and get the most mentioned -->
+        {{/* sort authors by number of mentions and get the most mentioned */}}
         {{ range $key, $value := $authors }}
-            {{ $authors_slice = append (dict "name" $key "count" $value) $authors_slice }}
+            {{ if ne $key "Varios Autores" }}{{ $authors_slice = append (dict "name" $key "count" $value) $authors_slice }}{{ end }}
         {{ end }}
         <p>
             Hay representados <strong>{{ len $authors }}</strong> autores distintos.
@@ -130,68 +106,44 @@
             El autor del que tengo más libros es <strong>{{ .name }}</strong>, con {{ .count }} libros.
             {{ end }}
         </p>
+        <p>Tengo, además, {{ $total_ebooks }} libros electrónicos, que no cuento acá.</p>
     </div>
 
     <hr/>
 
-    <!-- parse csv to build a table -->
-    <!-- scratch to work with title and subtitle fields -->
-    {{ $s := newScratch }}
+    {{/* display the library as a table */}}
     <table class="sortable">
-        {{ with $data }}
-            <!-- headers of the table -->
-            <thead>
-                <tr>
-                    <!-- process only the first row to get the headers -->
-                    {{ range index . 0}}
-                    {{ if not (eq . "Title") }}
-                        {{ if eq . "Subtitle" }}
-                            <th width="40%">Título</th>
-                        {{ else if eq . "Author" }}
-                            <th width="30%">Autor(es)</th>
-                        {{ else if eq . "Binding" }}
-                            <th>Encuadernación</th>
-                        {{ else if eq . "Language" }}
-                            <th>I</th>
-                        {{ else if eq . "Read" }}
-                            <th>L</th>
-                        {{ end }}
-                    {{ end }}
-                    {{ end }}
-                </tr>
-            </thead>
-            <!-- body of the table -->
-            <tbody>
-                <!-- ignore the first row -->
-                {{ range $i, $x := after 1 . | sort }}
-                <!-- alternate between classes r1 and r0 for styling purposes -->
-                <tr{{ if eq (mod $i 2) 0 }} class="r1"{{ else }} class="r0"{{ end }}>
-                    {{ range $j, $y := $x }}
-                        <!-- get the title, it will be used next to concatenate it with the subtitle -->
-                        {{ if eq $j 0 }}
-                            {{ $s.Set "title" $y }}
-                        <!-- concatenate title and subtitle (if exists)-->
-                        {{ else if eq $j 1 }}
-                            <td class="field">{{ $s.Get "title" }}{{ if not (eq $y "")}} — {{ $y }}{{ end }}</td>
-                        <!-- process book covers -->
-                        {{ else if eq $j 3 }}
-                            {{ if eq $y "Hardback" }}
-                            <td class="field">Cartoné</td>
-                            {{ else if eq $y "Trade Paperback" }}
-                            <td class="field">Rústica+</td>
-                            {{ else if eq $y "Paperback" }}
-                            <td class="field">Rústica</td>
-                            {{ else }}
-                            <td class="field">Libro electrónico</td>
-                            {{ end }}
-                        {{ else }}
-                            <td class="field">{{ if eq . "true" }}✅{{ else }}{{ . }}{{ end }}</td>
-                        {{ end }}
-                    {{ end }}
-                </tr>
-                {{ end }}
-            </tbody>
-        {{ end }}
+        {{/* headers */}}
+        <thead>
+            <tr>
+            <th width="40%">{{ T "Title" }}</th>
+            <th width="30%">{{ T "Authors" }}</th>
+            <th>{{ T "Binding" }}</th>
+            <th>{{ T "Language" }}</th>
+            <th>{{ T "Read" }}</th>
+            </tr>
+        </thead>
+        {{/* body */}}
+        <tbody>
+            {{ range $index, $book := sort $books "Author" "asc" }}
+            {{/* alternate between classes r1 and r0 for styling purposes */}}
+            <tr{{ if eq (mod $index 2) 0 }} class="r1"{{ else }} class="r0"{{ end }}>
+                {{/* title: include a link to details page */}}
+                {{/* if there is a subtitle, display it as well */}}
+                <td class="field">
+                    <strong>
+                    <a href="/biblioteca/libro/{{ $book.ID }}">
+                    {{ $book.Title }}{{ if not (eq $book.Subtitle "") }} – {{ $book.Subtitle }}{{ end }}
+                    </a>
+                    </strong>
+                </td>
+                <td class="field">{{ $book.Author }}</td>
+                <td class="field">{{ T $book.Binding }}</td>
+                <td class="field">{{ T $book.Language }}</td>
+                <td class="field">{{ if eq $book.Read "true" }}✅{{ end }}</td>
+            </tr>
+            {{ end }}
+        </tbody>
     </table>
 </main>
 {{ end }}
