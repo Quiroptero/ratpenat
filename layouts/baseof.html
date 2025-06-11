@@ -36,7 +36,7 @@
     {{ else }}
         {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
     {{ end }}
-    {{ $palette = printf "css/palettes/%s" $palette }}
+    {{ $palette = resources.Get (printf "css/palettes/%s" $palette) }}
     <!-- hardcoding the list since I have no clue how to automatically read from global resources -->
     {{ $styles := slice 
         (resources.Get "css/styles/colours.css")
@@ -45,12 +45,14 @@
         (resources.Get "css/styles/ratpenat.css")
         (resources.Get "css/styles/typography.css")
     }}
-    {{ $styles = $styles | append (resources.Get $palette) }}
     {{ $css := $styles | resources.Concat "css/style.css" }}
     {{ if hugo.IsProduction }}
         {{ $css = $css | minify | fingerprint }}
+        {{ $palette = $palette | minify | fingerprint }}
     {{ end }}
+    {{/* I need different files for the styles and the palette for the random palette feature to work */}}
     <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }}>
+    <link rel="stylesheet" href="{{ $palette.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $palette.Data.Integrity }}"{{ end }}>
     <!-- /theme -->
 
     <!-- scripts -->
