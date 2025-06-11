@@ -8,12 +8,21 @@
     {{/* extract the map from the slice */}}
     {{ $book := index $data 0 }}
 
+    <div class="warning">
+        Esta plantilla está en construcción. Próximamente incluirá más datos.
+    </div>
+
+    <div class="notice">
+    <p>
+        Este es el libro {{ $book.ID }}
+        de mi <strong><a href="/biblioteca">/biblioteca</a></strong>.
+    </p>
+    </div>
+
     <h1>{{ $book.Title }}</h1>
-    <h1>{{ $book.Front_Cover }}</h1>
-    <h1>{{ $book.ID }}</h1>
     
     {{ $img := "" }}
-    {{ with .Parent.Resources.Get (printf "img/%s*" $book.Front_Cover) }}
+    {{ with .Parent.Resources.Get (printf "img/%s" $book.Front_Cover) }}
         {{ $img = . }}
     {{ else }}
         {{ $img = resources.Get "images/no-book-cover.jpg" }}
@@ -22,7 +31,7 @@
         <figure>
         <img
             alt="" 
-            src="{{ ($img.Process "webp").RelPermalink }}"
+            src="{{ ($img.Fit "400x400 webp").RelPermalink }}"
         >
         <figcaption>
             <p><strong>{{ $book.title }}</strong></p>

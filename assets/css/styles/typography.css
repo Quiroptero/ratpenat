@@ -217,13 +217,16 @@ footer a {
 /* library styles */
 th {
     background: var(--w);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--bg);
     text-align: left;
 }
 
+tr {
+    font-size: 0.85rem;
+}
+
 tr.r0 {
-    font-size: 0.7rem;
     background-color: var(--mute);
     color: var(--bg);
 }
@@ -233,7 +236,6 @@ tr.r0 a {
 }
 
 tr.r1 {
-    font-size: 0.7rem;
     background-color: var(--off-bg);
 }
 

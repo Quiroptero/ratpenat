@@ -210,6 +210,17 @@ td.field {
     padding: 0.5rem 0.5rem;
 }
 
+div.book-title-pic {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0.2rem;
+}
+
+div.book-title-pic img {
+    object-fit: cover;
+}
+
 /* table of contents */
 div.toc > details > nav > ul { 
     padding-left: 0rem;

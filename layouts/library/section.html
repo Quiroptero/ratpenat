@@ -15,8 +15,8 @@
 
     {{/* set some variables to help compute metrics */}}
     {{/* total */}}
-    {{ $total_books := (sub (len $books) 1) }}
-    {{ $total_ebooks := (sub (len $ebooks) 1) }}
+    {{ $total_books := len $books }}
+    {{ $total_ebooks := len $ebooks }}
     {{/* how many have I read? */}}
     {{ $books_read := where $books "Read" "true" | len }}
     {{ $ebooks_read := where $ebooks "Read" "true" | len }}
@@ -65,7 +65,7 @@
         {{/* totals */}}
         <p>
             Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca
-            {{- if ne $total_books (uniq $titles | len) }}({{ uniq $titles | len }} no repetidos){{ end }},
+            {{- if ne $total_books (uniq $titles | len) }} ({{ uniq $titles | len }} no repetidos){{ end }},
             de los cuales he leído <strong>{{ $books_read }}</strong> ({{ div (float $books_read) $total_books | math.Product 100 | math.Round }}%).
         </p>
         {{/* bindings */}}
@@ -111,6 +111,14 @@
 
     <hr/>
 
+    {{/* 
+        we want to style the rows of the table in a way that the last row
+        is always of class r0, for that is the class that contrasts against the
+        background of the page
+        to achieve this we check whether the total books number is even or odd
+    */}}
+    {{ $odd_or_even_aux := mod $total_books 2 }}
+
     {{/* display the library as a table */}}
     <table class="sortable">
         {{/* headers */}}
@@ -126,16 +134,26 @@
         {{/* body */}}
         <tbody>
             {{ range $index, $book := sort $books "Author" "asc" }}
+            {{/*
+                get the image resource of the book
+                if it doesn't have one, get the general one
+            */}}
+            {{ $img := "" }}
+            {{ with page.Resources.Get (printf "img/%s" $book.Front_Cover) }}
+                {{ $img = . }}
+            {{ else }}
+                {{ $img = resources.Get "images/no-book-cover.jpg" }}
+            {{ end }}
             {{/* alternate between classes r1 and r0 for styling purposes */}}
-            <tr{{ if eq (mod $index 2) 0 }} class="r1"{{ else }} class="r0"{{ end }}>
+            <tr{{ if eq (mod $index 2) $odd_or_even_aux }} class="r1"{{ else }} class="r0"{{ end }}>
                 {{/* title: include a link to details page */}}
-                {{/* if there is a subtitle, display it as well */}}
                 <td class="field">
-                    <strong>
-                    <a href="/biblioteca/libro/{{ $book.ID }}">
-                    {{ $book.Title }}{{ if not (eq $book.Subtitle "") }} – {{ $book.Subtitle }}{{ end }}
-                    </a>
-                    </strong>
+                    <div class="book-title-pic">
+                        <img src="{{ ($img.Fit "webp 25x25").RelPermalink }}">
+                        <strong>
+                            <a href="/biblioteca/libro/{{ $book.ID }}">{{ $book.Title }}</a>
+                        </strong>
+                    </div>
                 </td>
                 <td class="field">{{ $book.Author }}</td>
                 <td class="field">{{ T $book.Binding }}</td>
