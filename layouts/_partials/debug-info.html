@@ -11,6 +11,9 @@
 <p><strong>CSS</strong>: {{ .Store.Get "random_palette" }}</p>
 <p><strong>Kind</strong>: {{ page.Kind }}</p>
 <p><strong>Page path</strong>: {{ page.Path }}</p>
+{{ with page.Parent }}
+<p><strong>Parent page path</strong>: {{ .Path }}</p>
+{{ end }}
 <p><strong>Calls</strong>: {{ delimit $calls " -> "}}</p>
 <p><strong>Words</strong>: {{ page.WordCount }}</p>
 <p><strong>Reading time</strong>: {{ page.ReadingTime }}</p>
