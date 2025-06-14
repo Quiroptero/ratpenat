@@ -102,15 +102,6 @@
     </script>
     {{ end }}
 
-    <!-- inject build metadata in stats page after build -->
-    {{ if (eq .Path "/about/stats") }}
-        {{ $script := "js/inject_build_metadata.js" | resources.Get }}
-        {{ if hugo.IsProduction }}
-            {{ $script = $script | minify | fingerprint }}
-        {{ end }}
-        <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
-    {{ end }}
-
     <!-- /scripts -->
 
     <!-- creation of LQIPs and GIPs -->
