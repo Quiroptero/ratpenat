@@ -8,8 +8,6 @@
     {{- with .Params.etiquetas -}}{{ $tag = delimit . "," }}{{ end }}
     {{- $.Store.Add "index" (dict 
         "title" .Title
-        "content" ( .Plain | htmlUnescape )
-        "permalink" .Permalink
         "summary" ( .Summary | htmlUnescape | plainify )
         "description" ( .Description )
         "category" $cat
