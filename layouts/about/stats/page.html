@@ -8,7 +8,7 @@
         {{ .Content | partial "anchors.html" }}
     </div>
 
-    <!-- compute metrics of interest -->
+    {{/* compute metrics of interest */}}
 
     <div class="build-meta">
         <span id="build-stats-time"></span>
@@ -20,21 +20,21 @@
 
     {{ $years_active := sub (time.Now | time.Format "2006" | int) 2017 }}
 
-    <!-- statistics are based on blog posts only -->
+    {{/* statistics are based on blog posts only */}}
     {{ $blog_pages := where .Site.RegularPages "Section" "in" .Site.MainSections }}
 
-    <!-- total words published -->
+    {{/* total words published */}}
     {{ $total_words := 0 }}
     {{ range $blog_pages }}
         {{ $total_words = add $total_words .WordCount }}
     {{ end }}
-    <!-- round total words -->
+    {{/* round total words */}}
     {{ $total_words_rounded := mul (math.Floor (div $total_words 100)) 100 }}
-    <!-- average word count per post -->
+    {{/* average word count per post */}}
     {{ $avg_words := div $total_words (len $blog_pages) }}
     {{ $avg_words_rounded := mul (math.Floor (div $avg_words 10)) 10 }}
     
-    <!-- posts count by month, year agnostic -->
+    {{/* posts count by month, year agnostic */}}
     {{ $months := slice "January" "February" "March" "April" "May" "June" "July" "August" "September" "October" "November" "December" }}
     {{ $months_count := dict }}
     {{ range $i, $month := $months }}
@@ -45,16 +45,16 @@
         {{ $current := index $months_count $month }}
         {{ $months_count = merge $months_count (dict $month (add $current 1 )) }}
     {{ end }}
-    <!-- sort the dict -->
-    <!-- hack: create a slice of maps to sort because Hugo removes the first level keys when sorting a map -->
-    <!-- see: https://gohugo.io/functions/collections/sort/#first-level-key-removal -->
+    {{/* sort the dict */}}
+    {{/* hack: create a slice of maps to sort because Hugo removes the first level keys when sorting a map */}}
+    {{/* see: https://gohugo.io/functions/collections/sort/#first-level-key-removal */}}
     {{ $months_slice := slice }}
     {{ range $key, $value := $months_count }}
         {{ $months_slice = append (dict "month" $key "count" $value) $months_slice }}
     {{ end }}
     {{ $months_slice = sort $months_slice "count" "desc" }}
 
-    <!-- posts count by day of week, date agnostic -->
+    {{/* posts count by day of week, date agnostic */}}
     {{ $weekdays := slice "Sunday" "Monday" "Tuesday" "Wednesday" "Thursday" "Friday" "Saturday" }}
     {{ $weekdays_count := dict }}
     {{ range $i, $day := $weekdays }}
@@ -65,19 +65,19 @@
         {{ $current := index $weekdays_count $weekday }}
         {{ $weekdays_count = merge $weekdays_count (dict $weekday (add $current 1)) }}
     {{ end }}
-    <!-- sort the dict -->
-    <!-- hack: create a slice of maps to sort because Hugo removes the first level keys when sorting a map -->
-    <!-- see: https://gohugo.io/functions/collections/sort/#first-level-key-removal -->
+    {{/* sort the dict */}}
+    {{/* hack: create a slice of maps to sort because Hugo removes the first level keys when sorting a map */}}
+    {{/* see: https://gohugo.io/functions/collections/sort/#first-level-key-removal */}}
     {{ $weekdays_slice := slice }}
     {{ range $key, $value := $weekdays_count }}
         {{ $weekdays_slice = append (dict "day" $key "count" $value) $weekdays_slice }}
     {{ end }}
     {{ $weekdays_slice = sort $weekdays_slice "count" "desc" }}
 
-    <!-- streaks logic outside because it's complex and lengthy -->
+    {{/* streaks logic outside because it's complex and lengthy */}}
     {{ $streaks := partial "stats/streaks" . }}
 
-    <!-- display the metrics -->
+    {{/* display the metrics */}}
     <p>
         A <strong>{{ $years_active }}</strong> años de su lanzamiento,
         he publicado en este blog <strong>{{ len $blog_pages }}</strong> entradas,
@@ -97,7 +97,7 @@
     </p>
 
     <h1>Hábitos de publicación</h1>
-    <!-- days -->
+    {{/* days */}}
     <p>
         El día que más prefiero para publicar es el
         <strong>{{ T (index $weekdays_slice 0 "day") }}</strong>
@@ -112,7 +112,7 @@
         <strong>{{ T (index $weekdays_slice 6 "day") }}</strong>
         ({{ index $weekdays_slice 6 "count" }} entradas).
     </p>
-    <!-- months -->
+    {{/* months */}}
     <p>
         Otra curiosidad es que los meses en los que más publico son
         <strong>{{ T (index $months_slice 0 "month") }}</strong>,
@@ -134,10 +134,10 @@
         esto es, cadenas de meses consecutivos con al menos una entrada.
     </p>
     
-    <!-- streaks -->
-    <!-- check active streak -->
+    {{/* streaks */}}
+    {{/* check active streak */}}
     {{ if eq (time.Now | time.Format "2006-01") (index $streaks 0 "end") }}
-        <!-- streak continues at build time -->
+        {{/* streak continues at build time */}}
         {{ $current_streak := index $streaks 0 }}
         {{ $longest_streak := index (sort $streaks "length" "desc") 0 }}
 
@@ -147,12 +147,12 @@
             Actualmente llevo una racha de publicación de <strong>{{ $current_streak.length }} meses</strong>,
             desde <strong>{{ $start }}</strong> hasta <strong>{{ $end }}</strong>.
             {{ if eq $current_streak.length $longest_streak.length }}
-                <!-- the current streak is also the longest one -->
+                {{/* the current streak is also the longest one */}}
                 Esta es también la racha más larga.
             {{ end }}
         </p>
     {{ else }}
-        <!-- no active streak at build time -->
+        {{/* no active streak at build time */}}
         {{ with index $streaks 0 }}
             {{ $start := printf "%s-01T00:00:00-06:00" .start | time.AsTime | time.Format "January de 2006" }}
             {{ $end := printf "%s-01T00:00:00-06:00" .end | time.AsTime | time.Format "January de 2006" }}
@@ -162,14 +162,14 @@
             </p>
         {{ end }}
     {{ end }}
-    <!-- TODO: make the streaks logic more robust -->
-    <!-- at time of writing I'm on a current long streak and have no intentions of losing it -->
-    <!-- so I'm leaving the template as it is -->
-    <!-- however, this logic is not complete and maybe in the future I will complete it -->
-    <!-- /streaks -->
+    {{/* TODO: make the streaks logic more robust */}}
+    {{/* at time of writing I'm on a current long streak and have no intentions of losing it */}}
+    {{/* so I'm leaving the template as it is */}}
+    {{/* however, this logic is not complete and maybe in the future I will complete it */}}
+    {{/* /streaks */}}
 
     <h1>A lo largo del tiempo</h1>
-    <!-- get the year with most posts -->
+    {{/* get the year with most posts */}}
     {{ $years := dict }}
     {{ range $blog_pages }}
     {{ $year := .Date.Year }}
@@ -187,17 +187,17 @@
             {{ $max_year = $year }}
         {{ end }}
     {{ end }}
-    <!-- /year with most posts -->
+    {{/* /year with most posts */}}
 
     <p>
         Entradas por año, para quienes les gusta llevar la cuenta (o sea, yo):
     </p>
     {{ range $blog_pages.GroupByDate "2006" }}
-        <!-- hardcoding the style: I don't need a CSS class only for this -->
-        <!-- (might change in the future, tho) -->
+        {{/* hardcoding the style: I don't need a CSS class only for this */}}
+        {{/* (might change in the future, tho) */}}
         <p style="margin: 0.25rem 0rem;">
-            <!-- feels dirty to use conditionals to open/close tags -->
-            <!-- but hey, funny things rarely can be described as 'clean' anyways -->
+            {{/* feels dirty to use conditionals to open/close tags */}}
+            {{/* but hey, funny things rarely can be described as 'clean' anyways */}}
             {{ if eq .Key ($max_year) }}
                 <strong>
             {{ end }}
