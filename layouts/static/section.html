@@ -8,7 +8,7 @@
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
     {{ $static := $pages | intersect (where .Site.AllPages.ByTitle "Params.static" true ) }}
     {{ range $static }}
-        <a href="{{ .Permalink }}">
+        <a href="{{ .RelPermalink }}">
         <div class="static-page-card">
             <div class="static-page-title">{{ .Title }}</div>
             <div class="static-page-descr">{{ .Description }}</div>

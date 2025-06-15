@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
 <head>
-    <!-- GNU Terry Pratchett -->
+    {{/* GNU Terry Pratchett */}}
     <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
 
     <meta charset="UTF-8">
@@ -12,32 +12,32 @@
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
     {{ with .Site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
 
-    <!-- RSS -->
+    {{/* RSS */}}
     {{ with .OutputFormats.Get "RSS" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}
 
-    <!-- theme (CSS) -->
-    <!-- I could postprocess CSS here, but as of now I don't see much gain out of it -->
-    <!-- the thing is, since I'm defining CSS by hand, unused classes should be few or none -->
-    <!-- (the palettes could be an example) -->
-    <!-- in short: postprocess seems overkill right now, since it also requires setting up Node in the CI/CD -->
-    <!-- however, this might be a nice thing in the future -->
-    <!-- see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 -->
-    <!--      https://gohugo.io/functions/resources/postprocess/ -->
+    {{/* theme (CSS) */}}
+    {{/* I could postprocess CSS here, but as of now I don't see much gain out of it */}}
+    {{/* the thing is, since I'm defining CSS by hand, unused classes should be few or none */}}
+    {{/* (the palettes could be an example) */}}
+    {{/* in short: postprocess seems overkill right now, since it also requires setting up Node in the CI/CD */}}
+    {{/* however, this might be a nice thing in the future */}}
+    {{/* see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 */}}
+    {{/*      https://gohugo.io/functions/resources/postprocess/ */}}
     {{ $palette := "" }}
     {{ $available_palettes := .Site.Params.theme.available_palettes }}
     {{ if (eq .Site.Params.theme.palette "random") }}
         {{ range ($available_palettes | shuffle | first 1) }}
             {{ $palette = printf "%s.css" . }}
-            <!-- set the random palette name for later use in debug mode -->
+            {{/* set the random palette name for later use in debug mode */}}
             {{ $.Store.Set "random_palette" . }}
         {{ end }}
     {{ else }}
         {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
     {{ end }}
     {{ $palette = resources.Get (printf "css/palettes/%s" $palette) }}
-    <!-- hardcoding the list since I have no clue how to automatically read from global resources -->
+    {{/* hardcoding the list since I have no clue how to automatically read from global resources */}}
     {{ $styles := slice 
         (resources.Get "css/styles/colours.css")
         (resources.Get "css/styles/layout.css")
@@ -53,18 +53,18 @@
     {{/* I need different files for the styles and the palette for the random palette feature to work */}}
     <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }}>
     <link rel="stylesheet" href="{{ $palette.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $palette.Data.Integrity }}"{{ end }}>
-    <!-- /theme -->
+    {{/* /theme */}}
 
-    <!-- scripts -->
+    {{/* scripts */}}
 
-    <!-- random bat script -->
+    {{/* random bat script */}}
     {{ $script := "js/random_bat.js" | resources.Get }}
     {{ if hugo.IsProduction }}
         {{ $script = $script | minify | fingerprint }}
     {{ end }}
     <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
 
-    <!-- random quote script -->
+    {{/* random quote script */}}
     {{ if (eq .Path "/") }}
         {{ $script := "js/random_quote.js" | resources.Get }}
         {{ if hugo.IsProduction }}
@@ -73,7 +73,7 @@
         <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
     {{ end }}
 
-    <!-- enable searching in the site -->
+    {{/* enable searching in the site */}}
     {{ if (eq .Path "/search") }}
         <link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
         {{- $fastsearch := resources.Get "js/fastsearch.js" | js.Build (dict "params" (dict "fuseOpts" site.Params.fuseOpts)) | resources.Minify }}
@@ -86,7 +86,7 @@
         <script defer crossorigin="anonymous" src="{{ $search.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $search.Data.Integrity }}"{{ end }}></script>
     {{ end }}
 
-    <!-- enable sorting library table -->
+    {{/* enable sorting library table */}}
     {{ if (eq .Path "/library") }}
     {{ $script := "js/tellico2html.js" | resources.Get }}
     {{ if hugo.IsProduction }}
@@ -102,21 +102,21 @@
     </script>
     {{ end }}
 
-    <!-- /scripts -->
+    {{/* /scripts */}}
 
-    <!-- creation of LQIPs and GIPs -->
-    <!-- see: https://www.brycewray.com/posts/2022/06/responsive-optimized-images-hugo/ -->
+    {{/* creation of LQIPs and GIPs */}}
+    {{/* see: https://www.brycewray.com/posts/2022/06/responsive-optimized-images-hugo/ */}}
     {{ partial "head-imgs-css.html" . }}
 </head>
 
 <body id="flex-container">
-    <!-- display debug information -->
+    {{/* display debug information */}}
     {{ if hugo.IsDevelopment }}
         <div class="debug">
             {{ partial "debug-info.html" . }}
         </div>
     {{ end }}
-    <!-- /debug -->
+    {{/* /debug */}}
 
     {{ partial "header" . }}
     {{ block "main" . }}{{ end }}
