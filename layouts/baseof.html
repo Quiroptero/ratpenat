@@ -26,17 +26,18 @@
     {{/* see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 */}}
     {{/*      https://gohugo.io/functions/resources/postprocess/ */}}
     {{ $palette := "" }}
-    {{ $available_palettes := .Site.Params.theme.available_palettes }}
-    {{ if (eq .Site.Params.theme.palette "random") }}
-        {{ range ($available_palettes | shuffle | first 1) }}
-            {{ $palette = printf "%s.css" . }}
-            {{/* set the random palette name for later use in debug mode */}}
-            {{ $.Store.Set "random_palette" . }}
+    {{ $available := .Site.Params.palettes.available }}
+    {{ if (eq .Site.Params.palettes.current "random") }}
+        {{ range ($available | shuffle | first 1) }}
+            {{ $palette = . }}
         {{ end }}
     {{ else }}
-        {{ $palette = printf "%s.css" (.Site.Params.theme.palette | default "darktooth") }}
+        {{ $palette = (.Site.Params.palettes.current | default "darktooth") }}
     {{ end }}
-    {{ $palette = resources.Get (printf "css/palettes/%s" $palette) }}
+    {{/* set the palette name for later use */}}
+    {{ .Store.Set "palette" $palette }}
+    {{/* to get a better understanding of the following line see: https://gohugo.io/functions/resources/executeastemplate/ */}}
+    {{ $palette = resources.ExecuteAsTemplate (printf "css/palettes/%s.css" $palette) $ (resources.Get "css/palettes/template.css") }}
     {{/* hardcoding the list since I have no clue how to automatically read from global resources */}}
     {{ $styles := slice 
         (resources.Get "css/styles/colours.css")
