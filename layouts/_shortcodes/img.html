@@ -9,8 +9,7 @@
 {{- $width := "" -}}
 {{- $class := default "" (.Get "class") -}}
 
-{{- $respSizes := slice "320" "900" "1200" -}}
-{{- $dataSzes := "(min-width: 1024px) 100vw, 50vw" -}}
+{{- $respSizes := slice "320" "640" "900" "1200" -}}
 {{- $imgBd5 := md5 $src -}}
 {{- $divClass := printf "relative bigImgDiv imgB-" $imgBd5 "-GIP" -}}
 {{/*
