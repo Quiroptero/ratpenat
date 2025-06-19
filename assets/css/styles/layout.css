@@ -343,3 +343,8 @@ div.static-page-card {
 div.static-page-title {
     margin-bottom: 0.2rem;
 }
+
+/* add an horizontal scrollbar when content of pre is bigger that its container */
+pre {
+    overflow: auto;
+}
