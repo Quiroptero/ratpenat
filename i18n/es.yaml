@@ -36,3 +36,7 @@ es: español
 en: inglés
 fr: francés
 ca: catalán
+
+# draft warning
+draft_beware: ¡ATENCIÓN! ESTA PUBLICACIÓN ES UN BORRADOR
+draft_date: "Fecha actual: {{ .date }}"

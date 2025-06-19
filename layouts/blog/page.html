@@ -34,6 +34,14 @@
     </div>
     {{ end }}
 
+    {{/* display a warning when the post is still in draft form */}}
+    {{ if strings.Contains .Page.Path "_drafts" }}
+    <div class="notice">
+        <p style="font-size: 1.3rem;">{{ T "draft_beware" }}</p>
+        <p>{{ T "draft_date" (dict "date" .Date) }}</p>
+    </div>
+    {{ end }}
+
     {{ if .Params.rl }}
     <div class="warning">
         <p>
