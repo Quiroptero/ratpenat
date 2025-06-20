@@ -133,7 +133,7 @@
         </thead>
         {{/* body */}}
         <tbody>
-            {{ range $index, $book := sort $books "Author" "asc" }}
+            {{ range $index, $book := sort $books "ID" "asc" }}
             {{/*
                 get the image resource of the book
                 if it doesn't have one, get the general one
@@ -151,7 +151,8 @@
                     <div class="book-title-pic">
                         <img src="{{ ($img.Fit "webp 25x25").RelPermalink }}">
                         <strong>
-                            <a href="/biblioteca/libro/{{ $book.ID }}">{{ $book.Title }}</a>
+                            {{/* using the index to make it match with the ordered list of files */}}
+                            <a href="/biblioteca/libro/{{ add $index 1 }}">{{ $book.Title }}</a>
                         </strong>
                     </div>
                 </td>

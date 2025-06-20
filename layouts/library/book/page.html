@@ -4,39 +4,83 @@
     {{/* read the library data file and filter this one book */}}
     {{ $opts := dict "targetType" "map" }}
     {{ $data := transform.Unmarshal $opts (.Parent.Resources.Get .Parent.Params.data_file) }}
+    {{/* notice that ID is the internal reference in the csv file, while weight is the index of the item in the ordered list */}}
     {{ $data := where $data "ID" "==" (.Params.id | string) }}
     {{/* extract the map from the slice */}}
     {{ $book := index $data 0 }}
 
-    <div class="warning">
-        Esta plantilla está en construcción. Próximamente incluirá más datos.
-    </div>
-
     <div class="notice">
     <p>
-        Este es el libro {{ $book.ID }}
+        Este es el libro {{ .Params.weight }}
         de mi <strong><a href="/biblioteca">/biblioteca</a></strong>.
     </p>
     </div>
 
-    <h1>{{ $book.Title }}</h1>
+    <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem;">
+        <h1 style="font-size: 1.5rem;">{{ $book.Title }}</h1>
+        {{ with $book.Subtitle }}<h2 style="font-size: 1rem;">{{ . }}</h2>{{ end }}
+    </div>
     
+    {{/* the following is really ugly, need to make it better in the future */}}
+    <div style="text-align: center;">
+        {{ T "book-details-lang" }}<strong>{{- T $book.Language -}}</strong>
+        {{- T "book-details-bind" -}}<strong>{{ T $book.Binding }}</strong>
+        {{ T "and" }}<strong>{{ if $book.Read }}{{ T "book-details-read" }}{{ else }}{{ T "book-details-noread" }}{{ end }}</strong>
+    </div>
+
     {{ $img := "" }}
+    {{ $alt := "" }}
     {{ with .Parent.Resources.Get (printf "img/%s" $book.Front_Cover) }}
         {{ $img = . }}
+        {{ $alt = T "book-cover-alt" (dict "title" $book.Title) }}
     {{ else }}
         {{ $img = resources.Get "images/no-book-cover.jpg" }}
+        {{ $alt = T "book-no-cover" }}
     {{ end }}
     <div>
-        <figure>
+        <figure class="with-border">
         <img
-            alt="" 
+            alt="{{ $alt }}"
             src="{{ ($img.Fit "400x400 webp").RelPermalink }}"
         >
-        <figcaption>
-            <p><strong>{{ $book.title }}</strong></p>
-        </figcaption>
         </figure>
     </div>
+    
+    {{/* author */}}
+    <div style="text-align: center;">
+        <h1>{{ T "author" (split $book.Author ";" | len) }}</h1>
+        <p>{{ $book.Author }}</p>
+    </div>
+
+    {{/* translator */}}
+    {{ if $book.Translator }}
+        <div style="text-align: center;">
+            <h1>{{ T "book-details-translation"}}</h1>
+            <p>{{ $book.Translator }}</p>
+        </div>
+    {{ end }}
+    
+    {{/* more details */}}
+    {{ $more_details := slice }}
+    {{ if $book.Gift }}{{ $more_details = append (slice (T "book-details-gift")) $more_details }}{{ end }}
+    {{ if $book.Signed }}{{ $more_details = append (slice (T "book-details-signed")) $more_details }}{{ end }}
+    {{ if $book.Loaned }}{{ $more_details = append (slice (T "book-details-loaned")) $more_details }}{{ end }}
+    {{ $more_details = delimit $more_details ", " " y "}}
+    {{ if $more_details }}
+        {{ $more_details = add (T "this-book") $more_details "." }}
+        <div style="text-align: center;">
+            <h1>Datos extras</h1>
+            <p>{{ $more_details }}</p>
+        </div>
+    {{ end }}
+
+    {{ $pages := where site.RegularPages "Section" "eq" "library" }}
+    {{ $pages = $pages.ByWeight }}
+    {{ if and (gt (len $pages) 1) (in $pages . ) }}
+    <nav class="nextprev">
+        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">« {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">{{ .Name }} »</a>{{- end }}</div>
+    </nav>
+    {{ end }}
 </main>
 {{ end }}

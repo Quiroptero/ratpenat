@@ -1,3 +1,4 @@
+and: "y"
 # months
 January: enero
 February: febrero
@@ -40,3 +41,19 @@ ca: catalán
 # draft warning
 draft_beware: ¡ATENCIÓN! ESTA PUBLICACIÓN ES UN BORRADOR
 draft_date: "Fecha actual: {{ .date }}"
+
+# book details
+author:
+  one: "Autor"
+  other: "Autores"
+book-details-lang: "Este libro está escrito en "
+book-details-bind: ", su encuadernación es "
+book-details-read: " ya lo leí."
+book-details-noread: " todavía no lo leo."
+book-cover-alt: "Imagen de portada del libro {{ .title }}."
+book-no-cover: "Representación genérica de un libro, ya que no se cuenta con la imagen de portada."
+this-book: "Este libro "
+book-details-gift: "fue un regalo"
+book-details-signed: "tiene una dedicatoria"
+book-details-loaned: "actualmente lo tengo prestado"
+book-details-translation: "Traducido por"
