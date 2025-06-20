@@ -78,8 +78,8 @@
     {{ $pages = $pages.ByWeight }}
     {{ if and (gt (len $pages) 1) (in $pages . ) }}
     <nav class="nextprev">
-        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">« {{ .Name }}</a>{{- end }}</div>
-        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">{{ .Name }} »</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">« {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">{{ .Name }} »</a>{{- end }}</div>
     </nav>
     {{ end }}
 </main>
