@@ -10,6 +10,7 @@
 
 <p><strong>CSS</strong>: {{ .Store.Get "palette" }}</p>
 <p><strong>Kind</strong>: {{ page.Kind }}</p>
+<p><strong>Section</strong>: {{ .Section }}</p>
 <p><strong>Page path</strong>: {{ page.Path }}</p>
 {{ with page.Parent }}
 <p><strong>Parent page path</strong>: {{ .Path }}</p>
