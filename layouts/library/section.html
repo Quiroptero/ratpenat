@@ -120,15 +120,16 @@
     {{ $odd_or_even_aux := mod $total_books 2 }}
 
     {{/* display the library as a table */}}
+    <div style="overflow-x: auto;">
     <table class="sortable">
         {{/* headers */}}
         <thead>
             <tr>
+            <th></th>
             <th width="40%">{{ T "Title" }}</th>
             <th width="30%">{{ T "Authors" }}</th>
             <th>{{ T "Binding" }}</th>
             <th>{{ T "Language" }}</th>
-            <th>{{ T "Read" }}</th>
             </tr>
         </thead>
         {{/* body */}}
@@ -146,6 +147,7 @@
             {{ end }}
             {{/* alternate between classes r1 and r0 for styling purposes */}}
             <tr{{ if eq (mod $index 2) $odd_or_even_aux }} class="r1"{{ else }} class="r0"{{ end }}>
+                <td class="field">{{ if eq $book.Read "true" }}✅{{ end }}</td>
                 {{/* title: include a link to details page */}}
                 <td class="field">
                     <div class="book-title-pic">
@@ -159,10 +161,10 @@
                 <td class="field">{{ $book.Author }}</td>
                 <td class="field">{{ T $book.Binding }}</td>
                 <td class="field">{{ T $book.Language }}</td>
-                <td class="field">{{ if eq $book.Read "true" }}✅{{ end }}</td>
             </tr>
             {{ end }}
         </tbody>
     </table>
+    </div>
 </main>
 {{ end }}
