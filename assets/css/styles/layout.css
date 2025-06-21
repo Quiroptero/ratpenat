@@ -306,12 +306,16 @@ div.label-fixed-date {
 }
 
 div.label-fixed-day {
-    width: 3ch; /* DD */
+    width: 6ch; /* MM-DD */
     flex-shrink: 0;
 }
 
 div.link-wrap {
     flex: 1;
+}
+
+div.group-by-month {
+    margin-bottom: 1rem;
 }
 
 /* static pages links in home */

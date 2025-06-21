@@ -10,15 +10,16 @@
         {{ range (where .Site.RegularPages "Type" "in" .Site.Params.mainSections).GroupByDate "2006" }}
             {{ $year := .Key }}
             <div>
+            <h1>{{ $year }}</h1>
             {{ range .Pages.GroupByDate "January" }}
-                {{ $month := .Key }}
-                <h1>{{ $year }} {{ $month }}</h1>
+                <div class="group-by-month">
                 {{ range .Pages }}
                     <div class="row-label-link">
-                        <div class="label-fixed-day">{{ .Date.Format "02" }}&nbsp;</div>
+                        <div class="label-fixed-day">{{ .Date.Format "01-02" }}&nbsp;</div>
                         <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
                     </div>
                 {{ end }}
+                </div>
             {{ end }}
             </div>
         {{ end }}
