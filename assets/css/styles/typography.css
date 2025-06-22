@@ -1,13 +1,53 @@
 /* fonts */
 
+/*  https://commitmono.com/
+    
+    Commit Mono supports:
+    weight: from 200 to 700 in steps of 25 units
+        use font-weight
+    width: from -10% to +10% in steps of 1%
+        use font-stretch
+    italics: 0 (off) or 1 (on)
+        use font-style
+*/
+@font-face {
+    font-family: "MainMono";
+    src: url("/fonts/commitmono.woff2") format("woff2-variations");
+    font-style: normal;
+    font-optical-sizing: auto; /* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_fonts/Variable_fonts_guide#optical_size */
+    font-display: swap;
+    font-weight: 200 700;
+    font-stretch: 90% 110%;
+}
+@font-face {
+    font-family: "MainMono";
+    src: url("/fonts/commitmono.woff2") format("woff2-variations");
+    font-style: italic;
+    font-synthesis: none; /* see: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_fonts/Variable_fonts_guide#italic */
+    font-display: swap;
+    font-weight: 200 700;
+    font-stretch: 90% 110%;
+}
+
+@font-face {
+    font-family: "MainHead";
+    src: url("/fonts/GoudyBookletter1911-Regular.woff2") format("woff2");
+    font-style: normal;
+    font-display: swap;
+}
+
+/* /fonts */
+
 :root {
-    --font-monospace: "Fira Mono", monospace, monospace;
+    --font-monospace: "MainMono", monospace, monospace;
+    --font-headings: "MainMono", sans-serif;
 }
 
 body {
     font-family: var(--font-monospace);
-    font-size: 1rem;
-    line-height: 1.3rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.6rem;
 }
 
 /* in general, remove link underlines (but keep them later on posts content) */
@@ -41,11 +81,7 @@ ul {
 /* site header */
 header * {
     color: var(--site-meta);
-}
-
-/* site menu */
-#menu {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 /* landing page */
@@ -57,10 +93,15 @@ div.welcome {
 div.meta { 
     font-size: 0.85rem; 
     color: var(--off-fg);
+    margin: 1.5rem 0rem;
 }
 
 div.meta a {
     color: var(--m);
+}
+
+div.meta p {
+    margin: 0;
 }
 
 /* build stats */
@@ -78,14 +119,16 @@ sup {
 }
 
 /* headings */
-h1, 
-h2, 
-h3, 
-h4, 
-h5, 
-h6 {
+h1.title {
+    font-size: 2rem;
+    line-height: 2.5rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headings);
     color: var(--h);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 h1.content::before { content: '# '; }
@@ -186,8 +229,7 @@ footer a {
 .notice {
     text-align: center;
     color: var(--off-fg);
-    font-size: 0.85rem;
-    background: var(--nb);
+    font-size: 1rem;
 }
 
 /* series box */
@@ -210,8 +252,7 @@ footer a {
 .warning {
     text-align: center;
     color: var(--w);
-    font-size: 0.85rem;
-    background: var(--nb);
+    font-size: 1rem;
 }
 
 /* library styles */
@@ -256,11 +297,28 @@ div.footnotes {
 /* table of contents */
 .toc {
     font-size: 0.85rem;
-    background: var(--nb);
 }
 
 .toc a {
     color: var(--h);
+}
+
+details > summary {
+    list-style: none;
+    width: fit-content;
+    max-width: calc(var(--max-width) - 4ch);
+    position: relative;
+    margin: 0.1rem 0 0 2ch;
+}
+
+details > summary::before {
+    content: "[+]";
+    position: absolute;
+    left: -4ch;
+}
+
+details[open] > summary::before {
+    content: "[-]"
 }
 
 /* stats */
@@ -275,7 +333,7 @@ p.latest-meta {
     font-size: 1rem;
 }
 p.latest-post {
-    font-size: 1.3rem;
+    font-size: 2rem;
     line-height: 2rem;
 }
 
@@ -304,3 +362,4 @@ div.static-page-descr {
     color: var(--mute);
     text-align: center;
 }
+

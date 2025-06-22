@@ -121,6 +121,8 @@ div.related-content {
 .notice {
     margin: 1rem auto;
     padding: 0.5rem;
+    border-bottom: 0.125rem solid var(--nb);
+    border-top: 0.125rem solid var(--nb);
 }
 
 /* series box */
@@ -141,6 +143,8 @@ div.related-content {
 .warning {
     margin: 1rem auto;
     padding: 0.5rem;
+    border-bottom: 0.125rem solid var(--w);
+    border-top: 0.125rem solid var(--w);
 }
 
 /* random bat */
@@ -223,13 +227,14 @@ div.book-title-pic img {
 
 /* table of contents */
 div.toc > details > nav > ul { 
-    padding-left: 0rem;
+    padding-left: 0.1rem;
 }
 
 .toc {
     padding: 0.5rem 1rem;
     margin: 1rem 0rem;
     border-top: 0.125rem solid var(--b);
+    border-bottom: 0.125rem solid var(--b);
 }
 
 /* movies and books list */
