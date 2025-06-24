@@ -1,0 +1,10 @@
+{{- /* this hook controls the rendering of markdown links */ -}}
+{{- /* taken from: https://git.vim.wtf/wq/runtimeterror/src/branch/main/layouts/_default/_markup/render-link.html */ -}}
+{{- $u := urls.Parse .Destination -}}
+<a href="{{ .Destination | safeURL }}"
+  {{- with .Title }} title="{{ . }}"{{ end -}}
+  {{- if $u.IsAbs }} rel="external"{{ end -}}
+>
+  {{- with .Text | safeHTML }}{{ . }}{{ end -}}
+</a>
+{{- /* chomp trailing newline */ -}}
