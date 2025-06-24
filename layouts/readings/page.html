@@ -4,8 +4,9 @@
 
     {{ partial "last_mod_by_file.html" . }}
 
-    <div class="notice">
-        Este es el registro de mis lecturas durante {{ .Title }}. El registro actual se encuentra acá: <a href="/lecturas">/lecturas</a>.
+    <div class="box box--notice">
+        <p>Este es el registro de mis lecturas durante <strong>{{ .Title }}</strong>.</p>
+        <p>El registro actual se encuentra acá: <a href="/lecturas">/lecturas</a>.</p>
     </div>
 
     <div class="content">
@@ -125,8 +126,8 @@
     {{- $pages := where site.RegularPages "Section" "eq" "readings" }}
     {{- if and (gt (len $pages) 1) (in $pages . ) }}
     <nav class="nextprev">
-        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
-        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
     </nav>
     {{- end }}
 </main>

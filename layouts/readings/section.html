@@ -122,14 +122,12 @@
 
     <!-- archive -->
     <div>
-    <h1 id="archivo">Archivo</h1>
+    <h1 id="archivo">Lecturas en...</h1>
     {{ $pages := where .Site.RegularPages "Section" "eq" "readings" }}
     {{ $pages := $pages.ByDate.Reverse }}
-    <ul>
         {{ range $pages }}
-        <li><a href="{{ .RelPermalink }}">Lecturas en {{ .Title }}</a></li>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
         {{ end }}
-    </ul>
     </div>
 </main>
 {{ end }}

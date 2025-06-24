@@ -7,9 +7,9 @@
         {{ $series_title = (site.GetPage (printf "/series/%s" $series_slug)).Title }}
     {{ end }}
 
-    <h1 class="title">{{ partial "draft_notice" . }}</h1>
+    <h1 class="post-title">{{ partial "draft_notice" . }}</h1>
     <div class="meta">
-        <p><b><time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">{{ .Date | time.Format ":date_full" }}</time></b></p>
+        <p><time datetime="{{ .Date.Format "2006-01-02T15:04:05" }}">{{ .Date | time.Format ":date_full" }}</time></p>
         <p>
         <span>
         {{ with .Params.categorías }}
@@ -34,23 +34,29 @@
 
     {{/* display a warning when the post is still in draft form */}}
     {{ if strings.Contains .Page.Path "_drafts" }}
-    <div class="notice">
+    <div class="box box--notice">
         <p style="font-size: 1.3rem;">{{ T "draft_beware" }}</p>
         <p>{{ T "draft_date" (dict "date" .Date) }}</p>
     </div>
     {{ end }}
 
     {{ if .Params.rl }}
-    <div class="warning">
+    <div class="box box--warning">
         <p>
             Esta entrada es una <a href="/rl">reseña literaria</a>,
             por lo que puede contener <a href="/2018/09/destripar">destripes</a>.
         </p>
+        {{ with .Params.library_id }}
+        <p>
+            Este libro forma parte de mi <a href="/biblioteca/">/biblioteca</a>
+            y es el libro número <a href="/biblioteca/libro/{{ . }}">{{ . }}</a>.
+        </p>
+        {{ end }}
     </div>
     {{ end }}
 
     {{ if .Params.toc }}
-    <div class="toc">
+    <div class="box box--toc">
         <details{{ if eq .Params.toc "open" }} open=""{{ end }}>
             <summary>Tabla de contenidos</summary>
             {{ .TableOfContents }}
@@ -62,10 +68,9 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-
     {{ if .Params.series }}
-    <div class="series-box">
-        <p>De la serie <strong>{{ $series_title }}</strong>:</p>
+    <div class="box box--series">
+        <p>De la serie <strong>{{ $series_title }}</strong></p>
         {{ $series := where site.RegularPages "Params.series" "=" $series_slug }}
         {{ range $series }}
             <div class="row-label-link">
@@ -76,22 +81,27 @@
     </div>
     {{ end }}
 
+    {{/* related content */}}
+    {{ $related := .Site.RegularPages.Related . | first 5 }}
+    {{ with $related }}
+    <div class="box box--related post-list">
+        <p><strong>{{ T "related-content" }}</strong></p>
+        {{ range . }}
+            <div class="row-label-link">
+                <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}</div>
+		        <div class="link-wrap"><a href="{{ .RelPermalink }}">{{.Title}}</a></div>
+            </div>
+        {{ end }}
+    </div>
+    {{ end }}
+
     {{/* previous and next pages */}}
     {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections }}
     {{- if and (gt (len $pages) 1) (in $pages . ) }}
     <nav class="nextprev">
-        <div>{{- with $pages.Prev . }}<a href="{{ .Permalink }}">« {{ .Name }}</a>{{- end }}</div>
-        <div>{{- with $pages.Next . }}<a href="{{ .Permalink }}">{{ .Name }} »</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">« {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">{{ .Name }} »</a>{{- end }}</div>
     </nav>
     {{- end }}
-    
-    {{/* related content */}}
-    {{ $related := .Site.RegularPages.Related . | first 5 }}
-    {{ with $related }}
-    <div class="related-content">
-        <h1>Publicaciones relacionadas</h1>
-        <ul>{{ range . }}<li><a href="{{ .RelPermalink }}">{{- .Title -}}</a></li>{{ end }}</ul>
-    </div>
-    {{ end }}
 </main>
 {{ end }}

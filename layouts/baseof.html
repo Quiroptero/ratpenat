@@ -4,9 +4,11 @@
     {{/* GNU Terry Pratchett */}}
     <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
 
+    {{ "<!--compatibility-->" | safeHTML }}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    {{ "<!--page metadata-->" | safeHTML }}
     <title>{{ with .Title }}{{ . }} &ndash; {{end}}{{ .Site.Title }}</title>
     {{ with .Page.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
@@ -14,17 +16,23 @@
 
     {{/* RSS */}}
     {{ with .OutputFormats.Get "RSS" -}}
+        {{ "<!--RSS-->" | safeHTML }}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}
 
-    {{/* theme (CSS) */}}
-    {{/* I could postprocess CSS here, but as of now I don't see much gain out of it */}}
-    {{/* the thing is, since I'm defining CSS by hand, unused classes should be few or none */}}
-    {{/* (the palettes could be an example) */}}
-    {{/* in short: postprocess seems overkill right now, since it also requires setting up Node in the CI/CD */}}
-    {{/* however, this might be a nice thing in the future */}}
-    {{/* see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4 */}}
-    {{/*      https://gohugo.io/functions/resources/postprocess/ */}}
+    {{ "<!--custom font-->" | safeHTML }}
+    <link rel="preload" href="/fonts/commitmono.woff2" as="font" type="font/woff2" crossorigin />
+
+    {{/* theme (CSS)
+        I could postprocess CSS here, but as of now I don't see much gain out of it
+        the thing is, since I'm defining CSS by hand, unused classes should be few or none
+        (the palettes could be an example)
+        in short: postprocess seems overkill right now, since it also requires setting up Node in the CI/CD
+        however, this might be a nice thing in the future
+        see: https://discourse.gohugo.io/t/using-resources-postprocess-and-resources-fingerprint-together/28909/4
+             https://gohugo.io/functions/resources/postprocess/
+    */}}
+    {{ "<!--CSS styles-->" | safeHTML }}
     {{ $palette := "" }}
     {{ $available := .Site.Params.palettes.available }}
     {{ if (eq .Site.Params.palettes.current "random") }}
@@ -38,27 +46,27 @@
     {{ .Store.Set "palette" $palette }}
     {{/* to get a better understanding of the following line see: https://gohugo.io/functions/resources/executeastemplate/ */}}
     {{ $palette = resources.ExecuteAsTemplate (printf "css/palettes/%s.css" $palette) $ (resources.Get "css/palettes/template.css") }}
-    {{/* hardcoding the list since I have no clue how to automatically read from global resources */}}
-    {{ $styles := slice 
-        (resources.Get "css/styles/colours.css")
-        (resources.Get "css/styles/layout.css")
-        (resources.Get "css/styles/progress.css")
-        (resources.Get "css/styles/ratpenat.css")
-        (resources.Get "css/styles/typography.css")
-    }}
-    {{ $css := $styles | resources.Concat "css/style.css" }}
+    {{/* see: https://discourse.gohugo.io/t/import-in-css-files-fail-to-load/41895/2 */}}
+    {{ $styles := resources.Get "css/styles/ratpenat.css" }}
+    {{ $css := $styles | toCSS }}
     {{ if hugo.IsProduction }}
         {{ $css = $css | minify | fingerprint }}
         {{ $palette = $palette | minify | fingerprint }}
     {{ end }}
     {{/* I need different files for the styles and the palette for the random palette feature to work */}}
-    <link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $css.Data.Integrity }}"{{ end }}>
-    <link rel="stylesheet" href="{{ $palette.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $palette.Data.Integrity }}"{{ end }}>
+    {{ if hugo.IsProduction }}
+        <link rel="stylesheet" href="{{ $css.Permalink }}" integrity="{{ $css.Data.Integrity }}">
+        <link rel="stylesheet" href="{{ $palette.Permalink }}" integrity="{{ $palette.Data.Integrity }}">
+    {{ else }}
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+        <link rel="stylesheet" href="{{ $palette.RelPermalink }}">
+    {{ end }}
     {{/* /theme */}}
 
     {{/* scripts */}}
 
     {{/* random bat script */}}
+    {{ "<!--nanananana-->" | safeHTML }}
     {{ $script := "js/random_bat.js" | resources.Get }}
     {{ if hugo.IsProduction }}
         {{ $script = $script | minify | fingerprint }}
@@ -67,6 +75,8 @@
 
     {{/* random quote script */}}
     {{ if (eq .Path "/") }}
+        {{ "<!--nice random quote-->" | safeHTML }}
+        <link rel="preload" href="/quotes.txt" as="fetch" type="text/plain" />
         {{ $script := "js/random_quote.js" | resources.Get }}
         {{ if hugo.IsProduction }}
             {{ $script = $script | minify | fingerprint }}
@@ -76,6 +86,7 @@
 
     {{/* enable searching in the site */}}
     {{ if (eq .Path "/search") }}
+        {{ "<!--search-->" | safeHTML }}
         <link crossorigin="anonymous" rel="preload" as="fetch" href="../index.json">
         {{- $fastsearch := resources.Get "js/fastsearch.js" | js.Build (dict "params" (dict "fuseOpts" site.Params.fuseOpts)) | resources.Minify }}
         {{- $fusejs := resources.Get "js/fuse.basic.min.js" }}
@@ -85,22 +96,25 @@
             {{ $search = $search | minify | fingerprint }}
         {{ end }}
         <script defer crossorigin="anonymous" src="{{ $search.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $search.Data.Integrity }}"{{ end }}></script>
+        {{ "<!--/search-->" | safeHTML }}
     {{ end }}
 
     {{/* enable sorting library table */}}
     {{ if (eq .Path "/library") }}
-    {{ $script := "js/tellico2html.js" | resources.Get }}
-    {{ if hugo.IsProduction }}
-        {{ $script = $script | minify | fingerprint }}
-    {{ end }}
-    <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
-    <script type="text/javascript">
-        var COL_SORT_ARRAY = new Array()
-        COL_SORT_ARRAY[0] = 0
-        COL_SORT_ARRAY[1] = 0
-        COL_SORT_ARRAY[2] = 0
-        COL_SORT_ARRAY[3] = 0
-    </script>
+        {{ "<!--library-->" | safeHTML }}
+        {{ $script := "js/tellico2html.js" | resources.Get }}
+        {{ if hugo.IsProduction }}
+            {{ $script = $script | minify | fingerprint }}
+        {{ end }}
+        <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+        <script type="text/javascript">
+            var COL_SORT_ARRAY = new Array()
+            COL_SORT_ARRAY[0] = 0
+            COL_SORT_ARRAY[1] = 0
+            COL_SORT_ARRAY[2] = 0
+            COL_SORT_ARRAY[3] = 0
+        </script>
+        {{ "<!--/library-->" | safeHTML }}
     {{ end }}
 
     {{/* /scripts */}}

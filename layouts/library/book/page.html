@@ -9,7 +9,7 @@
     {{/* extract the map from the slice */}}
     {{ $book := index $data 0 }}
 
-    <div class="notice">
+    <div class="box box--notice">
     <p>
         Este es el libro {{ .Params.weight }}
         de mi <strong><a href="/biblioteca">/biblioteca</a></strong>.
@@ -23,9 +23,14 @@
     
     {{/* the following is really ugly, need to make it better in the future */}}
     <div style="text-align: center;">
+    <p>
         {{ T "book-details-lang" }}<strong>{{- T $book.Language -}}</strong>
         {{- T "book-details-bind" -}}<strong>{{ T $book.Binding }}</strong>
         {{ T "and" }}<strong>{{ if $book.Read }}{{ T "book-details-read" }}{{ else }}{{ T "book-details-noread" }}{{ end }}</strong>
+    </p>
+    {{ with .Params.rl }}
+        <p>Escribí una reseña de este libro <a href="{{ . }}">acá</a>.</p>
+    {{ end }}
     </div>
 
     {{ $img := "" }}

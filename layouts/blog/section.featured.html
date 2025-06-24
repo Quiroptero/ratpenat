@@ -9,11 +9,13 @@
 
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
+    <div class="post-list">
     {{ range $featured}}
     <div class="row-label-link">
         <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}:</div>
         <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
     </div>
     {{ end }}
+    </div>
 </main>
 {{ end }}

@@ -1,11 +1,9 @@
 {{ define "main" }}
 <main class="home">
-    {{ with .Content }}<div class="welcome">{{ . | safeHTML }}</div>{{ end }}
-    <hr />
+    {{ with .Content }}<div style="text-align: center;">{{ . | safeHTML }}</div>{{ end }}
 
-    <div class="content">
     {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
-    <div class="notice">
+    <div class="box box--latest">
         <p class="latest-meta">
         Última entrada el <strong>{{ .Date | time.Format ":date_full"}}</strong>
         </p>
@@ -14,9 +12,10 @@
         </p>
     </div>
     {{ end }}
+    <div class="home-section">
     <p>Las <strong>entradas</strong> son el principal tipo de contenido del blog.</p>
     <h1>Más recientes</h1>
-    <div>
+    <div class="post-list">
     {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) | after 1 }}
         <div class="row-label-link">
             <div class="label-fixed-date">{{ .Date | time.Format "2006-01-02" }}:&nbsp;</div>
@@ -30,6 +29,7 @@
     <h2>Destacadas</h2>
     {{ $featured := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
     {{ $featured := $featured | intersect (where .Site.RegularPages "Params.featured" true )}}
+    <div class="post-list">
     <ul>
     {{ range first 5 $featured}}
         <div class="row-label-link">
@@ -38,12 +38,11 @@
         </div>
     {{ end }}
     </ul>
+    </div>
     <p>→ Ver todas las <a href="{{ "/destacadas/" | relLangURL }}">entradas destacadas</a></p>
     </div>
 
-    <hr>
-
-    <div class="content">
+    <div class="home-section">
     <p>Las <strong>páginas</strong> son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
     {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
     {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
@@ -56,9 +55,7 @@
     <p>→ Ver <a href="{{ "/páginas" | relLangURL }}">todas las páginas</a></p>
     </div>
 
-    <hr class="small">
-
-    <div id="random-quote-container">
+    <div id="random-quote-container" class="box box--quote">
         <span id="random-quote"></span>
     </div>
 </main>
