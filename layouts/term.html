@@ -16,17 +16,16 @@
         <p>→ Ver todas las <a href="/categorías">/categorías</a></p>
         {{ end }}
     </div>
-
-    <hr class="small">
+    <hr >
     {{ end }}
 
-    <ul>
-        {{ range .Pages }}
-    	<li>
-            <span>{{ dateFormat "2006-01-02" .Date }}</span>
-    		<a href="{{ .RelPermalink }}">{{.Title}}</a>
-    	</li>
-    	{{ end }}
-    </ul>
+    <div class="post-list">
+    {{ range .Pages }}
+    <div class="row-label-link">
+        <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}</div>
+    	<div class="link-wrap"><a href="{{ .RelPermalink }}">{{.Title}}</a></div>
+    </div>
+    {{ end }}
+    </div>
 </main>
 {{ end }}
