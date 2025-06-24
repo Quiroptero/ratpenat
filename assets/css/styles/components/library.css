@@ -1,0 +1,59 @@
+.library th {
+    background: var(--base08);
+    font-size: 0.95rem;
+    color: var(--color-background);
+    text-align: left;
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+}
+
+tr {
+    font-size: 0.85rem;
+}
+tr a {
+    text-decoration: underline;
+    border: none;
+}
+
+tr.r0 {
+    background-color: var(--text-faint);
+    color: var(--color-background);
+}
+
+tr.r0 a {
+    color: var(--color-background);
+}
+
+tr.r1 {
+    background-color: var(--text-off);
+}
+
+tr.r1 a {
+    color: var(--text);
+}
+
+table { 
+    border-collapse: collapse; 
+    border-color: transparent; 
+}
+
+table, 
+th, 
+td { 
+    border: none; 
+}
+
+td.field {
+    padding: 0.5rem 0.5rem;
+}
+
+div.book-title-pic {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0.2rem;
+}
+
+div.book-title-pic img {
+    object-fit: cover;
+}

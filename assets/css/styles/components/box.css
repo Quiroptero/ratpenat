@@ -1,0 +1,48 @@
+.box {
+    margin: var(--box-margin, 1rem auto);
+    padding: var(--box-padding, 0.5rem);
+    border-bottom: 0.125rem solid var(--box-border, var(--base0C));
+    border-top: 0.125rem solid var(--box-border, var(--base0C));
+    text-align: var(--box-text-align, center);
+    color: var(--box-text, var(--base06));
+    font-size: var(--box-font-size, 1rem);
+}
+
+.box--notice {
+    --box-border: var(--base0F); 
+}
+
+.box--warning {
+    --box-border: var(--base08);
+}
+
+.box--series {
+    --box-border: var(--base0E);
+    --box-text-align: left;
+    --box-margin: 3rem auto;
+    --box-padding: 1rem 0rem;
+}
+
+.box--series p {
+    margin-bottom: 1rem; 
+    margin-top: 0rem;
+}
+
+.box--latest {
+    --box-border: var(--base0D);
+    margin-top: 3rem;
+}
+
+.box--quote {
+    --box-border: var(--base0B);
+    font-size: 0.95rem;
+    margin-top: 4rem;
+}
+
+.box--related {
+    --box-border: var(--color-background);
+    --box-text-align: left;
+    --box-margin: 3rem auto;
+    --box-padding: 1rem 0rem;
+}
+

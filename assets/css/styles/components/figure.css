@@ -1,0 +1,22 @@
+figure {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem auto;
+    max-inline-size: min-content;
+}
+
+figure > picture {
+    display: flex;
+    flex-direction: column;
+    max-inline-size: min-content;
+}
+
+figure.with-border img {
+    border: 2px solid var(--color-border);
+}
+
+figcaption {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--text-faint);
+}

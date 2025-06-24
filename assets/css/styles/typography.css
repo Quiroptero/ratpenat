@@ -29,18 +29,11 @@
     font-stretch: 90% 110%;
 }
 
-@font-face {
-    font-family: "MainHead";
-    src: url("/fonts/GoudyBookletter1911-Regular.woff2") format("woff2");
-    font-style: normal;
-    font-display: swap;
-}
-
 /* /fonts */
 
 :root {
     --font-monospace: "MainMono", monospace, monospace;
-    --font-headings: "MainMono", sans-serif;
+    --font-headings: "MainMono", monospace, monospace; /* these are the same for now */
 }
 
 body {
@@ -50,67 +43,61 @@ body {
     line-height: 1.6rem;
 }
 
-/* in general, remove link underlines (but keep them later on posts content) */
+/* LINKS (ANCHOR TAGS) */
+/* replace automatic decoration in anchor tags with custom border */
 a {
     text-decoration: none;
+    color: var(--text-link, var(--base0A));
+    border-bottom: var(--border-link, 0.125rem) solid var(--text-link, var(--base0A));
 }
-
-/* make links in content noticeable */
-div.content a {
-    text-decoration: none;
-    color: var(--l);
-    border-bottom: 0.125rem solid var(--l);
+/* nice arrow for external links 
+    hardcoding domain, I don't like it, but vars can't be used
+    there might be a way to do this without relying on javascript
+*/
+a[href^="http"]:not([href*="quiroptero.blog"])::after {
+    content: "↗";
 }
-
-/* display general links in color */
-main a {
-    color: var(--l);
+.group-by-month a:visited,
+.post-list a:visited {
+    color: var(--base0C);
+    border-bottom: 0.125rem solid var(--base0C);
 }
+/* /LINKS */
 
-/* highlight bold text */
+/* BOLD TEXT */
 strong {
-    color: var(--s);
+    color: var(--text-strong);
 }
 
-/* lists */
-ul {
-    -webkit-padding-start: 0;
-    list-style-position: inside;
+b {
+    color: var(--text-bold);
 }
+/* /BOLD */
 
-/* site header */
-header * {
-    color: var(--site-meta);
-    font-size: 1.1rem;
-}
-
-/* landing page */
-div.welcome {
-    text-align: center;
-}
-
-/* content metadata */
+/* METADATA */
 div.meta { 
-    font-size: 0.85rem; 
-    color: var(--off-fg);
+    font-size: 0.9rem; 
+    color: var(--text-off);
     margin: 1.5rem 0rem;
 }
 
 div.meta a {
-    color: var(--m);
+    --text-link: var(--color-link-alt);
+    --border-link: 0.09rem;
 }
 
 div.meta p {
     margin: 0;
 }
+/* /METADATA */
 
 /* build stats */
 
 div.build-meta {
-    color: var(--m);
+    color: var(--color-link-alt);
     text-align: center;
     font-size: 0.8rem;
-    background: var(--nb);
+    background: var(--color-background-off);
 }
 
 /* prevent super from affecting line height */
@@ -119,14 +106,14 @@ sup {
 }
 
 /* headings */
-h1.title {
+h1.post-title {
     font-size: 2rem;
     line-height: 2.5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings);
-    color: var(--h);
+    color: var(--text-headings);
     font-size: 1.5rem;
     font-weight: 700;
 }
@@ -138,36 +125,22 @@ h4.content::before { content: '#### '; }
 h5.content::before { content: '##### '; }
 h6.content::before { content: '###### '; }
 
-/* archive */
-h1.blog-list::before { 
-    content: ''; 
-}
-
-h1.blog-list { 
-    font-size: 1rem; 
-}
-
 /* inline code block */
 code {
-    color: var(--m);
-    background: var(--nb);
+    color: var(--color-link-alt);
+    background: var(--color-background-off);
 }
 
 /* multiline code block */
 pre {
-    background: var(--nb);
+    background: var(--color-background-off);
 }
 
 /* separators */
 hr {
   margin: 25px 30% 25px;
-  border-color: var(--fg);
+  border-color: var(--text);
   border-width: 1px;
-}
-
-hr.small {
-  margin: 25px 45% 25px;
-  border: 1px dashed var(--fg);
 }
 
 /* display anchor # on hover */
@@ -181,144 +154,10 @@ h6:hover .anchor {
     border-bottom: 0rem;
 }
 
-/* nextprev blog links */
-nav.nextprev{
-    font-size: 0.85rem;
-}
-
-nav.nextprev a {
-    color: var(--nxtprv);
-}
-
-/* related content */
-div.related-content{
-    font-size: 0.85rem;
-}
-
-/* footer */
-footer {
-    text-align: center;
-    font-size: 0.8rem;
-}
-
-footer a {
-    color: var(--site-meta);
-}
-
-/* search page */
-#searchbox input {
-    background-color: var(--bgcolor);
-    font-weight: bold;
-    color: var(--fg);
-}
-
-#searchbox input:focus {
-    border-color: var(--l);
-    outline: none;
-    box-shadow: none;
-}
-
-/* random quote */
-#random-quote-container {
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--off-fg);
-}
-
-/* notice box */
-.notice {
-    text-align: center;
-    color: var(--off-fg);
-    font-size: 1rem;
-}
-
-/* series box */
-.series-box {
-    text-align: left;
-    color: var(--fg);
-    font-size: 0.9rem;
-    background: var(--nb);
-}
-
-.series-box ul {
-    font-size: 0.85rem;
-}
-
-.series-box strong {
-    color: var(--m);
-}
-
-/* warning notice */
-.warning {
-    text-align: center;
-    color: var(--w);
-    font-size: 1rem;
-}
-
-/* library styles */
-th {
-    background: var(--w);
-    font-size: 0.95rem;
-    color: var(--bg);
-    text-align: left;
-}
-
-tr {
-    font-size: 0.85rem;
-}
-
-tr.r0 {
-    background-color: var(--mute);
-    color: var(--bg);
-}
-
-tr.r0 a {
-    color: var(--bg);
-}
-
-tr.r1 {
-    background-color: var(--off-bg);
-}
-
-tr.r1 a {
-    color: var(--fg);
-}
-
-tr a {
-    text-decoration: underline;
-}
-
 /* footnotes */
 div.footnotes {
     font-size: 0.8rem;
-    color: var(--mute);
-}
-
-/* table of contents */
-.toc {
-    font-size: 0.85rem;
-}
-
-.toc a {
-    color: var(--h);
-}
-
-details > summary {
-    list-style: none;
-    width: fit-content;
-    max-width: calc(var(--max-width) - 4ch);
-    position: relative;
-    margin: 0.1rem 0 0 2ch;
-}
-
-details > summary::before {
-    content: "[+]";
-    position: absolute;
-    left: -4ch;
-}
-
-details[open] > summary::before {
-    content: "[-]"
+    color: var(--text-faint);
 }
 
 /* stats */
@@ -330,36 +169,9 @@ pre.stats {
 
 /* latest post */
 p.latest-meta {
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 p.latest-post {
     font-size: 2rem;
     line-height: 2rem;
 }
-
-/* debug info */
-div.debug {
-    color: var(--m);
-    background: var(--nb);
-}
-
-div.debug strong {
-    color: var(--s);
-}
-
-div.static-page-card {
-    background: var(--nb);
-}
-
-div.static-page-title {
-    font-size: 1.2rem;
-    color: var(--h);
-    text-align: center;
-}
-
-div.static-page-descr {
-    font-size: 0.9rem;
-    color: var(--mute);
-    text-align: center;
-}
-

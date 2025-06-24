@@ -1,0 +1,47 @@
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+header a {
+    font-size: 1.1rem;
+}
+
+header a, footer a {
+    border-bottom: none;
+    color: var(--base08);
+}
+
+header svg * {
+    fill: var(--base08);
+    stroke: var(--base08);
+}
+
+header button {
+    background-color: var(--color-background);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+header a:hover, footer a:hover {
+    background-color: var(--base08);
+    color: var(--color-background);
+}
+
+/* override ul styles */
+header ul li {
+    padding-left: 0;
+}
+header ul li::before {
+    content: none;
+}
+/* /override */
+
+footer {
+    text-align: center;
+    font-size: 0.9rem;
+}

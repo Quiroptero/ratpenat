@@ -3,15 +3,6 @@
     --radius: 0.5rem;
 }
 
-/* layout and behavior of site's header */
-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-}
-
 /* body container */
 #flex-container {
     display: flex;
@@ -56,185 +47,13 @@ h6 {
     margin-top:1.8rem;
 }
 
-/* archive */
-h1.blog-list {
-    margin-bottom: 0rem;
-}
-
-ul.blog-list {
-    margin-top: 0.2rem;
-    margin-bottom: 1.2rem;
-}
-
-/* styling nested unordered lists */
-div > ul { 
-    padding-left: 0rem;
-}
-main > ul {
-    padding-left: 0rem;
-}
-ul > li > ul {
-    padding-left: 2rem;
-}
-
 /* some extra space for main content */
 div.content {
-    margin: 2rem 0;
+    margin: 2rem 0rem;
 }
 
-/* nextprev blog links */
-nav.nextprev{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-    gap: 1rem;
-}
-
-/* related content */
-div.related-content {
-    margin-top: 3rem;
-}
-
-/* search page */
-#searchbox input {
-    padding: 4px 10px;
-    width: 100%;
-    border: 2px solid var(--b);
-    border-radius: var(--radius);
-}
-
-#searchResults {
-    list-style-position: inside;
-}
-
-/* random quote */
-#random-quote-container {
-    border: 1px solid var(--b);
-    margin: 0.5rem;
-    padding: 0.5rem 0.5rem;
-    display: flex;
-    flex-direction: column;
-}
-
-/* notice box */
-.notice {
-    margin: 1rem auto;
-    padding: 0.5rem;
-    border-bottom: 0.125rem solid var(--nb);
-    border-top: 0.125rem solid var(--nb);
-}
-
-/* series box */
-.series-box {
-    margin: 2rem auto;
-    padding: 1rem;
-}
-
-.series-box p {
-    margin: 0rem;
-}
-
-.series-box ul {
-    margin-bottom: 0rem;
-}
-
-/* warning notice */
-.warning {
-    margin: 1rem auto;
-    padding: 0.5rem;
-    border-bottom: 0.125rem solid var(--w);
-    border-top: 0.125rem solid var(--w);
-}
-
-/* random bat */
-#random-bat {
-    display: inline-flex;
-    background-color: var(--bgcolor);
-    border: none;
-    cursor: pointer;
-}
-
-/* images */
-figure {
-    display: flex;
-    flex-direction: column;
-    margin: 1rem auto;
-    max-inline-size: min-content;
-}
-
-figure > picture {
-    display: flex;
-    flex-direction: column;
-    max-inline-size: min-content;
-}
-
-figure.with-border img {
-    border: 2px solid var(--b);
-}
-
-figcaption {
-    font-size: 0.85rem;
-    text-align: center;
-    color: var(--mute);
-}
-
-/* scroll bar */
-/* width */
-::-webkit-scrollbar { width: 7px; }
-/* Track */
-::-webkit-scrollbar-track { background: var(--bg); }
-/* Handle */
-::-webkit-scrollbar-thumb { background: var(--fg); }
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover { background: var(--h); }
-
-/* library styles */
-table { 
-    border-collapse: collapse; 
-    border-color: transparent; 
-}
-
-table, 
-th, 
-td { 
-    border: none; 
-}
-
-.sortable {
-    margin-top: 3rem;
-}
-
-th {
-    padding: 0.5rem 0.5rem;
-    cursor: pointer;
-}
-
-td.field {
-    padding: 0.5rem 0.5rem;
-}
-
-div.book-title-pic {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0.2rem;
-}
-
-div.book-title-pic img {
-    object-fit: cover;
-}
-
-/* table of contents */
-div.toc > details > nav > ul { 
-    padding-left: 0.1rem;
-}
-
-.toc {
-    padding: 0.5rem 1rem;
-    margin: 1rem 0rem;
-    border-top: 0.125rem solid var(--b);
-    border-bottom: 0.125rem solid var(--b);
+div.home-section {
+    margin: 4rem 0rem;
 }
 
 /* movies and books list */
@@ -265,8 +84,15 @@ figure.book {
     max-inline-size: unset;
     margin: 0;
 }
+figure.book > a {
+    border-bottom: none;
+}
 figure.book figcaption {
     font-size: 0.8rem;
+}
+/* fix with high specificity... but you had to style pseudo elements, right? */
+figure.book a[href^="http"]:not([href*="quiroptero.blog"])::after {
+    content: none;
 }
 figure.movie {
     max-inline-size: unset;
@@ -283,19 +109,6 @@ blockquote {
 blockquote p {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-}
-
-/* debug info */
-div.debug {
-    font-size: 0.9rem;
-}
-
-div.debug p {
-    margin: 0.2rem 0rem;
-}
-
-div.debug pre {
-    margin: 0rem;
 }
 
 /* display list of links nicely */
@@ -321,36 +134,6 @@ div.link-wrap {
 
 div.group-by-month {
     margin-bottom: 1rem;
-}
-
-/* static pages links in home */
-
-div.grid-link-label {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 1ch;
-  row-gap: 0.5rem;
-  align-items: start;
-}
-
-div.label-cell {
-    display: flex;
-    align-items: center;
-}
-
-div.link-cell {
-    display: flex;
-    align-items: center;
-}
-
-/* static pages links in section */
-div.static-page-card {
-    margin: 0.5rem 0rem;
-    padding: 0.5rem 0rem;
-}
-
-div.static-page-title {
-    margin-bottom: 0.2rem;
 }
 
 /* add an horizontal scrollbar when content of pre is bigger that its container */

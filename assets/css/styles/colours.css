@@ -1,26 +1,12 @@
 :root {
-    /* background */
-    --bg: var(--base00); 
-    /* header and footer */
-    --site-meta: var(--base08);
-    /* main text color */
-    --fg: var(--base07);
-    /* headings */
-    --h: var(--base09);
-    /* box borders */
-    --b: var(--base0F);
-    /* links */
-    --l: var(--base0A);
-    /* content: metadata */
-    --off-fg: var(--base06);  /* text */
-    --m: var(--base0B);  /* links */
-    /* content: strong */
-    --s: var(--base0E);
-    /* content: footnotes and figcaptions */
-    --mute: var(--base05);
-    /* nextprev */
-    --nxtprv: var(--base0D);
-    /* notice boxes */
-    --w: var(--base08);  /* warning text */
-    --nb: var(--base01);  /* background for notice boxes, code and toc */
+    --color-background: var(--base00);
+    --color-background-off: var(--base01);
+    --text-strong: var(--base0E);
+    --text-bold: var(--base0C);
+    --text-headings: var(--base09);
+    --text-faint: var(--base05);
+    --text-off: var(--base06);
+    --text: var(--base07);
+    --color-border: var(--base0F);
+    --color-link-alt: var(--base0B);
 }

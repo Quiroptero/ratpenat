@@ -1,0 +1,18 @@
+nav.nextprev {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+}
+
+nav.nextprev a {
+    border-bottom: none;
+    color: var(--base0D);
+}
+
+nav.nextprev a:hover {
+    background-color: var(--base0D);
+    color: var(--color-background);
+}

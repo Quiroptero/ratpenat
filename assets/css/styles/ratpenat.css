@@ -1,9 +1,21 @@
 /* file structure based on https://github.com/joeroe/risotto/ */
 
-@import 'colours.css';
-@import 'typography.css';
-@import 'layout.css';
-@import 'progress.css';
+@import "colours";
+@import "typography";
+@import "layout";
+@import "progress";
+
+@import "components/box";
+@import "components/header-footer";
+@import "components/debug";
+@import "components/nextprev";
+@import "components/toc";
+@import "components/ul";
+@import "components/static";
+@import "components/figure";
+@import "components/library";
+@import "components/scrollbar";
+@import "components/search";
 
 html {
     overflow-y: scroll;
@@ -11,8 +23,8 @@ html {
 }
 
 body {
-    background-color: var(--bg);
-    color: var(--fg);
+    background-color: var(--color-background);
+    color: var(--text);
     max-width: 54rem;
     margin: 20px auto 0px;
     padding: 0 10px;

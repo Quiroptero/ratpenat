@@ -1,0 +1,25 @@
+
+/* search page */
+#searchbox input {
+    background-color: var(--color-background);
+    font-weight: bold;
+    color: var(--text);
+}
+
+#searchbox input:focus {
+    border-color: var(--base0A);
+    outline: none;
+    box-shadow: none;
+}
+
+/* search page */
+#searchbox input {
+    padding: 4px 10px;
+    width: 100%;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+}
+
+#searchResults {
+    list-style-position: inside;
+}

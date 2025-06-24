@@ -1,0 +1,36 @@
+/* see box.css */
+.box--toc {
+    --box-border: var(--base0F);
+    --box-padding: 0.5rem 0rem;
+    --box-font-size: 0.9rem;
+    --box-text-align: left;
+}
+
+.box--toc a {
+    color: var(--text-headings);
+    border: none;
+}
+
+.box--toc a:hover {
+    background-color: var(--text-headings);
+    color: var(--color-background);
+}
+
+details > summary {
+    list-style: none; /* remove default arrow */
+    width: fit-content;
+    max-width: calc(var(--max-width) - 4ch);
+    position: relative;
+    margin: 0.1rem 0 0 4ch;
+    cursor: pointer;
+}
+
+details > summary::before {
+    content: "[+]";
+    position: absolute;
+    left: -4ch;
+}
+
+details[open] > summary::before {
+    content: "[-]"
+}

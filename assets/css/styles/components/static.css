@@ -1,0 +1,35 @@
+/* static pages links in home */
+
+div.grid-link-label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 1ch;
+  row-gap: 0.2rem;
+  align-items: start;
+}
+
+div.label-cell,
+div.link-cell {
+    display: flex;
+    align-items: center;
+}
+
+/* static pages links in section */
+div.static-page-card {
+    margin: 0.5rem 0rem;
+    padding: 0.5rem 0rem;
+    background: var(--base01);
+    text-align: center;
+}
+
+div.static-page-title {
+    font-size: 1.8rem;
+    color: var(--text-headings);
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+}
+
+div.static-page-descr {
+    font-size: 0.9rem;
+    color: var(--text-faint);
+}

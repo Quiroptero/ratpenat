@@ -1,0 +1,11 @@
+div.debug {
+    font-size: 0.9rem;
+    color: var(--base0B);
+    background: var(--base01);
+    line-height: 1.2rem;
+}
+
+div.debug p,
+div.debug pre {
+    margin: 0rem;
+}
