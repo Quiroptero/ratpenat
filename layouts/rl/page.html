@@ -12,7 +12,7 @@
     <div class="post-list">
     {{ range $rl }}
     <div class="row-label-link">
-        <div class="label-fixed-date">{{ dateFormat "2006-01-02" .Date }}:</div>
+        {{ partial "label-fixed-date.html" (dict "context" . "date" .Date )}}
         <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
     </div>
     {{ end }}

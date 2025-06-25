@@ -18,7 +18,7 @@
     <div class="post-list">
     {{ range first 5 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) | after 1 }}
         <div class="row-label-link">
-            <div class="label-fixed-date">{{ .Date | time.Format "2006-01-02" }}:&nbsp;</div>
+            {{ partial "label-fixed-date.html" (dict "context" . "date" .Date )}}
             <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
         </div>
     {{ end }}
@@ -33,7 +33,7 @@
     <ul>
     {{ range first 5 $featured}}
         <div class="row-label-link">
-            <div class="label-fixed-date">{{ .Date | time.Format "2006-01-02" }}:&nbsp;</div>
+            {{ partial "label-fixed-date.html" (dict "context" . "date" .Date )}}
             <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
         </div>
     {{ end }}

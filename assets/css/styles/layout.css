@@ -119,12 +119,12 @@ div.row-label-link {
 }
 
 div.label-fixed-date {
-    width: 12ch; /* YYYY-MM-DD: */
+    width: 13ch; /* YYYY mmm DD: */
     flex-shrink: 0;
 }
 
 div.label-fixed-day {
-    width: 6ch; /* MM-DD */
+    width: 7ch; /* mmm DD */
     flex-shrink: 0;
 }
 

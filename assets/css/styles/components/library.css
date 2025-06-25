@@ -25,7 +25,7 @@ tr.r0 a {
 }
 
 tr.r1 {
-    background-color: var(--text-off);
+    background-color: var(--color-background);
 }
 
 tr.r1 a {
