@@ -63,6 +63,9 @@
         <li>📰 <strong>{{ $a.Get "5" }}</strong> ensayos, libros de historia u otras de no ficción</li>
         {{ end }}
     </ul>
+    <p>
+        Nota: este emoji 📚 indica que el libro forma parte de mi <a href="/biblioteca">/biblioteca</a>.</p>
+    <p>
     </div>
 
     <div class="bookgrid">
@@ -96,18 +99,25 @@
             {{ end }}
 
             <!-- book cover with metadata -->
+            {{ $cover_img := resources.Get "images/no-book-cover.jpg" }}
+            {{ $library_page := site.GetPage (printf "library") }}
+            {{ if .library_id }}
+                {{ $book_page := site.GetPage (printf "library/book/%d.md" .library_id) }}
+                {{ $cover_img = $library_page.Resources.GetMatch (printf "img/%s*" $book_page.Params.cover) }}
+            {{ else if .isbn }}
+                {{ $cover_img = $.Resources.GetMatch (printf "img/%s*" .isbn)}}
+            {{ end }}
             <figure class="book">
+                <div style="display: flex; justify-content: space-between;">
                 <p>{{ $k }}</p>
+                {{ if .library_id }}<a href="/biblioteca/libro/{{ .library_id }}" style="border-bottom: none;"><p>📚</p></a>{{ end }}
+                </div>
                 <!-- if available, the picture is a link to the review -->
                 {{ if .review }}<a href="{{ .review }}">{{ end }}
                 <!-- resize to fill an arbitrary size to fit movies page  -->
                 <img 
                     alt="Portada del libro {{ .title }}. {{ if gt (len .author) 1 }}Autores: {{ else }}Autor: {{ end }} {{ delimit $authorsAlt ", " " y " }}."
-                    {{ with $.Resources.GetMatch (printf "img/%s*" .isbn) }}
-                    {{ with .Fill "342x513 webp Top" }}
-                    src="{{ .RelPermalink }}"
-                    {{ end }}
-                    {{ end }}
+                    src="{{ ($cover_img.Fill "342x513 web Top").RelPermalink }}"
                     loading="lazy"
                 >
                 {{ if .review }}</a>{{ end }}

@@ -8,6 +8,8 @@
     {{ $data := where $data "ID" "==" (.Params.id | string) }}
     {{/* extract the map from the slice */}}
     {{ $book := index $data 0 }}
+    {{/* map reviews with library books */}}
+    {{ $rl := partialCached "rl_dict.html" . "blog-rl-libmap" }}
 
     <div class="box box--notice">
     <p>
@@ -28,8 +30,8 @@
         {{- T "book-details-bind" -}}<strong>{{ T $book.Binding }}</strong>
         {{ T "and" }}<strong>{{ if $book.Read }}{{ T "book-details-read" }}{{ else }}{{ T "book-details-noread" }}{{ end }}</strong>
     </p>
-    {{ with .Params.rl }}
-        <p>Escribí una reseña de este libro <a href="{{ . }}">acá</a>.</p>
+    {{ with index $rl (printf "%v" .Params.weight) }}
+        <p>Escribí una reseña de este libro <a href="/{{ . }}">acá</a>.</p>
     {{ end }}
     </div>
 

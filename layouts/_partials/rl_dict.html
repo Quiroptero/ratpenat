@@ -1,0 +1,17 @@
+{{- $pages := where .Site.AllPages "Type" "=" "blog" -}}
+{{- $rl := $pages | intersect (where .Site.RegularPages "Params.rl" true ) -}}
+
+{{- $rl_dict := dict -}}
+
+{{- range $p := $rl -}}
+    {{- with $p.Params.library_id -}}
+        {{- $key := printf "%v" . }}
+        {{- $year := $p.Date.Format "2006" }}
+        {{- $month := $p.Date.Format "01" }}
+        {{- $slug := $p.Slug }}
+        {{- $path := printf "%s/%s/%s" $year $month $slug }}
+        {{- $rl_dict = merge $rl_dict (dict $key $path) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- return $rl_dict -}}
