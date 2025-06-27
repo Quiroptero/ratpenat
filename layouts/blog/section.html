@@ -15,7 +15,7 @@
                 <div class="group-by-month">
                 {{ range .Pages }}
                     <div class="row-label-link">
-                        <div class="label-fixed-day">{{ strings.Replace (time.Format "Jan 02" .Date) "." "" }}</div>
+                        <div class="label-fixed-day">{{ strings.Replace (strings.Replace (time.Format "Jan 02" .Date) "." "") "pt" "p" }}</div>
                         <div class="link-wrap"><a href="{{ .RelPermalink }}">{{ partial "draft_notice.html" . }}</a></div>
                     </div>
                 {{ end }}

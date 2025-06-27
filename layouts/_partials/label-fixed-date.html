@@ -1,1 +1,2 @@
-<div class="label-fixed-date">{{ strings.Replace (time.Format "2006 Jan 02" .date ) "." "" }}:</div>
+{{/* ugly fix to get "sep" instead of "sept" (September) */}}
+<div class="label-fixed-date">{{ strings.Replace (strings.Replace (time.Format "2006 Jan 02" .date ) "." "") "pt" "p" }}:</div>
