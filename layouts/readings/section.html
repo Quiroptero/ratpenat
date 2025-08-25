@@ -97,7 +97,9 @@
             {{ $library_page := site.GetPage (printf "library") }}
             {{ if .library_id }}
                 {{ $book_page := site.GetPage (printf "library/book/%d.md" .library_id) }}
-                {{ $cover_img = $library_page.Resources.Get (printf "img/%s" $book_page.Params.cover) }}
+                {{ if $book_page.Params.cover }}
+                    {{ $cover_img = $library_page.Resources.Get (printf "img/%s" $book_page.Params.cover) }}
+                {{ end }}
             {{ else if .isbn }}
                 {{ $cover_img = $.Resources.GetMatch (printf "img/%s*" .isbn)}}
             {{ end }}
