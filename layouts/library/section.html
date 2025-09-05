@@ -17,6 +17,7 @@
     {{/* total */}}
     {{ $total_books := len $books }}
     {{ $total_ebooks := len $ebooks }}
+    {{ $books_with_cover := 0 }}
     {{/* how many have I read? */}}
     {{ $books_read := where $books "Read" "true" | len }}
     {{ $ebooks_read := where $ebooks "Read" "true" | len }}
@@ -55,6 +56,9 @@
         {{/* languages */}}
         {{ range split .Language "; " }}
             {{ $languages = merge $languages (dict . (add (index $languages . | default 0) 1) )}}
+        {{ end }}
+        {{ if .Front_Cover }}
+            {{ $books_with_cover = add $books_with_cover 1 }}
         {{ end }}
     {{ end }}
 
@@ -106,6 +110,12 @@
             El autor del que tengo más libros es <strong>{{ .name }}</strong>, con {{ .count }} libros.
             {{ end }}
         </p>
+        {{ if hugo.IsDevelopment }}
+            <p>
+                {{ T "books-with-cover" (dict "total" $books_with_cover) }}
+                ({{ div (float $books_with_cover) $total_books | math.Product 100 | math.Round }}%)
+            </p>
+        {{ end }}
     </div>
 
     <hr/>
