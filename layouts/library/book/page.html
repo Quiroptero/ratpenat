@@ -20,7 +20,8 @@
 
     <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem;">
         <h1 style="font-size: 1.5rem;">{{ $book.Title }}</h1>
-        {{ with $book.Subtitle }}<h2 style="font-size: 1rem;">{{ . }}</h2>{{ end }}
+        {{ with $book.Subtitle }}<h2 style="font-size: 1rem;">– {{ . }} –</h2>{{ end }}
+        {{ with $book.Original_Title }}<h3 style="font-size: 1rem; font-style: italic;">{{ . }}</h3>{{ end }}
     </div>
     
     {{/* the following is really ugly, need to make it better in the future */}}
