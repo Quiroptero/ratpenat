@@ -47,10 +47,20 @@
             por lo que puede contener <a href="/2018/09/destripar">destripes</a>.
         </p>
         {{ with .Params.library_id }}
-        <p>
-            Este libro forma parte de mi <a href="/biblioteca/">/biblioteca</a>
-            y es el libro número <a href="/biblioteca/libro/{{ . }}">{{ . }}</a>.
-        </p>
+            {{/* read the library data file */}}
+            {{ $library_page := site.GetPage (printf "library") }}
+            {{ $opts := dict "targetType" "map" }}
+            {{ $library := transform.Unmarshal $opts ($library_page.Resources.Get $library_page.Params.data_file) }}
+            {{ $books := where $library "Binding" "!=" "E-Book" }}
+            {{ $positions := dict }}
+            {{ range $i, $rec := sort $books "ID" }}
+                {{ $positions = merge $positions (dict $rec.ID (add $i 1)) }}
+            {{ end }}
+            {{ $position := index $positions ( . | string) }}
+            <p>
+                Este libro forma parte de mi <a href="/biblioteca/">/biblioteca</a>
+                y es el libro número <a href="/biblioteca/libro/{{ $position }}">{{ $position }}</a>.
+            </p>
         {{ end }}
     </div>
     {{ end }}

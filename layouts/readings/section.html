@@ -1,4 +1,6 @@
 {{ define "main" }}
+{{/* NOTE: This layout is pretty similar to the page one */}}
+{{/* Is there a way to make it DRY? */}}
 <main>
     <h1>{{ .Title }}</h1>
 
@@ -8,18 +10,16 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    <!-- read the data file -->
+    {{/* read the data file */}}
     {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
 
-    <!-- set some variables to help compute metrics -->
-    {{ $kinds := dict }}
-
-    <!-- compute details of books -->
-    {{ range $i, $x := $data }}
-        {{ $kinds = merge $kinds (dict (string .kind) (add (index $kinds (string .kind) | default 0) 1) )}}
+    {{/* compute details of books */}}
+    {{ $categories := dict }}
+    {{ range $data }}
+        {{ $categories = merge $categories (dict .kind (add (index $categories .kind | default 0) 1) )}}
     {{ end }}
 
-    <!-- paragraph with details of how many books were read -->
+    {{/* paragraph with details of how many books were read */}}
     <div class="content">
     <h1 id="lecturas-en-{{ now.Format "2006" }}" class="content">
         Lecturas en {{ now.Format "2006" }}
@@ -40,47 +40,46 @@
         Este año he leído <strong>{{ len $data }}</strong> libros
         y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
     </p>
+    {{/* showcase categories */}}
+    {{ $cat_info := dict
+        "A" (dict "icon" "📕" "label" "novelas")
+        "B" (dict "icon" "📘" "label" "colecciones de cuentos o de poesía")
+        "C" (dict "icon" "🖼️" "label" "novelas gráficas, cómics o libros de arte")
+        "D" (dict "icon" "📸" "label" "libros de fotografía")
+        "E" (dict "icon" "📰" "label" "ensayos, libros de historia u otras de no ficción")
+    }}
     <ul>
-        {{ if gt (index $kinds "1") 0 }}
-        <li>📕 <strong>{{ index $kinds "1" }}</strong> novelas</li>
+    {{ range $key, $info := $cat_info }}
+        {{ $count := index $categories $key }}
+        {{ if gt $count 0 }}
+            <li>{{ $info.icon }} <strong>{{ $count }}</strong> {{ $info.label }}</li>
         {{ end }}
-        {{ if gt (index $kinds "2") 0 }}
-        <li>📘 <strong>{{ index $kinds "2" }}</strong> colecciones de cuentos o de poesía</li>
-        {{ end }}
-        {{ if gt (index $kinds "3") 0 }}
-        <li>🖼️ <strong>{{ index $kinds "3" }}</strong> novelas gráficas, cómics o libros de arte</li>
-        {{ end }}
-        {{ if gt (index $kinds "4") 0 }}
-        <li>📸 <strong>{{ index $kinds "4" }}</strong> libros de fotografía</li>
-        {{ end }}
-        {{ if gt (index $kinds "5") 0 }}
-        <li>📰 <strong>{{ index $kinds "5" }}</strong> ensayos, libros de historia u otras de no ficción</li>
-        {{ end }}
+    {{ end }}
     </ul>
     <p>
         Nota: este emoji 📚 indica que el libro forma parte de mi <a href="/biblioteca">/biblioteca</a>.</p>
     <p>
     </div>
 
+    {{/* read the library data file */}}
+    {{ $library_page := site.GetPage (printf "library") }}
+    {{ $opts := dict "targetType" "map" }}
+    {{ $library := transform.Unmarshal $opts ($library_page.Resources.Get $library_page.Params.data_file) }}
+    {{ $books := where $library "Binding" "!=" "E-Book" }}
+    {{ $positions := dict }}
+    {{ range $i, $rec := sort $books "ID" }}
+        {{ $positions = merge $positions (dict $rec.ID (add $i 1)) }}
+    {{ end }}
+
     <div class="bookgrid">
     {{ range sort $data "weight" "desc" }}
         <div class="container">
-            <!-- determine the kind of book -->
-            <!-- remember: we use := to initialize a variable and = to assign it a value afterwards -->
-            {{ $k := "" }}
-            {{ if eq .kind 1 }}
-                {{ $k = "📕" }}
-            {{ else if eq .kind 2 }}
-                {{ $k = "📘" }}
-            {{ else if eq .kind 3 }}
-                {{ $k = "🖼️" }}
-            {{ else if eq .kind 4 }}
-                {{ $k = "📸" }}
-            {{ else if eq .kind 5 }}
-                {{ $k = "📰" }}
-            {{ end }}
+            {{/* determine the kind of book */}}
+            {{/* remember: we use := to initialize a variable and = to assign it a value afterwards */}}
+            {{ $icons := dict "A" "📕" "B" "📘" "C" "🖼️" "D" "📸" "E" "📰" }}
+            {{ $k := index $icons .kind | default "" }}
 
-            <!-- determine the list of authors and their roles (writing, illustration) -->
+            {{/* determine the list of authors and their roles (writing, illustration) */}}
             {{ $authors := slice }}
             {{ $authorsAlt := slice }}
             {{ range .author }}
@@ -92,34 +91,43 @@
                 {{ $authorsAlt = append (slice .name ) $authorsAlt }}
             {{ end }}
 
-            <!-- book cover with metadata -->
+            {{/* book cover */}}
+            {{/* generic placeholder picture */}}
             {{ $cover_img := resources.Get "images/no-book-cover.jpg" }}
-            {{ $library_page := site.GetPage (printf "library") }}
+            {{ $position := "" }}
             {{ if .library_id }}
-                {{ $book_page := site.GetPage (printf "library/book/%d.md" .library_id) }}
-                {{ if $book_page.Params.cover }}
-                    {{ $cover_img = $library_page.Resources.Get (printf "img/%s" $book_page.Params.cover) }}
+                {{/* the book is in the library and the cover might be available */}}
+                {{ $book := index (where $books "ID" "==" (.library_id | string)) 0 }}
+                {{ if $book.Front_Cover }}
+                    {{ $cover_img = $library_page.Resources.GetMatch (printf "img/%s*" $book.Front_Cover) }}
                 {{ end }}
+                {{/* determine the place of the book (as in a shelf) */}}
+                {{ $position = index $positions (.library_id | string) }}
+            {{/* a cover picture has been provided using the ISBN */}}
             {{ else if .isbn }}
                 {{ $cover_img = $.Resources.GetMatch (printf "img/%s*" .isbn)}}
             {{ end }}
+            
             <figure class="book">
                 <div style="display: flex; justify-content: space-between;">
                 <p>{{ $k }}</p>
-                {{ if .library_id }}<a href="/biblioteca/libro/{{ .library_id }}" style="border-bottom: none;"><p>📚</p></a>{{ end }}
+                {{ if .library_id }}
+                    <a href="/biblioteca/libro/{{ $position }}" style="border-bottom: none;"><p>📚</p></a>
+                {{ end }}
                 </div>
-                <!-- if available, the picture is a link to the review -->
+                {{/* if available, the picture is a link to the review */}}
+                {{/* notice that conditionals are used to open/close link tags */}}
                 {{ if .review }}<a href="{{ .review }}">{{ end }}
-                <!-- resize to fill an arbitrary size to fit movies page -->
+                {{/* resize to an arbitrary size */}}
                 <img 
                     alt="Portada del libro {{ .title }}. {{ if gt (len .author) 1 }}Autores: {{ else }}Autor: {{ end }} {{ delimit $authorsAlt ", " " y " }}."
                     src="{{ ($cover_img.Fill "342x513 web Top").RelPermalink }}"
                     loading="lazy"
                 >
                 {{ if .review }}</a>{{ end }}
-                <!--https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg-->
+                {{/* https://covers.openlibrary.org/b/isbn/9780385533225-S.jpg */}}
                 <figcaption>
-                    <!-- if available, the title is a link to the review -->
+                    {{/* if available, the title is a link to the review */}}
                     <p><strong>{{ if .review }}<a href="{{ .review }}">{{ end }}{{ .title }}{{ if .review }}</a>{{ end }}</strong></p>
                     <p>{{ delimit $authors "; " " y "}}</p>
                 </figcaption>

@@ -11,6 +11,12 @@
     {{/* map reviews with library books */}}
     {{ $rl := partialCached "rl_dict.html" . "blog-rl-libmap" }}
 
+    {{ if hugo.IsDevelopment }}
+        <div class="debug">
+            <p>ID: {{ .Params.id }}</p>
+        </div>
+    {{ end }}
+
     <div class="box box--notice">
     <p>
         Este es el libro {{ .Params.weight }}
@@ -31,7 +37,7 @@
         {{- T "book-details-bind" -}}<strong>{{ T $book.Binding }}</strong>
         {{ T "and" }}<strong>{{ if $book.Read }}{{ T "book-details-read" }}{{ else }}{{ T "book-details-noread" }}{{ end }}</strong>
     </p>
-    {{ with index $rl (printf "%v" .Params.weight) }}
+    {{ with index $rl (printf "%v" .Params.id) }}
         <p>Escribí una reseña de este libro <a href="/{{ . }}">acá</a>.</p>
     {{ end }}
     </div>

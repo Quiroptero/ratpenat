@@ -9,18 +9,14 @@
     {{/* read the library data file */}}
     {{ $opts := dict "targetType" "map" }}
     {{ $data := transform.Unmarshal $opts (.Resources.Get .Params.data_file) }}
-
     {{ $books := where $data "Binding" "!=" "E-Book" }}
-    {{ $ebooks := where $data "Binding" "==" "E-Book" }}
 
     {{/* set some variables to help compute metrics */}}
     {{/* total */}}
     {{ $total_books := len $books }}
-    {{ $total_ebooks := len $ebooks }}
     {{ $books_with_cover := 0 }}
     {{/* how many have I read? */}}
     {{ $books_read := where $books "Read" "true" | len }}
-    {{ $ebooks_read := where $ebooks "Read" "true" | len }}
     {{/* titles */}}
     {{ $titles := slice }}
     {{/* binding */}}
