@@ -4,6 +4,15 @@
 
     {{ partial "static_meta" . }}
 
+    {{ if .Params.toc }}
+    <div class="box box--toc">
+        <details{{ if eq .Params.toc "open" }} open=""{{ end }}>
+            <summary>Tabla de contenidos</summary>
+            {{ .TableOfContents }}
+        </details>
+    </div>
+    {{ end }}
+
     <div class="content">
     {{ .Content | partial "anchors.html" }}
     </div>
