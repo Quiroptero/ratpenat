@@ -117,6 +117,16 @@
         {{ "<!--/library-->" | safeHTML }}
     {{ end }}
 
+    {{/* christmas time! */}}
+    {{/* see: https://github.com/Canop/snow/ */}}
+    {{ "<!--christmas time!! -->" | safeHTML }}
+    {{ $script := "js/snow.js" | resources.Get }}
+    {{ if hugo.IsProduction }}
+        {{ $script = $script | minify | fingerprint }}
+    {{ end }}
+    <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+    {{ "<!--/christmas-->" | safeHTML }}
+
     {{/* /scripts */}}
 
     {{/* creation of LQIPs and GIPs */}}
@@ -136,5 +146,15 @@
     {{ partial "header" . }}
     {{ block "main" . }}{{ end }}
     {{ partial "footer" . }}
+
+    {{/* snow for christmas */}}
+    <script>
+		snow.start({
+			maxRadius: 2,
+			flakeCount: 600,
+			stickingRatio: 1,
+			wind: 0
+		});
+    </script>
 </body>
 </html>

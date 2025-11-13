@@ -46,3 +46,8 @@
     --box-padding: 1rem 0rem;
 }
 
+.box--closing-note {
+    --box-border: var(--base0D);
+    --box-font-size: 0.9rem;
+    --box-margin: 3rem auto;
+}
