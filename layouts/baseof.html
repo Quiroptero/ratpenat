@@ -119,13 +119,15 @@
 
     {{/* christmas time! */}}
     {{/* see: https://github.com/Canop/snow/ */}}
-    {{ "<!--christmas time!! -->" | safeHTML }}
-    {{ $script := "js/snow.js" | resources.Get }}
-    {{ if hugo.IsProduction }}
-        {{ $script = $script | minify | fingerprint }}
+    {{ if .Site.Params.snow.active }}
+        {{ "<!--christmas time!! -->" | safeHTML }}
+        {{ $script := "js/snow.js" | resources.Get }}
+        {{ if hugo.IsProduction }}
+            {{ $script = $script | minify | fingerprint }}
+        {{ end }}
+        <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+        {{ "<!--/christmas-->" | safeHTML }}
     {{ end }}
-    <script src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
-    {{ "<!--/christmas-->" | safeHTML }}
 
     {{/* /scripts */}}
 
@@ -148,13 +150,15 @@
     {{ partial "footer" . }}
 
     {{/* snow for christmas */}}
-    <script>
-		snow.start({
-			maxRadius: 2,
-			flakeCount: 600,
-			stickingRatio: 1,
-			wind: 0
-		});
-    </script>
+    {{ if .Site.Params.snow.active }}
+        <script>
+            snow.start({
+                maxRadius: {{ .Site.Params.snow.maxRadius }},
+                flakeCount: {{ .Site.Params.snow.flakeCount }},
+                stickingRatio: {{ .Site.Params.snow.stickingRatio }},
+                wind: {{ .Site.Params.snow.wind }}
+            });
+        </script>
+    {{ end }}
 </body>
 </html>
