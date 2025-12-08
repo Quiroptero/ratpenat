@@ -21,7 +21,7 @@
 }
 @font-face {
     font-family: "MainMono";
-    src: url("/fonts/commitmono.woff2") format("woff2-variations");
+    src: url("/fonts/commitmono-it.woff2") format("woff2-variations");
     font-style: italic;
     font-synthesis: none; /* see: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_fonts/Variable_fonts_guide#italic */
     font-display: swap;
