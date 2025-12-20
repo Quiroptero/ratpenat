@@ -54,7 +54,7 @@ a {
     hardcoding domain, I don't like it, but vars can't be used
     there might be a way to do this without relying on javascript
 */
-a[href^="http"]:not([href*="quiroptero.blog"])::after {
+a[href^="http"]:not([href*="quiroptero.blog"], [href*="localhost"])::after {
     content: "↗";
 }
 .group-by-month a:visited,

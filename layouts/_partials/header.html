@@ -2,6 +2,7 @@
     <nav>
         <div>
             <span><a href="/">{{ .Site.Title }}</a></span>
+            {{/*
             <span>
                 <button id="random-bat">
                     <svg id="bat" xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"
@@ -23,13 +24,25 @@
                     </svg>
                 </button>
             </span>
+            */}}
         </div>
-        <div>
+        <div style="display: flex;">
 	        {{ with .Site.Menus.main }}
 		    <ul id="menu">
-                {{ range . }}<li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>{{ end }}
+                {{ range . }}<li><a class="menu-item" href="{{ .URL | relURL }}">{{ .Name }}</a></li>{{ end }}
 		    </ul>
 	        {{ end }}
+            <a href="{{ (.Site.GetPage "/about/subscribe").RelPermalink }}">
+            <svg class="feed" xmlns="http://www.w3.org/2000/svg" 
+                width="1rem" 
+                height="1rem" 
+                viewBox="0 0 24 24"
+                style="margin-top: var(--gap-menu-items);margin-left: var(--gap-menu-items)"
+            >
+                <title>Feed</title>
+                <path d="M19.199 24C19.199 13.467 10.533 4.8.0 4.8V0c13.165.0 24 10.835 24 24zM3.291 17.415a3.3 3.3.0 013.293 3.295A3.303 3.303.0 013.283 24C1.47 24 0 22.526.0 20.71s1.475-3.294 3.291-3.295M15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727.0 15.909 7.184 15.909 15.91"></path>
+            </svg>
+            </a>
         </div>
 	</nav>
 </header>

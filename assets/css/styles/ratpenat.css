@@ -16,6 +16,8 @@
 @import "components/library";
 @import "components/scrollbar";
 @import "components/search";
+@import "components/input";
+@import "components/feed";
 
 html {
     overflow-y: scroll;

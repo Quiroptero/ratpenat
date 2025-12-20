@@ -1,0 +1,18 @@
+svg.feed {
+    fill: var(--base08);
+}
+
+svg.feed-item {
+    fill: var(--base08);
+}
+
+svg.feed:hover {
+    fill: var(--color-background);
+    stroke: var(--base08);
+    background-color: var(--base08);
+}
+
+a.feed-item {
+    text-decoration: none;
+    border-bottom: none;
+}

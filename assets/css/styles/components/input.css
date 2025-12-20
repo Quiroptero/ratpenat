@@ -1,0 +1,7 @@
+input {
+    border: none;
+    background-color: var(--base03);
+    color: var(--text-off);
+    height: 1.5rem;
+    font-family: var(--font-monospace);
+}

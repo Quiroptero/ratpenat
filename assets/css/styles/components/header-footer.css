@@ -15,19 +15,14 @@ header a, footer a {
     color: var(--base08);
 }
 
-header svg * {
-    fill: var(--base08);
-    stroke: var(--base08);
-}
+/* header button { */
+/*     background-color: var(--color-background); */
+/*     border: none; */
+/*     cursor: pointer; */
+/*     display: inline-flex; */
+/* } */
 
-header button {
-    background-color: var(--color-background);
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-}
-
-header a:hover, footer a:hover {
+header a.menu-item:hover, footer a:hover {
     background-color: var(--base08);
     color: var(--color-background);
 }

@@ -1,0 +1,75 @@
+{{/* this template has a lot of hardcoded values */}}
+{{/* note that you will need to adjust the template to suit your needs */}}
+{{/* having hardcoded values help me to understand this kind of files that are new for me */}}
+{{/* and that otherwise look like lovecraftian gibberish */}}
+{{- $authorEmail := site.Params.author.email }}
+{{- $authorName := site.Params.author.name }}
+{{- $pages := (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
+{{- $pages = (where $pages "Params.draft" false) }}
+{{- $limit := .Site.Config.Services.RSS.Limit }}
+{{- $pages = $pages | first $limit }}
+
+{{/* theme (CSS) - how can this be improved ? */}}
+{{ $palette := "" }}
+{{ $available := .Site.Params.palettes.available }}
+{{ if (eq .Site.Params.palettes.current "random") }}
+    {{ range ($available | shuffle | first 1) }}
+        {{ $palette = . }}
+    {{ end }}
+{{ else }}
+    {{ $palette = (.Site.Params.palettes.current | default "darktooth") }}
+{{ end }}
+{{ .Store.Set "palette" $palette }}
+{{ $palette = resources.ExecuteAsTemplate (printf "css/palettes/%s.css" "palette") $ (resources.Get "css/palettes/template.css") }}
+{{ $styles := resources.Get "css/styles/ratpenat.css" }}
+{{ $css := $styles | toCSS }}
+{{ if hugo.IsProduction }}
+    {{ $css = $css | minify | fingerprint }}
+    {{ $palette = $palette | minify | fingerprint }}
+{{ end }}
+
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+{{- printf "<?xml-stylesheet type=\"text/xsl\" href=\"/index.xsl\" media=\"all\"?>" | safeHTML }} 
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>quiroptero.blog</title>
+    <link href="{{ .Permalink }}" rel="alternate" hreflang="{{ .Site.LanguageCode }}"/>
+    {{ with .Site.GetPage "/about/subscribe" }}
+    <link href="{{ .Permalink }}" rel="help" title="Suscríbete a quiroptero.blog"/>
+    {{ end }}
+    {{- with .OutputFormats.Get "atom" }}
+    <link href="{{ .Permalink }}" rel="self"/>
+    {{ end -}}
+    {{ if hugo.IsProduction }}
+    <link rel="stylesheet" href="{{ $css.Permalink }}" integrity="{{ $css.Data.Integrity }}"></link>
+    <link rel="stylesheet" href="{{ $palette.Permalink }}" integrity="{{ $palette.Data.Integrity }}"></link>
+    {{ else }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}"></link>
+    <link rel="stylesheet" href="{{ $palette.RelPermalink }}"></link>
+    {{ end }}
+    <id>{{ .Permalink }}</id>
+    <updated>{{ .Date.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</updated>
+    <generator>Hugo -- gohugo.io</generator>
+    <author>
+        <name>{{ .Site.Params.author.name }}</name>
+        <email>{{ .Site.Params.author.email }}</email>
+    </author>
+    {{- range $pages }}
+    <entry>
+        <title>{{ .Title }}</title>
+        <link href="{{ .Permalink }}" rel="alternate"/>
+        <id>{{ .Permalink }}</id>
+        <published>{{ .Date.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</published>
+        <formattedpublished>{{ .Date | time.Format ":date_full" | safeHTML }}</formattedpublished>
+        <updated>{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</updated>
+        <author>
+            <name>{{ .Site.Params.author.name }}</name>
+            <email>{{ .Site.Params.author.email }}</email>
+        </author>
+        {{ range (.GetTerms "categorías") -}}<category term="{{ .LinkTitle }}"/>{{- end }}
+        {{ range (.GetTerms "etiquetas") -}}<category term="{{ .LinkTitle }}"/>{{- end }}
+        {{- with .Description }}
+        <summary type="text">{{ . | plainify | safeHTML }}</summary>
+        {{ end }}
+    </entry>
+    {{ end }}
+</feed>

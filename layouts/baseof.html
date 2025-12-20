@@ -14,11 +14,13 @@
     {{ with .Page.Params.keywords }}<meta name="keywords" content="{{ delimit . ", " }}">{{ end }}
     {{ with .Site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
 
-    {{/* RSS */}}
-    {{ with .OutputFormats.Get "RSS" -}}
-        {{ "<!--RSS-->" | safeHTML }}
+    {{/* feeds */}}
+    {{ "<!--feed (atom)-->" | safeHTML }}
+    {{ with .OutputFormats.Get "atom" -}}
         {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .RelPermalink $.Site.Title | safeHTML }}
     {{- end }}
+    {{/* this is the main feed */}}
+    {{ if not .IsHome }}<link rel="alternate" href="/index.xml" title="{{ .Site.Title }}"/>{{ end }}
 
     {{ "<!--custom font-->" | safeHTML }}
     <link rel="preload" href="/fonts/commitmono.woff2" as="font" type="font/woff2" crossorigin />
@@ -46,7 +48,7 @@
     {{/* set the palette name for later use */}}
     {{ .Store.Set "palette" $palette }}
     {{/* to get a better understanding of the following line see: https://gohugo.io/functions/resources/executeastemplate/ */}}
-    {{ $palette = resources.ExecuteAsTemplate (printf "css/palettes/%s.css" $palette) $ (resources.Get "css/palettes/template.css") }}
+    {{ $palette = resources.ExecuteAsTemplate (printf "css/palettes/%s.css" "palette") $ (resources.Get "css/palettes/template.css") }}
     {{/* see: https://discourse.gohugo.io/t/import-in-css-files-fail-to-load/41895/2 */}}
     {{ $styles := resources.Get "css/styles/ratpenat.css" }}
     {{ $css := $styles | toCSS }}
@@ -67,12 +69,14 @@
     {{/* scripts */}}
 
     {{/* random bat script */}}
-    {{ "<!--nanananana-->" | safeHTML }}
+    {{/* disabled for now :( */}}
+    {{/* {{ "<!--nanananana-->" | safeHTML }}
     {{ $script := "js/random_bat.js" | resources.Get }}
     {{ if hugo.IsProduction }}
         {{ $script = $script | minify | fingerprint }}
     {{ end }}
     <script defer src="{{ $script.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $script.Data.Integrity }}"{{ end }}></script>
+    */}}
 
     {{/* random quote script */}}
     {{ if (eq .Path "/") }}
