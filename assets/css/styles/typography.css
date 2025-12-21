@@ -132,9 +132,9 @@ code {
 }
 
 /* multiline code block */
-pre {
-    background: var(--color-background-off);
-}
+/* pre { */
+/*     background: var(--color-background-off); */
+/* } */
 
 /* separators */
 hr {
@@ -174,4 +174,17 @@ p.latest-meta {
 p.latest-post {
     font-size: 2rem;
     line-height: 2.8rem;
+}
+
+/* delete and insert */
+del, ins {
+    color: var(--base00);
+}
+
+del {
+    background-color: var(--base0E);
+}
+
+ins {
+    background-color: var(--base0B);
 }
