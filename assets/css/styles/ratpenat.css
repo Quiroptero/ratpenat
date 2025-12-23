@@ -18,7 +18,6 @@
 @import "components/search";
 @import "components/input";
 @import "components/feed";
-@import "components/broken";
 
 html {
     overflow-y: scroll;
