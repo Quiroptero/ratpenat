@@ -6,7 +6,7 @@
 
     {{ if .Params.toc }}
     <div class="box box--toc">
-        <details{{ if eq .Params.toc "open" }} open=""{{ end }}>
+        <details class="toc"{{ if eq .Params.toc "open" }} open=""{{ end }}>
             <summary>Tabla de contenidos</summary>
             {{ .TableOfContents }}
         </details>

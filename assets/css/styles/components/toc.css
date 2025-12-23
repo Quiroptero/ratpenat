@@ -16,7 +16,7 @@
     color: var(--color-background);
 }
 
-details > summary {
+details.toc > summary {
     list-style: none; /* remove default arrow */
     width: fit-content;
     max-width: calc(var(--max-width) - 4ch);
@@ -25,12 +25,12 @@ details > summary {
     cursor: pointer;
 }
 
-details > summary::before {
+details.toc > summary::before {
     content: "[+]";
     position: absolute;
     left: -4ch;
 }
 
-details[open] > summary::before {
+details.toc[open] > summary::before {
     content: "[-]"
 }
