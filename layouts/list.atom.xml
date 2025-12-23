@@ -40,8 +40,8 @@
     {{- with .OutputFormats.Get "atom" }}
     <link href="{{ .Permalink }}" rel="self"/>
     {{ end -}}
-    <link rel="stylesheet" href="{{ if hugo.IsProduction }}{{ $css.Permalink }}{{ else }}{{ $css.RelPermalink }}{{ end }}"></link>
-    <link rel="stylesheet" href="{{ if hugo.IsProduction }}{{ $palette.Permalink }}{{ else }}{{ $palette.RelPermalink }}{{ end }}"></link>
+    <link rel="stylesheet" href="{{ $css.Permalink }}"></link>
+    <link rel="stylesheet" href="{{ $palette.Permalink }}"></link>
     <id>{{ .Permalink }}</id>
     {{ range first 1 $pages }}
     <updated>{{ .Date.Format "2006-01-02T15:04:05-07:00" | safeHTML }}</updated>
