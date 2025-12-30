@@ -14,11 +14,12 @@
     {{/* set some variables to help compute metrics */}}
     {{/* total */}}
     {{ $total_books := len $books }}
-    {{ $books_with_cover := 0 }}
+    {{ $books_with_cover := slice }}
     {{/* how many have I read? */}}
     {{ $books_read := where $books "Read" "true" | len }}
     {{/* titles */}}
-    {{ $titles := slice }}
+    {{ $titles := dict }}
+    {{ $titles_slice := slice }}
     {{/* binding */}}
     {{ $binding := dict }}
     {{/* authors */}}
@@ -46,7 +47,7 @@
             {{ $authors = merge $authors (dict . (add (index $authors . | default 0) 1) )}}
         {{ end }}
         {{/* titles */}}
-        {{ $titles = append (slice .Title ) $titles }}
+        {{ $titles = merge $titles (dict .Title (add (index $titles .Title | default 0) 1) )}}
         {{/* binding */}}
         {{ $binding = merge $binding (dict .Binding (add (index $binding .Binding | default 0) 1) )}}
         {{/* languages */}}
@@ -54,7 +55,7 @@
             {{ $languages = merge $languages (dict . (add (index $languages . | default 0) 1) )}}
         {{ end }}
         {{ if .Front_Cover }}
-            {{ $books_with_cover = add $books_with_cover 1 }}
+            {{ $books_with_cover = append .Title $books_with_cover }}
         {{ end }}
     {{ end }}
 
@@ -63,9 +64,11 @@
     <div class="content">
         <h1>{{ T "My library stats" }}</h1>
         {{/* totals */}}
+        {{ range $key, $value := $titles }}
+            {{ $titles_slice = append (dict "name" $key "count" $value) $titles_slice }}
+        {{ end }}
         <p>
-            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca
-            {{- if ne $total_books (uniq $titles | len) }} ({{ uniq $titles | len }} no repetidos){{ end }},
+            Tengo <strong>{{ $total_books }}</strong> libros en mi biblioteca,
             de los cuales he leído <strong>{{ $books_read }}</strong> ({{ div (float $books_read) $total_books | math.Product 100 | math.Round }}%).
         </p>
         {{/* bindings */}}
@@ -107,10 +110,24 @@
             {{ end }}
         </p>
         {{ if hugo.IsDevelopment }}
+        <div class="debug">
             <p>
-                {{ T "books-with-cover" (dict "total" $books_with_cover) }}
-                ({{ div (float $books_with_cover) $total_books | math.Product 100 | math.Round }}%)
+                {{ T "books-with-cover" (dict "total" (len $books_with_cover)) }}
+                ({{ div (float (len $books_with_cover)) $total_books | math.Product 100 | math.Round }}%)
             </p>
+            <p>Sin imagen:</p>
+            <ul>
+            {{ range (where $titles_slice "name" "not in" $books_with_cover) }}
+                <li>{{ .name }}</li>
+            {{ end }}
+            </ul>
+            <p>Títulos repetidos</p>
+            <ul>
+            {{ range (where $titles_slice "count" "!=" 1)}}
+                <li>{{ .name }}</li>
+            {{ end }}
+            </ul>
+        </div>
         {{ end }}
     </div>
 
