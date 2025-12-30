@@ -13,20 +13,18 @@
     {{/* read the data file */}}
     {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
 
-    {{/* compute details of books */}}
-    {{ $categories := dict }}
-    {{ range $data }}
-        {{ $categories = merge $categories (dict .kind (add (index $categories .kind | default 0) 1) )}}
+    <div class="content">
+    <h1 id="lecturas-en-{{ .Params.current }}" class="content">
+        Lecturas en {{ .Params.current }}
+        <a hidden="" class="anchor" aria-hidden="true" href="#lecturas-en-{{ .Params.current }}">#</a>
+    </h1>
+    
+    {{ $total := 0 }}
+    {{ if $data }}
+        {{ $total = len $data }}
     {{ end }}
 
-    {{/* paragraph with details of how many books were read */}}
-    <div class="content">
-    <h1 id="lecturas-en-{{ now.Format "2006" }}" class="content">
-        Lecturas en {{ now.Format "2006" }}
-        <a hidden="" class="anchor" aria-hidden="true" href="#lecturas-en-{{ now.Format "2006" }}">#</a>
-    </h1>
-
-    {{ $progress := div (len $data) (float .Params.goal) | math.Product 100 | math.Round }}
+    {{ $progress := div $total (float .Params.goal) | math.Product 100 | math.Round }}
     <div class="progress-element">
         <p class="progress-label">Progreso de lectura respecto a la meta de <strong>{{ .Params.goal }}</strong> libros: {{ $progress }}%</p>
         <div class="progress-container">
@@ -36,6 +34,15 @@
         </div>
     </div>
 
+    {{ with $data }}
+
+    {{/* compute details of books */}}
+    {{ $categories := dict }}
+    {{ range $data }}
+        {{ $categories = merge $categories (dict .kind (add (index $categories .kind | default 0) 1) )}}
+    {{ end }}
+
+    {{/* paragraph with details of how many books were read */}}
     <p>
         Este año he leído <strong>{{ len $data }}</strong> libros
         y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
@@ -135,6 +142,8 @@
         </div>
     {{ end }}
     </div>
+
+    {{ end }}
 
     <hr/>
 
