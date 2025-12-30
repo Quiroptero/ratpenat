@@ -134,8 +134,8 @@
     {{- $pages := where site.RegularPages "Section" "eq" "readings" }}
     {{- if and (gt (len $pages) 1) (in $pages . ) }}
     <nav class="nextprev">
-        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
-        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
+        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">« Lecturas en {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">Lecturas en {{ .Name }} »</a>{{- end }}</div>
     </nav>
     {{- end }}
 </main>
