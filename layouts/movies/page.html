@@ -4,14 +4,17 @@
 
     {{ partial "last_mod_by_file.html" . }}
 
+    <div class="box box--notice">
+        <p>Este es el registro de las películas y series que vi durante <strong>{{ .Title }}</strong>.</p>
+        <p>El registro actual se encuentra acá: <a href="/peliseries">/peliseries</a>.</p>
+    </div>
+
     <div class="content">
     {{ .Content | partial "anchors.html" }}
     </div>
 
     <!-- read the movies data file -->
     {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
-
-    {{ with $data }}
 
     <!-- set some variables to help compute metrics -->
     {{ $total_movies := (len $data) }}
@@ -38,10 +41,10 @@
     <!-- paragraph with details of how many movies were watched -->
     <div class="content">
     <p>
-        Este año he visto <strong>{{ $total_movies }}</strong> películas y series distintas
-        <!-- kind of hardcoding the reference here in order to make the meme an element of the page bundle -->
-        {{ $meme_url := ((.Resources.Get "meme.webp").Process "q50").RelPermalink }}
-        (<strong>{{ len $movies_slice }}</strong> de ellas <a href="{{ $meme_url }}">en más de una ocasión</a>):
+        En {{ .Title }} vi <strong>{{ $total_movies }}</strong> películas y series distintas
+        {{ if ne $total_movies (len $movies_slice) }}
+            (<strong>{{ len $movies_slice }}</strong> de ellas en más de una ocasión)
+        {{ end -}}:
     </p>
     <ul>
         <li>🍿 <strong>{{ index $kinds "1" }}</strong> en el cine</li>
@@ -75,19 +78,13 @@
     {{ end }}
     </div>
 
-    {{ end }}
-
-    <hr/>
-
-    <!-- archive -->
-    <div>
-    <h1 id="archivo">Peliseries en...</h1>
-    {{ $pages := where .Site.RegularPages "Section" "eq" "movies" }}
-    {{ $pages := $pages.ByDate.Reverse }}
-        {{ range $pages }}
-        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        {{ end }}
-    </div>
-
+    {{/* links to next/prev pages */}}
+    {{- $pages := where site.RegularPages "Section" "eq" "movies" }}
+    {{- if and (gt (len $pages) 1) (in $pages . ) }}
+    <nav class="nextprev">
+        <div>{{- with $pages.Prev . }}<a href="{{ .RelPermalink }}">« Peliseries en {{ .Name }}</a>{{- end }}</div>
+        <div>{{- with $pages.Next . }}<a href="{{ .RelPermalink }}">Peliseries en {{ .Name }} »</a>{{- end }}</div>
+    </nav>
+    {{- end }}
 </main>
 {{ end }}
