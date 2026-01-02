@@ -37,19 +37,26 @@ main.home {
 }
 
 /* headings */
-h1, 
-h2, 
-h3, 
-h4, 
-h5, 
-h6 {
-    margin-bottom: 0.5rem;
-    margin-top:1.8rem;
+h1.post-title {
+    margin-bottom: 0;
+}
+
+h1 {
+    margin-top: 3rem;
+}
+
+h2, h3, h4, h5, h6 {
+    margin-top: 1.8rem;
+}
+
+/* metadata */
+div.meta {
+    margin-top: 1rem;   
 }
 
 /* some extra space for main content */
 div.content {
-    margin: 2rem 0rem;
+    margin: 3rem 0rem;
 }
 
 div.home-section {
@@ -126,6 +133,7 @@ div.label-fixed-date {
 div.label-fixed-day {
     width: 7ch; /* mmm DD */
     flex-shrink: 0;
+    font-size: 0.9rem
 }
 
 div.link-wrap {
@@ -133,7 +141,7 @@ div.link-wrap {
 }
 
 div.group-by-month {
-    margin-bottom: 1rem;
+    line-height: 1.4rem;
 }
 
 /* add an horizontal scrollbar when content of pre is bigger that its container */

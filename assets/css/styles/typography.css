@@ -38,9 +38,9 @@
 
 body {
     font-family: var(--font-monospace);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
-    line-height: 1.6rem;
+    line-height: 1.3rem;
 }
 
 /* LINKS (ANCHOR TAGS) */
@@ -48,7 +48,7 @@ body {
 a {
     text-decoration: none;
     color: var(--text-link, var(--base0A));
-    border-bottom: var(--border-link, 0.125rem) solid var(--text-link, var(--base0A));
+    border-bottom: var(--border-link, 0.1rem) solid var(--text-link, var(--base0A));
 }
 /* nice arrow for external links 
     hardcoding domain, I don't like it, but vars can't be used
@@ -78,7 +78,6 @@ b {
 div.meta { 
     font-size: 0.9rem; 
     color: var(--text-off);
-    margin: 1.5rem 0rem;
 }
 
 div.meta a {
@@ -107,23 +106,23 @@ sup {
 
 /* headings */
 h1.post-title {
-    font-size: 2rem;
-    line-height: 2.5rem;
+    font-size: 1.1rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings);
     color: var(--text-headings);
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 700;
+    text-transform: uppercase;
 }
 
-h1.content::before { content: '# '; }
-h2.content::before { content: '## '; }
-h3.content::before { content: '### '; }
-h4.content::before { content: '#### '; }
-h5.content::before { content: '##### '; }
-h6.content::before { content: '###### '; }
+h1.content::before { content: '# '; color: var(--text-bold);}
+h2.content::before { content: '## '; color: var(--color-border);}
+h3.content::before { content: '### '; color: var(--color-border);}
+h4.content::before { content: '#### '; color: var(--color-border);}
+h5.content::before { content: '##### '; color: var(--color-border);}
+h6.content::before { content: '###### '; color: var(--color-border);}
 
 /* inline code block */
 code {
@@ -187,4 +186,10 @@ del {
 
 ins {
     background-color: var(--base0B);
+}
+
+/* links in posts lists */
+
+div.link-wrap {
+    text-transform: uppercase;
 }

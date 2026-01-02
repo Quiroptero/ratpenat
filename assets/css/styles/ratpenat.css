@@ -27,7 +27,7 @@ html {
 body {
     background-color: var(--color-background);
     color: var(--text);
-    max-width: 54rem;
+    max-width: 40rem;
     margin: 20px auto 0px;
     padding: 0 10px;
 }

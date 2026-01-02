@@ -9,6 +9,7 @@
 .box--toc a {
     color: var(--text-headings);
     border: none;
+    text-transform: uppercase;
 }
 
 .box--toc a:hover {
@@ -23,6 +24,7 @@ details.toc > summary {
     position: relative;
     margin: 0.1rem 0 0 4ch;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 details.toc > summary::before {

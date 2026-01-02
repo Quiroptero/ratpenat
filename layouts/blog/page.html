@@ -17,7 +17,6 @@
         {{ end }}
         </span>
         ·
-        etiquetas: 
         <span>
         {{ with .Params.etiquetas }}
 		    {{ range . }} #<a href="{{ "/etiquetas/" | relLangURL }}{{ . | urlize }}">{{ . }}</a>{{ end }}
