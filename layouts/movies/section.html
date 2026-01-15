@@ -8,49 +8,62 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    <!-- read the movies data file -->
+    {{/* read the movies data file */}}
     {{ $data := .Resources.Get "data.yaml" | transform.Unmarshal }}
 
     {{ with $data }}
 
-    <!-- set some variables to help compute metrics -->
+    {{/* set some variables to help compute metrics */}}
     {{ $total_movies := (len $data) }}
     {{ $movies := dict }}
     {{ $movies_slice := slice }}
-    <!-- visualization kind -->
+    {{/* visualization kind */}}
     {{ $kinds := dict }}
 
-    <!-- compute metrics -->
+    {{/* compute metrics */}}
     {{ range $i, $x := $data }}
-        <!-- general count of kinds and movies -->
+        {{/* general count of kinds and movies */}}
         {{ range split .kind " " }}
             {{ $kinds = merge $kinds (dict . (add (index $kinds . | default 0) 1) )}}
             {{ $movies = merge $movies (dict $x.title (add (index $movies $x.title | default 0) 1) )}}
         {{ end }}
     {{ end }}
-    <!-- repeated movies -->
+    {{/* repeated movies */}}
     {{ range $key, $value := $movies }}
         {{ if gt $value 1 }}
             {{ $movies_slice = append (slice $key) $movies_slice}}
         {{ end }}
     {{ end }}
 
-    <!-- paragraph with details of how many movies were watched -->
+    {{/* paragraph with details of how many movies were watched */}}
+    {{ $meme_url := "" }}
     <div class="content">
     <p>
         Este año he visto <strong>{{ $total_movies }}</strong> películas y series distintas
-        <!-- kind of hardcoding the reference here in order to make the meme an element of the page bundle -->
-        {{ $meme_url := ((.Resources.Get "meme.webp").Process "q50").RelPermalink }}
-        (<strong>{{ len $movies_slice }}</strong> de ellas <a href="{{ $meme_url }}">en más de una ocasión</a>):
+        {{- if gt (len $movies_slice) 0 }}
+            {{ $meme_url = (($.Resources.Get "meme.webp").Process "q50").RelPermalink }}
+            (<strong>{{ len $movies_slice }}</strong> de ellas <a href="{{ $meme_url }}">en más de una ocasión</a>)
+        {{ end -}}:
     </p>
+    {{/* categories */}}
+    {{ $link_str := "en el <a href=\"/2025/02/cinecasa\">cinecasa</a>" }}
+    {{ $link_str = $link_str | $.RenderString}}
+    {{ $cat_info := dict
+        "1" (dict "icon" "🍿" "label" "en el cine")
+        "2" (dict "icon" "🏠" "label" $link_str)
+        "3" (dict "icon" "📺" "label" "en otro tipo de pantallas")
+    }}
     <ul>
-        <li>🍿 <strong>{{ index $kinds "1" }}</strong> en el cine</li>
-        <li>🏠 <strong>{{ index $kinds "2" }}</strong> en el <a href="/2025/02/cinecasa">cinecasa</a></li>
-        <li>📺 <strong>{{ index $kinds "3" }}</strong> en otro tipo de pantallas</li>
+    {{ range $key, $info := $cat_info }}
+        {{ $count := index $kinds $key }}
+        {{ if gt $count 0 }}
+            <li>{{ $info.icon }} <strong>{{ $count }}</strong> {{ $info.label }}</li>
+        {{ end }}
+    {{ end }}
     </ul>
     </div>
 
-    <!-- grid with movie posters and the corresponding emoji -->
+    {{/* grid with movie posters and the corresponding emoji */}}
     <div class="grid">
     {{ range sort $data "weight" "desc" }}
         <div class="container">
@@ -79,7 +92,7 @@
 
     <hr/>
 
-    <!-- archive -->
+    {{/* archive */}}
     <div>
     <h1 id="archivo">Peliseries en...</h1>
     {{ $pages := where .Site.RegularPages "Section" "eq" "movies" }}
