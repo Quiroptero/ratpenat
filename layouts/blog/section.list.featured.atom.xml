@@ -32,7 +32,7 @@
 {{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 {{- printf "<?xml-stylesheet type=\"text/xsl\" href=\"/index.xsl\" media=\"all\"?>" | safeHTML }} 
 <feed xmlns="http://www.w3.org/2005/Atom"
-    xmlns="https://quiroptero.blog/ns/atom">
+    xmlns:quiroptero="https://quiroptero.blog/ns/atom">
     <title>Las entradas destacadas en quiroptero.blog</title>
     <link href="{{ .Permalink }}" rel="alternate" hreflang="{{ .Site.LanguageCode }}"/>
     {{ with .Site.GetPage "/about/subscribe" }}
