@@ -79,10 +79,11 @@
 
     {{/* display the metrics */}}
     <p>
-        A <strong>{{ $years_active }}</strong> años de su lanzamiento,
-        he publicado en este blog <strong>{{ len $blog_pages }}</strong> entradas,
-        que suman más de <strong>{{ lang.FormatNumberCustom 0 $total_words_rounded "- . ," }}</strong> palabras.
-        La entrada promedio tiene <strong>{{ $avg_words_rounded }}</strong> palabras.
+        En los <strong>{{ $years_active }}</strong> años que este blog lleva activo 
+        he publicado <strong>{{ len $blog_pages }}</strong> entradas.
+        Juntas suman más de <strong>{{ lang.FormatNumberCustom 0 $total_words_rounded "- . ," }}</strong> palabras.
+        {{/* La entrada promedio tiene <strong>{{ $avg_words_rounded }}</strong> palabras. */}}
+        Con eso me alcanzaría para un par de novelas.
     </p>
 
     <p>
