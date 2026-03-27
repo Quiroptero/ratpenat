@@ -1,20 +1,29 @@
 # ratpenat
 
-I created this theme from the [blank](https://themes.gohugo.io/themes/blank/) theme
-with inspiration from several other themes, for example:
+This is the Hugo theme I use in my [personal blog](https://quiroptero.blog).
+Is not suitable to be used as-is by someone else than me,
+as it contains a lot of hardcoded stuff,
+dirty solutions,
+and things that only interest me.
+It shamelessly mixes Spanish and English too.
+
+Anyone can inspect it and learn a thing or two from it.
+
+I created **ratpenat** from the [blank](https://github.com/Vimux/blank) theme
+with inspiration drawn from many others:
+
 * [PaperMod](https://themes.gohugo.io/themes/hugo-papermod/)
 * [MinIndie](https://git.sr.ht/~bacardi55/MinIndie)
 * [Archie](https://github.com/athul/archie)
 * [smol](https://themes.gohugo.io/themes/smol/)
 
-This is a theme tailored for my personal use in [my blog](https://quiroptero.blog).
-As a result it might be heavily hardcoded, opinionated and filled with dirty solutions.
-Mistakes, if any, are mine and not those I have borrowed ideas from.
+Mistakes are mine.
 
-The creation of this theme aims to achieve the following objectives:
+This theme aims to achieve the following objectives:
 
-* It's easy to understand (for me).
-* Prefer, when possible, specific layouts rather than general ones.
+* Easy to understand for me.
+* Specific layouts instead of general ones when possible.
 * It's overall structure is simple.
-* It's sparse: nothing that I do not specifically need won't be included.
-* Reduce the number of variables that I need to run my site
+* Reduce the amount of configuration that I need to run my site.
+
+> 'ratpenat' is Catalan for 'bat'
