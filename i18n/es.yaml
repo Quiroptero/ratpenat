@@ -32,6 +32,10 @@ Wednesday: miércoles
 Thursday: jueves
 Friday: viernes
 Saturday: sábado
+# weeks
+week:
+  one: "semana"
+  other: "semanas"
 
 Image unavailable: Imagen no disponible
 related-content: Entradas relacionadas
