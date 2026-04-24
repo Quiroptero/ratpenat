@@ -2,8 +2,6 @@
 <main>
     <h1>{{ .Title }}</h1>
 
-    {{ partial "static_meta" . }}
-
     <div class="content">
         {{ .Content | partial "anchors.html" }}
     </div>
@@ -75,7 +73,7 @@
     {{ $weekdays_slice = sort $weekdays_slice "count" "desc" }}
 
     {{/* streaks logic outside because it's complex and lengthy */}}
-    {{ $streaks := partial "stats/streaks" . }}
+    {{ $streaks := partial "stats/streaks_weeks" . }}
 
     {{/* display the metrics */}}
     <p>
@@ -100,53 +98,42 @@
     <h1>Hábitos de publicación</h1>
     {{/* days */}}
     <p>
-        El día que más prefiero para publicar es el
+        El día con más entradas publicadas es el
         <strong>{{ T (index $weekdays_slice 0 "day") }}</strong>
-        ({{ index $weekdays_slice 0 "count" }} entradas),
-        seguido del 
-        <strong>{{ T (index $weekdays_slice 1 "day") }}</strong>
-        ({{ index $weekdays_slice 1 "count" }})
-        y del
-        <strong>{{ T (index $weekdays_slice 2 "day") }}</strong>
-        ({{ index $weekdays_slice 2 "count" }}).
-        El día en el que ha habido menos actividad es el
+        ({{ index $weekdays_slice 0 "count" }} entradas).
+        El día con menos entradas es el
         <strong>{{ T (index $weekdays_slice 6 "day") }}</strong>
         ({{ index $weekdays_slice 6 "count" }} entradas).
     </p>
     {{/* months */}}
     <p>
         Otra curiosidad es que los meses en los que más publico son
-        <strong>{{ T (index $months_slice 0 "month") }}</strong>,
-        <strong>{{ T (index $months_slice 1 "month") }}</strong> y
-        <strong>{{ T (index $months_slice 2 "month") }}</strong>.
-        Juntos suman <strong>{{ add (index $months_slice 0 "count") (index $months_slice 1 "count") (index $months_slice 2 "count") }}</strong> entradas.
-        Por el otro lado, los meses más silenciosos son
-        <strong>{{ T (index $months_slice 11 "month") }}</strong>,
-        <strong>{{ T (index $months_slice 10 "month") }}</strong> y
-        <strong>{{ T (index $months_slice 9 "month") }}</strong>,
-        con apenas <strong>{{ add (index $months_slice 11 "count") (index $months_slice 10 "count") (index $months_slice 9 "count") }}</strong> entradas.
+        <strong>{{ T (index $months_slice 0 "month") }}</strong> y
+        <strong>{{ T (index $months_slice 1 "month") }}</strong>.
+        Juntos suman <strong>{{ add (index $months_slice 0 "count") (index $months_slice 1 "count") }}</strong> entradas.
+        Los meses más silenciosos son
+        <strong>{{ T (index $months_slice 11 "month") }}</strong> y
+        <strong>{{ T (index $months_slice 10 "month") }}</strong>,
+        con apenas <strong>{{ add (index $months_slice 11 "count") (index $months_slice 10 "count") }}</strong> entradas.
     </p>
 
     <h1>Constancia</h1>
     <p>
         Para que tenga sentido tener un blog hace falta algo de <strong>constancia</strong>.
-        Mi intención es publicar al menos una entrada todos los meses.
+        Mi intención es publicar al menos una entrada cada semana.
         Para saber cómo voy con eso estoy midiendo mis <strong>rachas</strong> de publicación;
-        esto es, cadenas de meses consecutivos con al menos una entrada.
+        esto es, cadenas de semanas consecutivas con al menos una entrada.
     </p>
     
     {{/* streaks */}}
     {{/* check active streak */}}
-    {{ if eq (time.Now | time.Format "2006-01") (index $streaks 0 "end") }}
+    {{ if eq (partial "func/get_iso_week.html" time.Now) (index $streaks 0 "end") }}
         {{/* streak continues at build time */}}
         {{ $current_streak := index $streaks 0 }}
         {{ $longest_streak := index (sort $streaks "length" "desc") 0 }}
-
-        {{ $start := printf "%s-01T00:00:00-06:00" $current_streak.start | time.AsTime | time.Format "January de 2006" }}
-        {{ $end := printf "%s-01T00:00:00-06:00" $current_streak.end | time.AsTime | time.Format "January de 2006" }}
         <p>
-            Actualmente llevo una racha de publicación de <strong>{{ $current_streak.length }} meses</strong>,
-            desde <strong>{{ $start }}</strong> hasta <strong>{{ $end }}</strong>.
+            Llevo una racha de publicación de <strong>{{ $current_streak.length }} semanas</strong>,
+            desde <strong>{{ $current_streak.start }}</strong> hasta <strong>{{ $current_streak.end }}</strong>.
             {{ if eq $current_streak.length $longest_streak.length }}
                 {{/* the current streak is also the longest one */}}
                 Esta es también la racha más larga.
@@ -155,18 +142,13 @@
     {{ else }}
         {{/* no active streak at build time */}}
         {{ with index $streaks 0 }}
-            {{ $start := printf "%s-01T00:00:00-06:00" .start | time.AsTime | time.Format "January de 2006" }}
-            {{ $end := printf "%s-01T00:00:00-06:00" .end | time.AsTime | time.Format "January de 2006" }}
             <p>
-                Mi última racha duró <strong>{{ .length }} meses</strong>,
-                desde <strong>{{ $start }}</strong> hasta <strong>{{ $end }}</strong>.
+                Mi última racha duró <strong>{{ .length }} {{ T "week" .length }}</strong>,
+                desde <strong>{{ .start }}</strong> hasta <strong>{{ .end }}</strong>.
             </p>
         {{ end }}
     {{ end }}
     {{/* TODO: make the streaks logic more robust */}}
-    {{/* at time of writing I'm on a current long streak and have no intentions of losing it */}}
-    {{/* so I'm leaving the template as it is */}}
-    {{/* however, this logic is not complete and maybe in the future I will complete it */}}
     {{/* /streaks */}}
 
     <h1>A lo largo del tiempo</h1>
