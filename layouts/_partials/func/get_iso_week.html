@@ -1,0 +1,23 @@
+{{/*
+Taken and adapted from: https://discourse.gohugo.io/t/group-content-by-week-number-of-year/11894/6
+
+File: layouts/partials/func/get_iso_week.html
+Usage: {{ partial "func/get_iso_week.html" .Date }}
+Returns: String (e.g., "2023-W05")
+*/}}
+
+{{- $date := . -}}
+
+{{/* 1. Normalize Weekday (Mon=1 ... Sun=7) */}}
+{{- $isoDay := cond (eq $date.Weekday 0) 7 (int $date.Weekday) -}}
+
+{{/* 2. Find Thursday (ISO Week belongs to the year of its Thursday) */}}
+{{- $offset := sub 4 $isoDay -}}
+{{- $thursday := $date.AddDate 0 0 $offset -}}
+
+{{/* 3. Calculate Week Number */}}
+{{- $isoYear := $thursday.Year -}}
+{{- $isoWeek := add (div (sub $thursday.YearDay 1) 7) 1 -}}
+
+{{/* 4. Return the formatted string */}}
+{{- return dict "str" (printf "%04d-W%02d" $isoYear $isoWeek) "year" $isoYear "week" $isoWeek -}}
