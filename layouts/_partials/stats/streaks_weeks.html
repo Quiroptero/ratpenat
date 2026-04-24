@@ -1,0 +1,65 @@
+{{/* streaks are only computed for blog posts */}}
+{{ $blog_pages := where .Site.RegularPages.ByDate "Section" "in" .Site.MainSections }}
+
+{{/* get the weeks that have at least one post published */}}
+{{ $weeks_with_posts := slice }}
+{{ range $blog_pages }}
+    {{ $week := partial "func/get_iso_week.html" .Date }}
+    {{ if not (in $weeks_with_posts $week)}}
+        {{ $weeks_with_posts = $weeks_with_posts | append $week }}
+    {{ end }}
+{{ end }}
+
+{{/* initialize variables */}}
+{{ $previous_week := "" }}
+{{ $current_streak := "1" }}
+{{ $streaks := dict $current_streak (dict "length" 0 "start" "" "end" "") }}
+{{/* start a loop to walk through weeks and compute streaks */}}
+{{/* a streak is defined as a chain of consecutive weeks */}}
+{{/* then, check if week[i-1] + 1 week is equal to week[i] */}}
+{{ range $i, $week := $weeks_with_posts }}
+    {{/* first iteration */}}
+    {{ if eq $previous_week "" }}
+        {{ $start_dict := dict $current_streak (dict "start" $week.str) }}
+        {{ $length_dict := dict $current_streak (dict "length" 1) }}
+        {{ $streaks = merge $streaks $start_dict $length_dict }}
+    {{/* subsequent iterations */}}
+    {{ else }}
+        {{/* see if "previous week's year" has W53 */}}
+        {{ $last_day_previous_year := printf "%d-12-31T00:00:00-06:00" $previous_week.year | time.AsTime }}
+        {{ $previous_year_has_W53 := eq (partial "func/get_iso_week.html" $last_day_previous_year).week 53 }}
+        {{/* weeks are consecutive */}}
+        {{ if or
+            (and (eq $previous_week.year $week.year) (eq (add $previous_week.week 1) $week.week) )
+            (and 
+                (eq $week.week 1) 
+                (or 
+                    (and $previous_year_has_W53 (eq $previous_week.week 53))
+                    (and (not $previous_year_has_W53) (eq $previous_week.week 52))
+                )
+            )
+        }}
+            {{/* streak continues */}}
+            {{ $length_dict := dict $current_streak (dict "length" (add (index $streaks $current_streak "length") 1)) }}
+            {{ $streaks = merge $streaks $length_dict }}
+        {{/* weeks are not consecutive */}}
+        {{ else }}
+            {{/* streak finished */}}
+            {{/* notice that the only missing part of the last streak is the end */}}
+            {{ $end_dict := dict $current_streak (dict "end" $previous_week.str) }}
+            {{ $streaks = merge $streaks $end_dict }}
+            {{/* start a new streak */}}
+            {{ $current_streak = add (int $current_streak) 1 | string }}
+            {{ $new_streak := dict $current_streak (dict "length" 0 "start" $week.str "end" "") }}
+            {{ $streaks = merge $streaks $new_streak}}
+        {{ end }}
+    {{ end }}
+    {{ $previous_week = $week }}
+{{ end }}
+{{/* always set the end of the last streak */}}
+{{ $end_dict := dict $current_streak (dict "end" $previous_week.str) }}
+{{ $streaks = merge $streaks $end_dict }}
+
+{{/* return the streaks dict to the caller template */}}
+{{ $streaks = sort $streaks "end" "desc" }}
+{{ return $streaks }}
