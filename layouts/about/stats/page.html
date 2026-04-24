@@ -127,7 +127,7 @@
     
     {{/* streaks */}}
     {{/* check active streak */}}
-    {{ if eq (partial "func/get_iso_week.html" time.Now) (index $streaks 0 "end") }}
+    {{ if eq (partial "func/get_iso_week.html" time.Now).str (index $streaks 0 "end") }}
         {{/* streak continues at build time */}}
         {{ $current_streak := index $streaks 0 }}
         {{ $longest_streak := index (sort $streaks "length" "desc") 0 }}
