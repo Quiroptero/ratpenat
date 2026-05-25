@@ -44,8 +44,8 @@
 
     <div class="home-section">
     <p>Las <strong>páginas</strong> son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
-    {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
-    {{ $featured := $pages | intersect (where .Site.AllPages "Params.featured" true )}}
+    {{ $pages := where .Site.Pages "Type" "!=" "blog" }}
+    {{ $featured := $pages | intersect (where .Site.Pages "Params.featured" true )}}
     <div class="grid-link-label">
         {{ range $featured }}
         <div class="link-cell"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>

@@ -7,7 +7,7 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    {{ $pages := where .Site.AllPages "Type" "=" "blog" }}
+    {{ $pages := where .Site.Pages "Type" "=" "blog" }}
     {{ $rl := $pages | intersect (where .Site.RegularPages.ByDate.Reverse "Params.rl" true )}}
     <div class="post-list">
     {{ range $rl }}

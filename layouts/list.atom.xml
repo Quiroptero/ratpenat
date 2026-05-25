@@ -33,7 +33,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom"
     xmlns:quiroptero="https://quiroptero.blog/ns/atom">
     <title>quiroptero.blog</title>
-    <link href="{{ .Permalink }}" rel="alternate" hreflang="{{ .Site.LanguageCode }}"/>
+    <link href="{{ .Permalink }}" rel="alternate" hreflang="{{ .Site.Language.Locale }}"/>
     {{ with .Site.GetPage "/about/subscribe" }}
     <link href="{{ .Permalink }}" rel="help" title="Suscríbete a quiroptero.blog"/>
     {{ end }}

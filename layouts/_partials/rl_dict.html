@@ -1,4 +1,4 @@
-{{- $pages := where .Site.AllPages "Type" "=" "blog" -}}
+{{- $pages := where .Site.Pages "Type" "=" "blog" -}}
 {{- $rl := $pages | intersect (where .Site.RegularPages "Params.rl" true ) -}}
 
 {{- $rl_dict := dict -}}

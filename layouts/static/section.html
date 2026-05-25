@@ -5,8 +5,8 @@
     {{ .Content | partial "anchors.html" }}
     </div>
 
-    {{ $pages := where .Site.AllPages "Type" "!=" "blog" }}
-    {{ $static := $pages | intersect (where .Site.AllPages.ByTitle "Params.static" true ) }}
+    {{ $pages := where .Site.Pages "Type" "!=" "blog" }}
+    {{ $static := $pages | intersect (where .Site.Pages.ByTitle "Params.static" true ) }}
     {{ range $static }}
         <a href="{{ .RelPermalink }}">
         <div class="static-page-card">
