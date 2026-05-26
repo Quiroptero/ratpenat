@@ -156,10 +156,10 @@
         </thead>
         {{/* body */}}
         <tbody>
-            {{ range $index, $book := sort $books "ID" "asc" }}
+            {{ range $index, $book := $books }}
             {{/*
                 get the image resource of the book
-                if it doesn't have one, get the general one
+                if it doesn't have one, get the default
             */}}
             {{ $img := "" }}
             {{ with page.Resources.Get (printf "img/%s" $book.Front_Cover) }}
