@@ -97,9 +97,11 @@
                 {{ end }}
                 {{/* determine the place of the book (as in a shelf) */}}
                 {{ $position = index $positions (.library_id | string) }}
-            {{/* a cover picture has been provided using the ISBN */}}
-            {{ else if .isbn }}
-                {{ $cover_img = $.Resources.GetMatch (printf "img/%s*" .isbn)}}
+            {{/* a cover picture might have been provided using the ISBN */}}
+            {{ else if .isbn  }}
+                {{ with $.Resources.GetMatch (printf "img/%s*" .isbn)}}
+                {{ $cover_img = . }}
+                {{ end }}
             {{ end }}
 
             <figure class="book">
