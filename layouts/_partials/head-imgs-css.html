@@ -3,6 +3,7 @@
 {{- with .Resources.ByType "image" }}
 	<style media="screen">
 	{{- range . -}}
+        {{ if reflect.IsImageResourceProcessable . }}
 		{{- $src := . -}}
         {{/* skip animated webp files - my convention is to include 'gif' in the name */}}
         {{- if not (and (eq $src.MediaType.SubType "webp") (in $src.Name "gif")) -}}
@@ -26,6 +27,7 @@
                 {{ $BkgdStyleLQIP | safeCSS }}
             }
         {{- end -}}
+        {{ end }}
 	{{- end }}
 	</style>
 {{ end }}
