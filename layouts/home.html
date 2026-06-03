@@ -1,7 +1,9 @@
 {{ define "main" }}
 <main class="home">
+    {{/* content from /content/_index.md */}}
     {{ with .Content }}<div style="text-align: center;">{{ . | safeHTML }}</div>{{ end }}
 
+    {{/* latest post */}}
     {{ range first 1 (where .Site.RegularPages "Type" "in" .Site.Params.mainSections) }}
     <div class="box box--latest">
         <p class="latest-meta">
@@ -12,6 +14,8 @@
         </p>
     </div>
     {{ end }}
+
+    {{/* posts section */}}
     <div class="home-section">
     <p>Las <strong>entradas</strong> son el principal tipo de contenido del blog.</p>
     <h1>Más recientes</h1>
@@ -42,6 +46,7 @@
     <p>→ Ver todas las <a href="{{ "/destacadas/" | relLangURL }}">entradas destacadas</a></p>
     </div>
 
+    {{/* pages section */}}
     <div class="home-section">
     <p>Las <strong>páginas</strong> son un tipo diferente de contenido. No cambian a menudo y no están en orden cronológico.</p>
     {{ $pages := where .Site.Pages "Type" "!=" "blog" }}
