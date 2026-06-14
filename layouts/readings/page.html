@@ -61,7 +61,8 @@
     {{ $library := transform.Unmarshal $opts ($library_page.Resources.Get $library_page.Params.data_file) }}
     {{ $books := where $library "Binding" "!=" "E-Book" }}
     {{ $positions := dict }}
-    {{ range $i, $rec := sort $books "ID" }}
+    {{/* assumes csv is ordered */}}
+    {{ range $i, $rec := $books }}
         {{ $positions = merge $positions (dict $rec.ID (add $i 1)) }}
     {{ end }}
 
