@@ -121,77 +121,14 @@
     <p>
         Para que tenga sentido tener un blog hace falta algo de <strong>constancia</strong>.
         Mi intención es publicar al menos una entrada cada semana.
-        Para saber cómo voy con eso estoy midiendo mis <strong>rachas</strong> de publicación;
-        esto es, cadenas de semanas consecutivas con al menos una entrada.
     </p>
     
-    {{/* streaks */}}
-    {{/* check active streak */}}
-    {{ if eq (partial "func/get_iso_week.html" time.Now).str (index $streaks 0 "end") }}
-        {{/* streak continues at build time */}}
-        {{ $current_streak := index $streaks 0 }}
-        {{ $longest_streak := index (sort $streaks "length" "desc") 0 }}
-        <p>
-            Llevo una racha de publicación de <strong>{{ $current_streak.length }} semanas</strong>,
-            desde <strong>{{ $current_streak.start }}</strong> hasta <strong>{{ $current_streak.end }}</strong>.
-            {{ if eq $current_streak.length $longest_streak.length }}
-                {{/* the current streak is also the longest one */}}
-                Esta es también la racha más larga.
-            {{ end }}
-        </p>
-    {{ else }}
-        {{/* no active streak at build time */}}
-        {{ with index $streaks 0 }}
-            <p>
-                Mi última racha duró <strong>{{ .length }} {{ T "week" .length }}</strong>,
-                desde <strong>{{ .start }}</strong> hasta <strong>{{ .end }}</strong>.
-            </p>
-        {{ end }}
-    {{ end }}
-    {{/* TODO: make the streaks logic more robust */}}
-    {{/* /streaks */}}
-
-    <h1>A lo largo del tiempo</h1>
-    {{/* get the year with most posts */}}
-    {{ $years := dict }}
-    {{ range $blog_pages }}
-    {{ $year := .Date.Year }}
-        {{ with index $years (string $year) }}
-            {{ $years = merge $years (dict (string $year) (add . 1)) }}
-        {{ else }}
-            {{ $years = merge $years (dict (string $year) 1)}}
-        {{ end }}
-    {{ end }}
-    {{ $max_year := 0 }}
-    {{ $max_count := 0 }}
-    {{ range $year, $count := $years }}
-        {{ if gt $count $max_count }}
-            {{ $max_count = $count }}
-            {{ $max_year = $year }}
-        {{ end }}
-    {{ end }}
-    {{/* /year with most posts */}}
-
-    {{ range $blog_pages.GroupByDate "2006" }}
-        {{/* hardcoding the style: I don't need a CSS class only for this */}}
-        {{/* (might change in the future, tho) */}}
-        <p style="margin: 0.25rem 0rem;">
-            {{/* feels dirty to use conditionals to open/close tags */}}
-            {{/* but hey, funny things rarely can be described as 'clean' anyways */}}
-            {{ if eq .Key ($max_year) }}
-                <strong>
-            {{ end }}
-            {{ .Key }}: {{ len .Pages }}
-            {{ if eq .Key ($max_year) }}
-                </strong>
-            {{ end }}
-        </p>
-    {{ end }}
-
     {{ $csv := "stats/dates.csv" | resources.Get }}
+    {{ $csv_totals := "stats/totals.csv" | resources.Get }}
     <div class="stats-heatmap"
         data-heatmap
         data-src="{{ $csv.RelPermalink }}"
+        data-totals-src="{{ $csv_totals.RelPermalink }}"
         data-scheme="inferno"
         data-cell-size="16">
     </div>
