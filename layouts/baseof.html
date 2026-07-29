@@ -134,6 +134,13 @@
         {{ "<!--/christmas-->" | safeHTML }}
     {{ end }}
 
+    {{/* stats */}}
+    {{ if (eq .Path "/about/stats") }}
+        {{ "<!-- stats -->" | safeHTML }}
+        {{ $script := "stats/heatmap.js" | resources.Get }}
+        <script src="{{ $script.RelPermalink }}" defer></script>
+    {{ end }}
+
     {{/* /scripts */}}
 
     {{/* creation of LQIPs and GIPs */}}
