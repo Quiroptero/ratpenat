@@ -44,8 +44,12 @@
 
     {{/* paragraph with details of how many books were read */}}
     <p>
-        Este año he leído <strong>{{ len $data }}</strong> libros
-        y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
+        Este año he leído <strong>{{ len $data }}</strong>
+        {{ if gt (where $data "review" "ne" nil | len ) 0 }}
+        libros y publicado <strong>{{ where $data "review" "ne" nil | len }}</strong> <a href="/rl">reseñas</a>:
+        {{ else }}
+        libros:
+        {{ end }}
     </p>
     {{/* showcase categories */}}
     {{ $cat_info := dict
