@@ -1,0 +1,17 @@
+.webring {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+}
+
+.webring * {
+    color: var(--color-link-alt) !important;
+}
+
+.webring a:hover {
+    background-color: var(--color-link-alt) !important;
+    color: var(--color-background) !important;
+}
+
+.webring a::after {
+    content: none !important;
+}

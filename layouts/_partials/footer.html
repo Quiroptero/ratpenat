@@ -11,5 +11,7 @@
     <span>·</span>
     <span><a href="mailto:{{ site.Params.author.email }}">Contacto</a></span>
     </div>
-    <div class="webring-container"><script defer="" src="https://blogblog.es/webring.js"></script></div>
+    <div class="webring">
+    {{ partial "blogblog-ring" . }}
+    </div>
 </footer>

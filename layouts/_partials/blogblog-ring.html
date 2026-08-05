@@ -1,0 +1,33 @@
+{{- $webring := hugo.Data.webring -}}
+{{- if not $webring -}}
+  {{- warnf "blogblog-ring: data/webring.json not found or empty" -}}
+{{- else -}}
+  {{- $selfNorm := .Site.Params.url | lower | replaceRE "^https?://" "" | strings.TrimPrefix "www." | strings.TrimRight "/" -}}
+  {{- $selfIdx := -1 -}}
+  {{- range $i, $entry := $webring -}}
+    {{- $entryNorm := $entry.url | lower | replaceRE "^https?://" "" | strings.TrimPrefix "www." | strings.TrimRight "/" -}}
+    {{- if eq $entryNorm $selfNorm -}}
+      {{- $selfIdx = $i -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if eq $selfIdx -1 -}}
+    {{- warnf "blogblog-ring: %s not found in webring list" $selfNorm -}}
+  {{- else -}}
+    {{- $len := len $webring -}}
+    {{- $prevIdx := mod (add $selfIdx (sub $len 1)) $len -}}
+    {{- $nextIdx := mod (add $selfIdx 1) $len -}}
+    {{- $prev := index $webring $prevIdx -}}
+    {{- $next := index $webring $nextIdx -}}
+    {{- $others := slice -}}
+    {{- range $i, $entry := $webring -}}
+      {{- if ne $i $selfIdx -}}
+        {{- $others = $others | append $entry -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $rand := index (shuffle $others) 0 -}}
+    <span><a href="https://blogblog.es/webring.html">[blogblog.es]</a></span>
+    <a href="{{ $prev.url }}" title="{{ $prev.nombre }}">← Prev</a>
+    <a href="{{ $rand.url }}" title="{{ $rand.nombre }}">{ Random }</a>
+    <a href="{{ $next.url }}" title="{{ $next.nombre }}">→ Next</a>
+  {{- end -}}
+{{- end -}}
