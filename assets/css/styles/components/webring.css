@@ -1,10 +1,14 @@
 .webring {
-    margin-top: 2em;
+    margin-top: 1em;
     margin-bottom: 0.5em;
 }
 
 .webring * {
     color: var(--color-link-alt) !important;
+}
+
+.webring p {
+    margin: 0;
 }
 
 .webring a:hover {

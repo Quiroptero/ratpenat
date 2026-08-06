@@ -25,9 +25,9 @@
       {{- end -}}
     {{- end -}}
     {{- $rand := index (shuffle $others) 0 -}}
-    <span><a href="https://blogblog.es/webring.html">[blogblog.es]</a></span>
-    <a href="{{ $prev.url }}" title="{{ $prev.nombre }}">← Prev</a>
-    <a href="{{ $rand.url }}" title="{{ $rand.nombre }}">{ Random }</a>
-    <a href="{{ $next.url }}" title="{{ $next.nombre }}">→ Next</a>
+    <p><a href="https://blogblog.es/webring.html">< webring blogblog.es ></a></p>
+    <a href="{{ $prev.url }}" title="{{ $prev.nombre }}">←  |</a>
+    <a href="{{ $rand.url }}" title="{{ $rand.nombre }}">{ ? }</a>
+    <a href="{{ $next.url }}" title="{{ $next.nombre }}">|  →</a>
   {{- end -}}
 {{- end -}}
