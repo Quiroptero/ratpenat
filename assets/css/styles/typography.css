@@ -127,13 +127,19 @@ h6.content::before { content: '###### '; color: var(--color-border);}
 /* inline code block */
 code {
     color: var(--color-link-alt);
-    background: var(--color-background-off);
+    /* background: var(--color-background-off); */
 }
 
 /* multiline code block */
-/* pre { */
-/*     background: var(--color-background-off); */
-/* } */
+pre {
+    overflow: auto;
+    background: var(--base02);
+    font-size: 0.85rem;
+    padding-top: 1rem;
+    padding-left: 0.5rem;
+    padding-bottom: 1rem;
+    padding-right: 0.5rem;
+}
 
 /* separators */
 hr {
